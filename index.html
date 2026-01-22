@@ -806,9 +806,11 @@
                     break;
                 case 'crack':
                     document.getElementById('crack').classList.add('active');
+                    spawnBackupWindows('crack');
                     break;
                 case 'virus':
                     document.getElementById('virus').classList.add('active');
+                    spawnBackupWindows('virus');
                     break;
                 case 'reset':
                     resetAll();
@@ -824,6 +826,23 @@
                 if (percent > 99) percent = Math.random() * 30;
                 document.getElementById('bsodPercent').textContent = Math.floor(percent) + '% complete';
             }, 500);
+            // Spawn backup windows
+            spawnBackupWindows('bsod');
+        }
+
+        function spawnBackupWindows(prankType) {
+            localStorage.setItem('activePrank', prankType);
+            // Open multiple backup windows
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const w = 600 + Math.random() * 200;
+                    const h = 400 + Math.random() * 200;
+                    const l = Math.random() * (screen.width - w);
+                    const t = Math.random() * (screen.height - h);
+                    window.open(window.location.href + '?prank=' + prankType, '_blank',
+                        `width=${w},height=${h},left=${l},top=${t}`);
+                }, i * 300);
+            }
         }
 
         function tryCloseBsod() {
@@ -894,6 +913,8 @@
             document.getElementById('bsod').classList.remove('active');
             document.getElementById('crack').classList.remove('active');
             document.getElementById('virus').classList.remove('active');
+            localStorage.removeItem('activePrank');
+            localStorage.removeItem('prankState');
         }
 
         function addShakeStyle() {
@@ -995,7 +1016,31 @@
         startSpawnCheck();
 
         // Load state when page opens
-        window.addEventListener('load', loadPrankState);
+        window.addEventListener('load', function() {
+            // Check URL parameter first
+            const urlParams = new URLSearchParams(window.location.search);
+            const prankParam = urlParams.get('prank');
+            if (prankParam) {
+                setTimeout(() => {
+                    if (prankParam === 'bsod') showBsodNoSpawn();
+                    if (prankParam === 'virus') { document.getElementById('virus').classList.add('active'); }
+                    if (prankParam === 'crack') { document.getElementById('crack').classList.add('active'); }
+                }, 500);
+            } else {
+                loadPrankState();
+            }
+        });
+
+        // BSOD without spawning more windows (for backup windows)
+        function showBsodNoSpawn() {
+            document.getElementById('bsod').classList.add('active');
+            let percent = 0;
+            bsodInterval = setInterval(() => {
+                percent += Math.random() * 2;
+                if (percent > 99) percent = Math.random() * 30;
+                document.getElementById('bsodPercent').textContent = Math.floor(percent) + '% complete';
+            }, 500);
+        }
     </script>
 </body>
 </html>
