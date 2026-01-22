@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Annoying Site</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>NexusAI - The Future of Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,13 +15,12 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background: #0a0a0a;
-            overflow: hidden;
+            color: white;
+            overflow-x: hidden;
         }
 
+        /* Animated gradient background */
         .bg-gradient {
             position: fixed;
             top: 0;
@@ -29,1103 +28,780 @@
             width: 100%;
             height: 100%;
             background:
-                radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 20% 20%, rgba(147, 51, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+            animation: gradientShift 10s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Grid pattern overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
             pointer-events: none;
         }
 
-        .container {
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #9333ea, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            padding: 60px 80px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 120px 40px 80px;
             position: relative;
             z-index: 1;
         }
 
-        h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #22c55e;
-            margin-bottom: 12px;
-            letter-spacing: -1px;
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(147, 51, 234, 0.15);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: #c084fc;
+            margin-bottom: 30px;
         }
 
-        .subtitle {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 1rem;
-            font-weight: 300;
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            max-width: 900px;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, #9333ea, #3b82f6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.6);
+            max-width: 600px;
+            line-height: 1.7;
             margin-bottom: 50px;
         }
 
-        .soccer-ball {
-            width: 160px;
-            height: 160px;
-            background: linear-gradient(145deg, #4ade80, #16a34a);
-            border-radius: 50%;
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 80px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #9333ea, #7c3aed);
+            border: none;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 40px rgba(147, 51, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 60px rgba(147, 51, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        /* AI Visual */
+        .ai-visual {
             position: relative;
-            margin: 0 auto 50px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 60px rgba(34, 197, 94, 0.3), 0 20px 40px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            height: 400px;
+            margin-bottom: 60px;
         }
 
-        .soccer-ball:hover {
-            transform: scale(1.08) translateY(-5px);
-            box-shadow: 0 0 80px rgba(34, 197, 94, 0.4), 0 30px 60px rgba(0, 0, 0, 0.4);
-        }
-
-        .soccer-ball::before {
-            content: '';
+        .ai-orb {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.2);
-            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-        }
-
-        .soccer-ball::after {
-            content: '';
-            position: absolute;
-            top: 12%;
-            left: 18%;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.3);
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #9333ea, #3b82f6, #ec4899);
             border-radius: 50%;
-            filter: blur(15px);
+            animation: orbFloat 6s ease-in-out infinite;
+            box-shadow:
+                0 0 80px rgba(147, 51, 234, 0.5),
+                0 0 120px rgba(59, 130, 246, 0.3),
+                inset 0 0 60px rgba(255,255,255,0.1);
         }
 
-        .warning {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.85rem;
-            font-weight: 400;
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -55%) scale(1.05); }
         }
 
-        .hint {
-            position: fixed;
-            bottom: 30px;
-            color: rgba(255, 255, 255, 0.15);
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .dropdown-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-        }
-
-        .dropdown-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.6);
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .dropdown-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .dropdown-btn svg {
-            width: 16px;
-            height: 16px;
-            transition: transform 0.2s;
-        }
-
-        .dropdown-container.open .dropdown-btn svg {
-            transform: rotate(180deg);
-        }
-
-        .dropdown-menu {
+        .ai-ring {
             position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            background: rgba(20, 20, 20, 0.95);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 8px;
-            min-width: 220px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s;
-            backdrop-filter: blur(20px);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 50%;
+            animation: ringPulse 4s ease-in-out infinite;
         }
 
-        .dropdown-container.open .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+        .ai-ring:nth-child(2) { width: 280px; height: 280px; animation-delay: 0.5s; }
+        .ai-ring:nth-child(3) { width: 340px; height: 340px; animation-delay: 1s; }
+        .ai-ring:nth-child(4) { width: 400px; height: 400px; animation-delay: 1.5s; }
+
+        @keyframes ringPulse {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.05); }
         }
 
-        .dropdown-item {
-            display: block;
-            width: 100%;
-            padding: 12px 16px;
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            font-family: inherit;
-            font-size: 0.85rem;
-            text-align: left;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.15s;
-        }
-
-        .dropdown-item:hover {
-            background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: 8px 0;
-        }
-
-        /* BSOD - Ultra Realistic Windows 11 Style */
-        .bsod-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0078d4;
-            z-index: 99999;
-            font-family: 'Segoe UI', 'Segoe UI Emoji', sans-serif;
-            cursor: default;
-        }
-
-        .bsod-overlay.active {
+        /* Stats */
+        .stats {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding-left: 10%;
+            gap: 80px;
         }
 
-        .bsod-sad {
-            font-size: 150px;
-            color: white;
-            margin-bottom: 30px;
-            font-weight: 100;
+        .stat {
+            text-align: center;
         }
 
-        .bsod-title {
-            color: white;
-            font-size: 32px;
-            font-weight: 400;
-            margin-bottom: 10px;
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .bsod-text {
-            color: white;
-            font-size: 14px;
-            line-height: 2;
-            margin-bottom: 40px;
-            max-width: 700px;
-        }
-
-        .bsod-percent {
-            color: white;
-            font-size: 14px;
-            margin-bottom: 50px;
-        }
-
-        .bsod-bottom {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-        }
-
-        .bsod-qr {
-            width: 120px;
-            height: 120px;
-            background: white;
-            padding: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .bsod-qr-code {
-            width: 100%;
-            height: 100%;
-            display: grid;
-            grid-template-columns: repeat(21, 1fr);
-            gap: 0;
-        }
-
-        .bsod-qr-code span {
-            background: black;
-        }
-
-        .bsod-qr-code span:nth-child(odd) {
-            background: white;
-        }
-
-        .bsod-qr-code span:nth-child(3n) {
-            background: black;
-        }
-
-        .bsod-info {
-            color: white;
-            font-size: 12px;
-            line-height: 1.8;
-        }
-
-        .bsod-info a {
-            color: white;
-        }
-
-        .bsod-passcode {
-            position: absolute;
-            bottom: 40px;
-            left: 10%;
-        }
-
-        .bsod-passcode input {
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 12px 24px;
-            font-size: 14px;
-            border-radius: 4px;
-            width: 250px;
-        }
-
-        .bsod-passcode input::placeholder {
-            color: rgba(255,255,255,0.6);
-        }
-
-        .bsod-passcode p {
+        .stat-label {
+            font-size: 0.9rem;
             color: rgba(255,255,255,0.5);
-            font-size: 11px;
-            margin-top: 8px;
+            margin-top: 4px;
         }
 
-        /* Virus Alert - Extremely Realistic */
-        .virus-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 99999;
-        }
-
-        .virus-overlay.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .virus-bg-pulse {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(255,0,0,0.3) 0%, transparent 70%);
-            animation: virusBgPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes virusBgPulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.8; }
-        }
-
-        .virus-popup {
-            background: #1a1a1a;
-            border: 2px solid #cc0000;
-            width: 95%;
-            max-width: 800px;
+        /* Features Section */
+        .features {
+            padding: 100px 60px;
             position: relative;
-            box-shadow: 0 0 100px rgba(255,0,0,0.5);
             z-index: 1;
         }
 
-        .virus-header {
-            background: linear-gradient(180deg, #cc0000 0%, #990000 100%);
-            padding: 12px 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .virus-header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .virus-header-icon {
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .virus-header-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .virus-header-btn {
-            width: 14px;
-            height: 14px;
-            border: none;
-            cursor: pointer;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .virus-minimize { background: #ffbd2e; border-radius: 50%; }
-        .virus-maximize { background: #27c93f; border-radius: 50%; }
-        .virus-close-btn { background: #ff5f56; border-radius: 50%; color: #800; }
-
-        .virus-body {
-            padding: 0;
-        }
-
-        .virus-alert-bar {
-            background: #ff0000;
-            color: white;
-            padding: 15px;
+        .section-title {
             text-align: center;
-            font-weight: bold;
-            font-size: 18px;
-            animation: alertFlash 0.5s infinite;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 60px;
         }
 
-        @keyframes alertFlash {
-            0%, 100% { background: #ff0000; }
-            50% { background: #cc0000; }
-        }
-
-        .virus-content {
-            padding: 30px;
-            display: flex;
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .virus-left {
-            flex: 0 0 120px;
+        .feature-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(147, 51, 234, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: rgba(255,255,255,0.5);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Footer hint */
+        .hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.1);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+
+        /* Ready Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(145deg, #1a1a2e, #16162a);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 24px;
+            padding: 50px 60px;
             text-align: center;
+            box-shadow: 0 0 100px rgba(147, 51, 234, 0.3);
+            animation: modalAppear 0.3s ease;
         }
 
-        .virus-shield {
-            font-size: 80px;
-            animation: shieldPulse 0.5s infinite;
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        @keyframes shieldPulse {
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes iconPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
 
-        .virus-right {
-            flex: 1;
+        .modal h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #9333ea, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .virus-title {
-            color: #ff3333;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
+        .modal p {
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 40px;
+            font-size: 1rem;
         }
 
-        .virus-subtitle {
-            color: #ff6666;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .virus-details {
-            background: #0d0d0d;
-            border: 1px solid #333;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 11px;
-            color: #ff4444;
-            max-height: 120px;
-            overflow-y: auto;
-        }
-
-        .virus-detail-line {
-            margin-bottom: 5px;
+        .modal-buttons {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            gap: 20px;
+            justify-content: center;
         }
 
-        .virus-detail-line::before {
-            content: '⚠';
-            color: #ffcc00;
-        }
-
-        .virus-status {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .virus-progress-container {
-            flex: 1;
-            background: #333;
-            height: 25px;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .virus-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #ff0000, #ff6600, #ff0000);
-            background-size: 200% 100%;
-            animation: progressAnim 1s linear infinite;
-            width: 67%;
-        }
-
-        @keyframes progressAnim {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 200% 0%; }
-        }
-
-        .virus-progress-text {
-            color: #ff6666;
-            font-size: 12px;
-            white-space: nowrap;
-        }
-
-        .virus-buttons {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .virus-btn {
-            flex: 1;
-            padding: 15px;
-            border: none;
+        .modal-btn {
+            padding: 16px 50px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            border: none;
         }
 
-        .virus-btn-danger {
-            background: #ff0000;
+        .modal-btn-yes {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
-            animation: btnPulse 0.5s infinite;
+            box-shadow: 0 0 30px rgba(34, 197, 94, 0.4);
         }
 
-        @keyframes btnPulse {
-            0%, 100% { box-shadow: 0 0 10px rgba(255,0,0,0.5); }
-            50% { box-shadow: 0 0 30px rgba(255,0,0,0.8); }
+        .modal-btn-yes:hover {
+            box-shadow: 0 0 50px rgba(34, 197, 94, 0.6);
+            transform: translateY(-2px);
         }
 
-        .virus-btn-secondary {
-            background: #333;
+        .modal-btn-no {
+            background: rgba(255,255,255,0.1);
             color: white;
-            border: 1px solid #666;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .virus-phone {
-            background: #1a0000;
-            border: 2px solid #ff0000;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
+        .modal-btn-no:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
         }
 
-        .virus-phone-label {
-            color: #ff6666;
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-
-        .virus-phone-number {
-            color: #ffffff;
-            font-size: 32px;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .virus-passcode {
-            text-align: center;
-            padding-top: 15px;
-            border-top: 1px solid #333;
-        }
-
-        .virus-passcode input {
-            background: #0d0d0d;
-            border: 1px solid #333;
-            color: white;
-            padding: 10px 20px;
-            font-size: 14px;
-            width: 200px;
-            text-align: center;
-        }
-
-        .virus-passcode p {
-            color: #666;
-            font-size: 10px;
-            margin-top: 8px;
-        }
-
-        /* Cracked Screen - Ultra Realistic */
-        .crack-overlay {
+        /* Shutdown Screen */
+        .shutdown-overlay {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 99998;
-            pointer-events: none;
-        }
-
-        .crack-overlay.active {
-            display: block;
-            pointer-events: auto;
-        }
-
-        .crack-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .crack-impact {
-            position: absolute;
-            top: 30%;
-            left: 40%;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(ellipse at center,
-                rgba(255,255,255,0.4) 0%,
-                rgba(200,200,200,0.2) 20%,
-                rgba(150,150,150,0.1) 40%,
-                transparent 60%);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            filter: blur(1px);
-        }
-
-        .crack-impact::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 30px;
-            height: 30px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        .crack-svg {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .crack-glass-effect {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.03) 50%, transparent 60%),
-                linear-gradient(225deg, transparent 40%, rgba(255,255,255,0.02) 50%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .crack-passcode-box {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.95);
-            padding: 20px 30px;
-            border-radius: 8px;
-            text-align: center;
+            background: #000;
             z-index: 99999;
-            border: 1px solid rgba(255,255,255,0.1);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .crack-passcode-box input {
+        .shutdown-overlay.active {
+            display: flex;
+            animation: shutdownFade 1.5s ease;
+        }
+
+        @keyframes shutdownFade {
+            0% { opacity: 0; }
+            30% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .shutdown-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: #0078d4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 40px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .shutdown-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 60px;
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .shutdown-error {
+            background: #1a1a1a;
+            border: 2px solid #ff3333;
+            border-radius: 8px;
+            padding: 40px 60px;
+            text-align: center;
+            animation: errorAppear 0.5s ease 3s forwards;
+            opacity: 0;
+        }
+
+        @keyframes errorAppear {
+            to { opacity: 1; }
+        }
+
+        .shutdown-error-icon {
+            font-size: 4rem;
+            color: #ff3333;
+            margin-bottom: 20px;
+        }
+
+        .shutdown-error h3 {
+            color: #ff3333;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .shutdown-error p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        .shutdown-error-code {
+            background: #0d0d0d;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: #ff6666;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .shutdown-usb-prompt {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid rgba(255, 165, 0, 0.3);
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .shutdown-usb-icon {
+            font-size: 2rem;
+        }
+
+        .shutdown-usb-text {
+            color: #ffa500;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .shutdown-passcode {
+            margin-top: 40px;
+        }
+
+        .shutdown-passcode input {
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             color: white;
-            padding: 12px 24px;
-            font-size: 14px;
-            border-radius: 4px;
+            padding: 14px 28px;
+            font-size: 1rem;
+            border-radius: 8px;
             text-align: center;
-            width: 200px;
+            width: 250px;
         }
 
-        .crack-passcode-box p {
+        .shutdown-passcode input::placeholder {
             color: rgba(255,255,255,0.4);
-            font-size: 11px;
-            margin-top: 8px;
+        }
+
+        .shutdown-passcode p {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.8rem;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="bg-gradient"></div>
+    <div class="grid-overlay"></div>
 
-    <div class="dropdown-container" id="dropdown">
-        <button class="dropdown-btn" onclick="toggleDropdown()">
-            More Pranks
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M6 9l6 6 6-6"/>
-            </svg>
-        </button>
-        <div class="dropdown-menu">
-            <button class="dropdown-item" onclick="prank('flip')">Flip Screen Upside Down</button>
-            <button class="dropdown-item" onclick="prank('shake')">Earthquake Mode</button>
-            <button class="dropdown-item" onclick="prank('spin')">Spinning Screen</button>
-            <button class="dropdown-item" onclick="prank('tiny')">Make Everything Tiny</button>
-            <button class="dropdown-item" onclick="prank('cursor')">Hide Cursor</button>
-            <button class="dropdown-item" onclick="prank('blur')">Blur Vision</button>
-            <div class="dropdown-divider"></div>
-            <button class="dropdown-item" onclick="prank('bsod')">Fake Blue Screen</button>
-            <button class="dropdown-item" onclick="prank('crack')">Cracked Screen</button>
-            <button class="dropdown-item" onclick="prank('virus')">Fake Virus Alert</button>
-            <div class="dropdown-divider"></div>
-            <button class="dropdown-item" onclick="prank('reset')" style="color: #22c55e;">Reset All Pranks</button>
+    <nav>
+        <div class="logo">NexusAI</div>
+        <div class="nav-links">
+            <a href="#">Products</a>
+            <a href="#">Research</a>
+            <a href="#">Documentation</a>
+            <a href="#">Pricing</a>
+            <button class="nav-btn">Sign In</button>
         </div>
-    </div>
+    </nav>
 
-    <div class="container">
-        <h1>The Annoying Site</h1>
-        <p class="subtitle">Click the ball. We dare you.</p>
-        <div class="soccer-ball" onclick="window.open('ready.html', '_blank', 'width=500,height=450,left=' + (screen.width/2-250) + ',top=' + (screen.height/2-225))"></div>
-        <p class="warning">Allow popups for full experience</p>
-    </div>
+    <section class="hero">
+        <div class="badge">
+            <span class="badge-dot"></span>
+            Now Available - NexusAI 5.0
+        </div>
+
+        <div class="ai-visual">
+            <div class="ai-ring"></div>
+            <div class="ai-ring"></div>
+            <div class="ai-ring"></div>
+            <div class="ai-orb"></div>
+        </div>
+
+        <h1>The Future of <span>Artificial Intelligence</span> is Here</h1>
+
+        <p class="hero-subtitle">
+            Experience the most advanced AI system ever created. NexusAI understands,
+            creates, and innovates at a level that was once thought impossible.
+        </p>
+
+        <div class="cta-buttons">
+            <button class="btn-primary" onclick="showReadyModal()">Get Started Free</button>
+            <button class="btn-secondary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Watch Demo
+            </button>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">1T+</div>
+                <div class="stat-label">Parameters</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">99.9%</div>
+                <div class="stat-label">Accuracy</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">10M+</div>
+                <div class="stat-label">Users</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <h2 class="section-title">Powered by Next-Gen Technology</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>Neural Processing</h3>
+                <p>Our quantum-enhanced neural networks process information 1000x faster than traditional systems.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔮</div>
+                <h3>Predictive Intelligence</h3>
+                <p>Advanced algorithms that anticipate your needs before you even know them yourself.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Enterprise Security</h3>
+                <p>Military-grade encryption with zero-knowledge architecture to protect your data.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Real-Time Learning</h3>
+                <p>Continuously evolving AI that adapts and improves with every interaction.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>Global Scale</h3>
+                <p>Deployed across 50+ data centers worldwide for instant response anywhere.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Precision Output</h3>
+                <p>Unmatched accuracy in code generation, content creation, and data analysis.</p>
+            </div>
+        </div>
+    </section>
 
     <p class="hint">Passcode: 1234</p>
 
-    <!-- BSOD Overlay -->
-    <div class="bsod-overlay" id="bsod">
-        <div class="bsod-sad">:(</div>
-        <div class="bsod-title">Your PC ran into a problem and needs to restart.</div>
-        <div class="bsod-text">
-            We're just collecting some error info, and then we'll restart for you.<br>
-            For more information about this issue and possible fixes, visit<br>
-            https://www.windows.com/stopcode
-        </div>
-        <div class="bsod-percent" id="bsodPercent">0% complete</div>
-        <div class="bsod-bottom">
-            <div class="bsod-qr">
-                <div class="bsod-qr-code" id="qrCode"></div>
-            </div>
-            <div class="bsod-info">
-                For more information about this issue and<br>
-                possible fixes, visit https://www.windows.com/stopcode<br><br>
-                If you call a support person, give them this info:<br>
-                Stop code: CRITICAL_PROCESS_DIED<br>
-                What failed: ntoskrnl.exe
-            </div>
-        </div>
-        <div class="bsod-passcode">
-            <input type="text" id="bsodPasscode" placeholder="Enter recovery key" onkeyup="checkBsodPasscode(event)">
-            <p>Microsoft Recovery Key Required</p>
-        </div>
-    </div>
-
-    <!-- Virus Alert Overlay -->
-    <div class="virus-overlay" id="virus">
-        <div class="virus-bg-pulse"></div>
-        <div class="virus-popup">
-            <div class="virus-header">
-                <div class="virus-header-left">
-                    <div class="virus-header-icon">🛡</div>
-                    Windows Defender - Security Warning
-                </div>
-                <div class="virus-header-buttons">
-                    <button class="virus-header-btn virus-minimize">−</button>
-                    <button class="virus-header-btn virus-maximize">□</button>
-                    <button class="virus-header-btn virus-close-btn" onclick="tryCloseVirus()">×</button>
-                </div>
-            </div>
-            <div class="virus-body">
-                <div class="virus-alert-bar">⚠ CRITICAL SECURITY ALERT - IMMEDIATE ACTION REQUIRED ⚠</div>
-                <div class="virus-content">
-                    <div class="virus-left">
-                        <div class="virus-shield">🛑</div>
-                    </div>
-                    <div class="virus-right">
-                        <div class="virus-title">THREAT DETECTED!</div>
-                        <div class="virus-subtitle">Your computer has been compromised. Personal data at risk.</div>
-                        <div class="virus-details" id="virusDetails">
-                            <div class="virus-detail-line">Trojan:Win32/Emotet.G!MTB - C:\Windows\System32\drivers\acpi.sys</div>
-                            <div class="virus-detail-line">Ransom:Win32/StopCrypt.PAK!MTB - C:\Users\AppData\Local\Temp</div>
-                            <div class="virus-detail-line">Backdoor:Win32/Bladabindi!ml - C:\Program Files\Common Files</div>
-                            <div class="virus-detail-line">PWS:Win32/Zbot.gen!AM - Browser Password Storage</div>
-                            <div class="virus-detail-line">Trojan:Script/Wacatac.B!ml - C:\Users\Downloads\setup.exe</div>
-                            <div class="virus-detail-line">HackTool:Win32/Keygen - C:\Program Files (x86)\Software</div>
-                            <div class="virus-detail-line">Exploit:Win32/CVE-2023-23397 - Microsoft Outlook</div>
-                            <div class="virus-detail-line">Spyware:Win32/Keylogger.AX - Active in memory</div>
-                        </div>
-                        <div class="virus-status">
-                            <div class="virus-progress-container">
-                                <div class="virus-progress-bar"></div>
-                            </div>
-                            <div class="virus-progress-text">Threat Level: CRITICAL</div>
-                        </div>
-                        <div class="virus-buttons">
-                            <button class="virus-btn virus-btn-danger">Remove Threats Now</button>
-                            <button class="virus-btn virus-btn-secondary">Schedule Scan</button>
-                        </div>
-                        <div class="virus-phone">
-                            <div class="virus-phone-label">Call Microsoft Certified Technicians Immediately:</div>
-                            <div class="virus-phone-number">1-888-123-4567</div>
-                        </div>
-                        <div class="virus-passcode">
-                            <input type="text" id="virusPasscode" placeholder="Admin override code" onkeyup="checkVirusPasscode(event)">
-                            <p>IT Administrator access required</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- Ready Modal -->
+    <div class="modal-overlay" id="readyModal">
+        <div class="modal">
+            <div class="modal-icon">🚀</div>
+            <h2>Are You Ready?</h2>
+            <p>You're about to experience the most powerful AI on the planet.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-yes" onclick="handleYes()">Yes, Let's Go!</button>
+                <button class="modal-btn modal-btn-no" onclick="handleNo()">No, I'm Scared</button>
             </div>
         </div>
     </div>
 
-    <!-- Cracked Screen Overlay - Ultra Realistic -->
-    <div class="crack-overlay" id="crack">
-        <div class="crack-container">
-            <div class="crack-impact"></div>
-            <svg class="crack-svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
-                <defs>
-                    <filter id="crackShadow">
-                        <feDropShadow dx="1" dy="1" stdDeviation="0.5" flood-color="rgba(255,255,255,0.3)"/>
-                    </filter>
-                    <linearGradient id="crackGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" style="stop-color:rgba(80,80,80,0.9)"/>
-                        <stop offset="50%" style="stop-color:rgba(120,120,120,0.95)"/>
-                        <stop offset="100%" style="stop-color:rgba(80,80,80,0.9)"/>
-                    </linearGradient>
-                </defs>
-
-                <!-- Impact center point -->
-                <circle cx="768" cy="324" r="8" fill="rgba(0,0,0,0.4)"/>
-
-                <!-- Main radiating cracks from impact -->
-                <path d="M768 324 L650 180 L620 120 L580 50" stroke="url(#crackGradient)" stroke-width="3" fill="none" filter="url(#crackShadow)"/>
-                <path d="M768 324 L850 150 L920 80 L1000 20" stroke="url(#crackGradient)" stroke-width="3.5" fill="none" filter="url(#crackShadow)"/>
-                <path d="M768 324 L950 280 L1100 260 L1300 240" stroke="url(#crackGradient)" stroke-width="3" fill="none" filter="url(#crackShadow)"/>
-                <path d="M768 324 L920 420 L1050 500 L1200 600" stroke="url(#crackGradient)" stroke-width="2.5" fill="none" filter="url(#crackShadow)"/>
-                <path d="M768 324 L800 500 L820 650 L850 850" stroke="url(#crackGradient)" stroke-width="3" fill="none" filter="url(#crackShadow)"/>
-                <path d="M768 324 L650 480 L550 600 L400 750" stroke="url(#crackGradient)" stroke-width="2.5" fill="none" filter="url(#crackShadow)"/>
-                <path d="M768 324 L580 350 L400 380 L200 400" stroke="url(#crackGradient)" stroke-width="3" fill="none" filter="url(#crackShadow)"/>
-                <path d="M768 324 L600 250 L480 200 L300 150" stroke="url(#crackGradient)" stroke-width="2.5" fill="none" filter="url(#crackShadow)"/>
-                <path d="M768 324 L900 350 L1050 380 L1250 420" stroke="url(#crackGradient)" stroke-width="2" fill="none" filter="url(#crackShadow)"/>
-                <path d="M768 324 L720 450 L680 550 L620 700" stroke="url(#crackGradient)" stroke-width="2.5" fill="none" filter="url(#crackShadow)"/>
-
-                <!-- Secondary branching cracks -->
-                <path d="M650 180 L550 200 L450 180" stroke="rgba(100,100,100,0.8)" stroke-width="2" fill="none"/>
-                <path d="M650 180 L680 100 L720 40" stroke="rgba(100,100,100,0.8)" stroke-width="1.5" fill="none"/>
-                <path d="M850 150 L800 80 L750 30" stroke="rgba(100,100,100,0.8)" stroke-width="1.5" fill="none"/>
-                <path d="M920 80 L980 120 L1050 100" stroke="rgba(100,100,100,0.7)" stroke-width="1.5" fill="none"/>
-                <path d="M950 280 L1000 200 L1080 150" stroke="rgba(100,100,100,0.8)" stroke-width="2" fill="none"/>
-                <path d="M1100 260 L1150 320 L1220 350" stroke="rgba(100,100,100,0.7)" stroke-width="1.5" fill="none"/>
-                <path d="M920 420 L980 380 L1050 400" stroke="rgba(100,100,100,0.8)" stroke-width="1.5" fill="none"/>
-                <path d="M1050 500 L1120 450 L1200 480" stroke="rgba(100,100,100,0.7)" stroke-width="1.5" fill="none"/>
-                <path d="M800 500 L750 550 L780 620" stroke="rgba(100,100,100,0.8)" stroke-width="2" fill="none"/>
-                <path d="M820 650 L880 700 L920 780" stroke="rgba(100,100,100,0.7)" stroke-width="1.5" fill="none"/>
-                <path d="M650 480 L580 450 L520 500" stroke="rgba(100,100,100,0.8)" stroke-width="1.5" fill="none"/>
-                <path d="M550 600 L480 580 L420 620" stroke="rgba(100,100,100,0.7)" stroke-width="1.5" fill="none"/>
-                <path d="M580 350 L540 280 L480 300" stroke="rgba(100,100,100,0.8)" stroke-width="2" fill="none"/>
-                <path d="M400 380 L350 320 L280 350" stroke="rgba(100,100,100,0.7)" stroke-width="1.5" fill="none"/>
-                <path d="M600 250 L620 180 L580 130" stroke="rgba(100,100,100,0.8)" stroke-width="1.5" fill="none"/>
-                <path d="M480 200 L440 250 L380 220" stroke="rgba(100,100,100,0.7)" stroke-width="1.5" fill="none"/>
-
-                <!-- Tertiary micro cracks -->
-                <path d="M700 200 L680 220 L650 210" stroke="rgba(120,120,120,0.6)" stroke-width="1" fill="none"/>
-                <path d="M880 200 L900 180 L930 200" stroke="rgba(120,120,120,0.6)" stroke-width="1" fill="none"/>
-                <path d="M1000 300 L1030 280 L1020 320" stroke="rgba(120,120,120,0.6)" stroke-width="1" fill="none"/>
-                <path d="M850 450 L880 440 L870 480" stroke="rgba(120,120,120,0.6)" stroke-width="1" fill="none"/>
-                <path d="M750 550 L720 570 L750 600" stroke="rgba(120,120,120,0.6)" stroke-width="1" fill="none"/>
-                <path d="M600 400 L570 420 L590 450" stroke="rgba(120,120,120,0.6)" stroke-width="1" fill="none"/>
-                <path d="M500 300 L470 320 L490 350" stroke="rgba(120,120,120,0.6)" stroke-width="1" fill="none"/>
-                <path d="M680 280 L650 300 L670 330" stroke="rgba(120,120,120,0.6)" stroke-width="1" fill="none"/>
-
-                <!-- Shattered glass pieces near impact -->
-                <polygon points="755,310 775,300 780,320 760,325" fill="rgba(255,255,255,0.08)" stroke="rgba(150,150,150,0.5)" stroke-width="0.5"/>
-                <polygon points="780,315 800,308 805,330 785,335" fill="rgba(255,255,255,0.06)" stroke="rgba(150,150,150,0.4)" stroke-width="0.5"/>
-                <polygon points="758,335 778,340 773,360 753,355" fill="rgba(255,255,255,0.07)" stroke="rgba(150,150,150,0.5)" stroke-width="0.5"/>
-                <polygon points="740,318 755,308 762,328 747,335" fill="rgba(255,255,255,0.05)" stroke="rgba(150,150,150,0.4)" stroke-width="0.5"/>
-                <polygon points="785,295 800,285 810,305 795,312" fill="rgba(255,255,255,0.06)" stroke="rgba(150,150,150,0.4)" stroke-width="0.5"/>
-            </svg>
-            <div class="crack-glass-effect"></div>
+    <!-- Shutdown Screen -->
+    <div class="shutdown-overlay" id="shutdownScreen">
+        <div class="shutdown-spinner"></div>
+        <div class="shutdown-text">
+            Shutting down...<br>
+            Please wait while your system powers off safely.
         </div>
-        <div class="crack-passcode-box">
-            <input type="text" id="crackPasscode" placeholder="Enter repair code" onkeyup="checkCrackPasscode(event)">
-            <p>Screen repair authorization required</p>
+        <div class="shutdown-error">
+            <div class="shutdown-error-icon">⚠️</div>
+            <h3>CRITICAL SYSTEM FAILURE</h3>
+            <p>Your system has encountered a fatal error and cannot continue.</p>
+            <div class="shutdown-error-code">
+                Error Code: 0x00000F4<br>
+                CRITICAL_OBJECT_TERMINATION<br>
+                System boot files corrupted or missing
+            </div>
+            <div class="shutdown-usb-prompt">
+                <span class="shutdown-usb-icon">💾</span>
+                <span class="shutdown-usb-text">INPUT RECOVERY USB</span>
+            </div>
+            <div class="shutdown-passcode">
+                <input type="text" id="shutdownPasscode" placeholder="Enter recovery code" onkeyup="checkShutdownPasscode(event)">
+                <p>Recovery authorization required</p>
+            </div>
         </div>
     </div>
 
     <script>
         const PASSCODE = "1234";
-        let bsodInterval;
 
-        // Generate fake QR code
-        function generateQR() {
-            const qr = document.getElementById('qrCode');
-            for (let i = 0; i < 441; i++) {
-                const span = document.createElement('span');
-                span.style.background = Math.random() > 0.5 ? 'black' : 'white';
-                qr.appendChild(span);
-            }
-        }
-        generateQR();
-
-        function toggleDropdown() {
-            document.getElementById('dropdown').classList.toggle('open');
+        function showReadyModal() {
+            document.getElementById('readyModal').classList.add('active');
         }
 
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.dropdown-container')) {
-                document.getElementById('dropdown').classList.remove('open');
-            }
-        });
-
-        function prank(type) {
-            document.getElementById('dropdown').classList.remove('open');
-
-            switch(type) {
-                case 'flip':
-                    document.body.style.transform = 'rotate(180deg)';
-                    document.body.style.transition = 'transform 0.5s';
-                    break;
-                case 'shake':
-                    document.body.style.animation = 'shake 0.1s infinite';
-                    addShakeStyle();
-                    break;
-                case 'spin':
-                    document.body.style.animation = 'spin 2s linear infinite';
-                    addSpinStyle();
-                    break;
-                case 'tiny':
-                    document.body.style.transform = 'scale(0.3)';
-                    document.body.style.transition = 'transform 0.5s';
-                    break;
-                case 'cursor':
-                    document.body.style.cursor = 'none';
-                    break;
-                case 'blur':
-                    document.body.style.filter = 'blur(5px)';
-                    document.body.style.transition = 'filter 0.5s';
-                    break;
-                case 'bsod':
-                    showBsod();
-                    spawnBackupWindows('bsod');
-                    break;
-                case 'crack':
-                    document.getElementById('crack').classList.add('active');
-                    spawnBackupWindows('crack');
-                    break;
-                case 'virus':
-                    document.getElementById('virus').classList.add('active');
-                    spawnBackupWindows('virus');
-                    break;
-                case 'reset':
-                    resetAll();
-                    break;
-            }
+        function hideReadyModal() {
+            document.getElementById('readyModal').classList.remove('active');
         }
 
-        function showBsod() {
-            document.getElementById('bsod').classList.add('active');
-            let percent = 0;
-            bsodInterval = setInterval(() => {
-                percent += Math.random() * 3;
-                if (percent > 99) percent = Math.random() * 40;
-                document.getElementById('bsodPercent').textContent = Math.floor(percent) + '% complete';
-            }, 800);
-        }
-
-        function showBsodNoSpawn() {
-            document.getElementById('bsod').classList.add('active');
-            let percent = 0;
-            bsodInterval = setInterval(() => {
-                percent += Math.random() * 3;
-                if (percent > 99) percent = Math.random() * 40;
-                document.getElementById('bsodPercent').textContent = Math.floor(percent) + '% complete';
-            }, 800);
-        }
-
-        function spawnBackupWindows(prankType) {
-            localStorage.setItem('activePrank', prankType);
-            // Open 20 backup windows
-            for (let i = 0; i < 20; i++) {
+        function handleYes() {
+            hideReadyModal();
+            // Spawn chaos windows with crazy AI/virus content
+            for (let i = 0; i < 30; i++) {
                 setTimeout(() => {
-                    const w = 500 + Math.random() * 300;
+                    const w = 400 + Math.random() * 250;
                     const h = 350 + Math.random() * 200;
                     const l = Math.random() * (screen.width - w);
                     const t = Math.random() * (screen.height - h);
-                    window.open(window.location.href + '?prank=' + prankType, '_blank',
+                    window.open('popup.html', '_blank',
                         `width=${w},height=${h},left=${l},top=${t}`);
                 }, i * 100);
             }
         }
 
-        function tryCloseBsod() {
-            document.getElementById('bsod').classList.remove('active');
-            setTimeout(() => {
-                document.getElementById('bsod').classList.add('active');
-                alert('Critical system error. Recovery key required.');
-            }, 100);
+        function handleNo() {
+            hideReadyModal();
+            document.getElementById('shutdownScreen').classList.add('active');
         }
 
-        function tryCloseVirus() {
-            document.getElementById('virus').classList.remove('active');
-            setTimeout(() => {
-                document.getElementById('virus').classList.add('active');
-                alert('WARNING: Closing this window may result in permanent data loss!\n\nEnter admin override code to safely remove threats.');
-            }, 100);
-        }
-
-        function tryCloseCrack() {
-            document.getElementById('crack').classList.remove('active');
-            setTimeout(() => {
-                document.getElementById('crack').classList.add('active');
-                alert('Display hardware error detected. Authorization required for repair.');
-            }, 100);
-        }
-
-        function checkBsodPasscode(e) {
-            if (document.getElementById('bsodPasscode').value === PASSCODE) {
-                clearInterval(bsodInterval);
-                document.getElementById('bsod').classList.remove('active');
-                document.getElementById('bsodPasscode').value = '';
-                localStorage.removeItem('activePrank');
+        function checkShutdownPasscode(e) {
+            if (document.getElementById('shutdownPasscode').value === PASSCODE) {
+                document.getElementById('shutdownScreen').classList.remove('active');
+                document.getElementById('shutdownPasscode').value = '';
             }
         }
 
-        function checkVirusPasscode(e) {
-            if (document.getElementById('virusPasscode').value === PASSCODE) {
-                document.getElementById('virus').classList.remove('active');
-                document.getElementById('virusPasscode').value = '';
-                localStorage.removeItem('activePrank');
+        // Click outside modal to close
+        document.getElementById('readyModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideReadyModal();
             }
-        }
+        });
 
-        function checkCrackPasscode(e) {
-            if (document.getElementById('crackPasscode').value === PASSCODE) {
-                document.getElementById('crack').classList.remove('active');
-                document.getElementById('crackPasscode').value = '';
-                localStorage.removeItem('activePrank');
-            }
-        }
-
-        function resetAll() {
-            document.body.style.transform = '';
-            document.body.style.animation = '';
-            document.body.style.cursor = '';
-            document.body.style.filter = '';
-            clearInterval(bsodInterval);
-            document.getElementById('bsod').classList.remove('active');
-            document.getElementById('crack').classList.remove('active');
-            document.getElementById('virus').classList.remove('active');
-            localStorage.removeItem('activePrank');
-            localStorage.removeItem('prankState');
-        }
-
-        function addShakeStyle() {
-            if (!document.getElementById('shake-style')) {
-                const style = document.createElement('style');
-                style.id = 'shake-style';
-                style.textContent = '@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)} 75%{transform:translateX(10px)} }';
-                document.head.appendChild(style);
-            }
-        }
-
-        function addSpinStyle() {
-            if (!document.getElementById('spin-style')) {
-                const style = document.createElement('style');
-                style.id = 'spin-style';
-                style.textContent = '@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }';
-                document.head.appendChild(style);
-            }
-        }
-
-        // Prevent closing with Escape key
+        // Prevent escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 e.preventDefault();
-                if (document.getElementById('bsod').classList.contains('active') ||
-                    document.getElementById('virus').classList.contains('active') ||
-                    document.getElementById('crack').classList.contains('active')) {
-                    alert('You cannot escape! Enter the passcode.');
+                if (document.getElementById('shutdownScreen').classList.contains('active')) {
+                    alert('System recovery required. Insert recovery USB or enter code.');
                 }
             }
+        });
+
+        // Emergency reset with ?
+        document.addEventListener('keydown', function(e) {
             if (e.key === '?' || (e.shiftKey && e.key === '/')) {
-                resetAll();
-            }
-        });
-
-        // Load state when page opens
-        window.addEventListener('load', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const prankParam = urlParams.get('prank');
-            if (prankParam) {
-                setTimeout(() => {
-                    if (prankParam === 'bsod') showBsodNoSpawn();
-                    if (prankParam === 'virus') document.getElementById('virus').classList.add('active');
-                    if (prankParam === 'crack') document.getElementById('crack').classList.add('active');
-                }, 300);
-            }
-        });
-
-        // Warn before closing
-        window.addEventListener('beforeunload', function(e) {
-            if (document.getElementById('bsod').classList.contains('active') ||
-                document.getElementById('virus').classList.contains('active') ||
-                document.getElementById('crack').classList.contains('active')) {
-                window.open(window.location.href + '?prank=' + localStorage.getItem('activePrank'), '_blank');
-                e.preventDefault();
-                e.returnValue = 'You cannot escape!';
-                return e.returnValue;
+                document.getElementById('shutdownScreen').classList.remove('active');
+                document.getElementById('readyModal').classList.remove('active');
             }
         });
     </script>

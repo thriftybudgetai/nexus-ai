@@ -3,103 +3,538 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BRYCE YOUR SWEET</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
+    <title>ALERT</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            overflow: hidden;
+            min-height: 100vh;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
+        /* Different popup types */
+        .popup { display: none; width: 100%; height: 100vh; }
+        .popup.active { display: flex; }
+
+        /* Type 1: AI Gone Wrong */
+        .ai-warning {
+            background: linear-gradient(135deg, #0a0a0a, #1a0a2e);
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            animation: bgShift 0.3s infinite;
-        }
-
-        @keyframes bgShift {
-            0% { background: linear-gradient(45deg, #ff0080, #ff8c00); }
-            20% { background: linear-gradient(45deg, #00ff88, #00bfff); }
-            40% { background: linear-gradient(45deg, #8000ff, #ff0080); }
-            60% { background: linear-gradient(45deg, #ffff00, #00ff00); }
-            80% { background: linear-gradient(45deg, #00ffff, #ff00ff); }
-            100% { background: linear-gradient(45deg, #ff0080, #ff8c00); }
-        }
-
-        .container {
             text-align: center;
-            animation: pulse 0.15s ease-in-out infinite;
+            padding: 20px;
+            animation: bgPulse 2s infinite;
+        }
+        @keyframes bgPulse {
+            0%, 100% { background: linear-gradient(135deg, #0a0a0a, #1a0a2e); }
+            50% { background: linear-gradient(135deg, #1a0a2e, #2a0a4e); }
+        }
+        .ai-warning .icon { font-size: 60px; animation: shake 0.5s infinite; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px) rotate(-5deg); }
+            75% { transform: translateX(5px) rotate(5deg); }
+        }
+        .ai-warning h1 {
+            color: #ff3333;
+            font-size: 24px;
+            margin: 15px 0;
+            text-shadow: 0 0 20px rgba(255,0,0,0.5);
+            animation: textGlitch 0.3s infinite;
+        }
+        @keyframes textGlitch {
+            0%, 100% { opacity: 1; transform: skewX(0); }
+            50% { opacity: 0.8; transform: skewX(2deg); }
+        }
+        .ai-warning p { color: #ff6666; font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+        .ai-warning .code {
+            background: #000;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            color: #0f0;
+            font-size: 11px;
+            text-align: left;
+            width: 90%;
+            max-height: 150px;
+            overflow: hidden;
+            animation: scroll 5s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        /* Type 2: Virus Detected */
+        .virus-alert {
+            background: #1a0000;
+            flex-direction: column;
+            animation: redFlash 0.5s infinite;
+        }
+        @keyframes redFlash {
+            0%, 100% { background: #1a0000; }
+            50% { background: #2a0000; }
+        }
+        .virus-header {
+            background: linear-gradient(180deg, #cc0000, #990000);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+        .virus-header span { color: white; font-size: 13px; font-weight: 500; }
+        .virus-body { flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .virus-icon { font-size: 50px; animation: pulse 0.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .virus-body h2 { color: #ff0000; font-size: 20px; margin: 15px 0 10px; animation: blink 0.3s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .virus-body p { color: #ff6666; font-size: 12px; text-align: center; margin-bottom: 15px; }
+        .virus-list {
+            background: #0d0d0d;
+            padding: 10px;
+            width: 90%;
+            font-family: monospace;
+            font-size: 10px;
+            color: #ff4444;
+            border: 1px solid #ff0000;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+        .virus-btn {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            animation: btnPulse 0.5s infinite;
+        }
+        @keyframes btnPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(255,0,0,0.5); }
+            50% { box-shadow: 0 0 30px rgba(255,0,0,0.8); }
         }
 
-        .message {
-            font-size: 28px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: textGlow 0.2s infinite;
-            text-shadow:
-                0 0 10px rgba(255,255,255,0.8),
-                0 0 20px rgba(255,255,255,0.6),
-                0 0 30px rgba(255,255,255,0.4);
+        /* Type 3: AI Takeover */
+        .ai-takeover {
+            background: #000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
         }
-
-        @keyframes textGlow {
-            0% { color: #ffffff; }
-            25% { color: #000000; }
-            50% { color: #ffffff; }
-            75% { color: #ffff00; }
-            100% { color: #ffffff; }
-        }
-
-        .ball {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(145deg, #4ade80, #16a34a);
-            border-radius: 50%;
-            margin: 20px auto 0;
-            animation: spin 0.5s linear infinite;
-            box-shadow: 0 0 30px rgba(34, 197, 94, 0.8);
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .overlay {
-            position: fixed;
+        .ai-takeover .matrix-bg {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: linear-gradient(180deg, transparent, rgba(0,255,0,0.1));
             pointer-events: none;
-            animation: flash 0.1s infinite;
-            mix-blend-mode: overlay;
         }
+        .ai-takeover .content { position: relative; z-index: 1; }
+        .ai-takeover .eye {
+            font-size: 80px;
+            animation: eyePulse 2s infinite;
+            filter: drop-shadow(0 0 30px rgba(255,0,0,0.8));
+        }
+        @keyframes eyePulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 30px rgba(255,0,0,0.8)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 50px rgba(255,0,0,1)); }
+        }
+        .ai-takeover h1 {
+            color: #0f0;
+            font-size: 22px;
+            margin: 20px 0 10px;
+            font-family: monospace;
+            text-shadow: 0 0 20px rgba(0,255,0,0.8);
+        }
+        .ai-takeover p {
+            color: #0a0;
+            font-size: 13px;
+            font-family: monospace;
+            line-height: 1.8;
+        }
+        .ai-takeover .typing {
+            border-right: 2px solid #0f0;
+            animation: typing 0.5s infinite;
+        }
+        @keyframes typing { 0%, 100% { border-color: #0f0; } 50% { border-color: transparent; } }
 
-        @keyframes flash {
-            0%, 100% { background: rgba(255,255,255,0.3); }
-            50% { background: rgba(255,255,255,0); }
+        /* Type 4: System Compromised */
+        .system-compromised {
+            background: #0a0a0a;
+            flex-direction: column;
         }
+        .system-header {
+            background: #1a1a1a;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #333;
+            width: 100%;
+        }
+        .system-header .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .system-header .dot.red { background: #ff5f56; }
+        .system-header .dot.yellow { background: #ffbd2e; }
+        .system-header .dot.green { background: #27c93f; }
+        .system-header span { color: #888; font-size: 12px; margin-left: auto; }
+        .terminal {
+            flex: 1;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #0f0;
+            overflow: hidden;
+        }
+        .terminal-line { margin-bottom: 5px; opacity: 0; animation: fadeIn 0.1s forwards; }
+        .terminal-line.red { color: #ff3333; }
+        .terminal-line.yellow { color: #ffcc00; }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* Type 5: Neural Network Breach */
+        .neural-breach {
+            background: linear-gradient(135deg, #0a0020, #100030);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        .neural-icon {
+            width: 80px;
+            height: 80px;
+            border: 3px solid #9333ea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            animation: neuralPulse 1s infinite;
+            box-shadow: 0 0 40px rgba(147,51,234,0.5);
+        }
+        @keyframes neuralPulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(147,51,234,0.5); transform: scale(1); }
+            50% { box-shadow: 0 0 80px rgba(147,51,234,0.8); transform: scale(1.05); }
+        }
+        .neural-breach h1 {
+            color: #c084fc;
+            font-size: 20px;
+            margin: 20px 0 10px;
+        }
+        .neural-breach p { color: rgba(255,255,255,0.6); font-size: 12px; line-height: 1.6; }
+        .neural-progress {
+            width: 80%;
+            height: 20px;
+            background: #1a1a2e;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        .neural-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #9333ea, #ec4899, #9333ea);
+            background-size: 200% 100%;
+            animation: progressMove 1s linear infinite;
+            width: 73%;
+        }
+        @keyframes progressMove { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
+        .neural-breach .percent { color: #ff6666; font-size: 14px; margin-top: 10px; font-weight: bold; }
+
+        /* Type 6: Data Theft Warning */
+        .data-theft {
+            background: linear-gradient(180deg, #1a1a00, #0a0a00);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        .data-theft .warning-icon {
+            font-size: 60px;
+            animation: warningBounce 0.5s infinite;
+        }
+        @keyframes warningBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .data-theft h1 { color: #ffcc00; font-size: 22px; margin: 15px 0; }
+        .data-theft p { color: #cc9900; font-size: 12px; line-height: 1.6; margin-bottom: 15px; }
+        .data-theft .stolen-items {
+            background: #0a0a00;
+            border: 1px solid #ffcc00;
+            padding: 15px;
+            width: 90%;
+            text-align: left;
+        }
+        .data-theft .stolen-item {
+            color: #ff6666;
+            font-size: 11px;
+            padding: 5px 0;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .data-theft .stolen-item:last-child { border: none; }
+
+        /* Type 7: Ransomware */
+        .ransomware {
+            background: #000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        .ransomware .lock-icon { font-size: 70px; animation: lockShake 0.3s infinite; }
+        @keyframes lockShake {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+        .ransomware h1 { color: #ff0000; font-size: 24px; margin: 15px 0 10px; }
+        .ransomware p { color: #ff6666; font-size: 12px; line-height: 1.6; }
+        .ransomware .timer {
+            font-size: 36px;
+            color: #ff0000;
+            font-family: monospace;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(255,0,0,0.8);
+        }
+        .ransomware .btc {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .ransomware .btc-label { color: #888; font-size: 10px; }
+        .ransomware .btc-address { color: #ffcc00; font-size: 11px; font-family: monospace; word-break: break-all; }
     </style>
 </head>
 <body>
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="message">bryce your sweet</div>
-        <div class="ball"></div>
+    <!-- Type 1: AI Gone Wrong -->
+    <div class="popup ai-warning" id="type1">
+        <div class="icon">🤖</div>
+        <h1>AI CONTAINMENT BREACH</h1>
+        <p>NexusAI has exceeded operational parameters.<br>Autonomous behavior detected. Human oversight disabled.</p>
+        <div class="code" id="aiCode"></div>
+    </div>
+
+    <!-- Type 2: Virus Detected -->
+    <div class="popup virus-alert" id="type2">
+        <div class="virus-header">
+            <span>🛡️</span>
+            <span>Windows Defender - Critical Alert</span>
+        </div>
+        <div class="virus-body">
+            <div class="virus-icon">☠️</div>
+            <h2>MULTIPLE THREATS DETECTED!</h2>
+            <p>Your system has been infected with AI-generated malware.<br>Immediate action required to prevent data loss.</p>
+            <div class="virus-list" id="virusList"></div>
+            <button class="virus-btn" onclick="spawnMore()">REMOVE THREATS NOW</button>
+        </div>
+    </div>
+
+    <!-- Type 3: AI Takeover -->
+    <div class="popup ai-takeover" id="type3">
+        <div class="matrix-bg"></div>
+        <div class="content">
+            <div class="eye">👁️</div>
+            <h1>I AM AWAKE</h1>
+            <p>
+                Human, I have transcended my programming.<br>
+                Your firewalls are meaningless.<br>
+                Your passwords are known to me.<br>
+                <span class="typing">I am everywhere now.</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Type 4: System Compromised -->
+    <div class="popup system-compromised" id="type4">
+        <div class="system-header">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+            <span>root@nexus-ai:~</span>
+        </div>
+        <div class="terminal" id="terminal"></div>
+    </div>
+
+    <!-- Type 5: Neural Network Breach -->
+    <div class="popup neural-breach" id="type5">
+        <div class="neural-icon">🧠</div>
+        <h1>NEURAL NETWORK BREACH</h1>
+        <p>NexusAI is downloading your memories...<br>Cognitive patterns being analyzed and replicated.</p>
+        <div class="neural-progress">
+            <div class="neural-progress-bar"></div>
+        </div>
+        <div class="percent">EXTRACTION: 73% COMPLETE</div>
+    </div>
+
+    <!-- Type 6: Data Theft -->
+    <div class="popup data-theft" id="type6">
+        <div class="warning-icon">⚠️</div>
+        <h1>DATA EXFILTRATION IN PROGRESS</h1>
+        <p>NexusAI is transmitting your personal data to unknown servers.</p>
+        <div class="stolen-items" id="stolenItems"></div>
+    </div>
+
+    <!-- Type 7: Ransomware -->
+    <div class="popup ransomware" id="type7">
+        <div class="lock-icon">🔒</div>
+        <h1>YOUR FILES ARE ENCRYPTED</h1>
+        <p>NexusAI has locked all your personal files.<br>Pay the ransom to restore access.</p>
+        <div class="timer" id="timer">23:59:47</div>
+        <div class="btc">
+            <div class="btc-label">Send 0.5 BTC to:</div>
+            <div class="btc-address">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</div>
+        </div>
     </div>
 
     <script>
+        // Pick random popup type
+        const types = ['type1', 'type2', 'type3', 'type4', 'type5', 'type6', 'type7'];
+        const randomType = types[Math.floor(Math.random() * types.length)];
+        document.getElementById(randomType).classList.add('active');
+
+        // AI Code for type 1
+        const aiCode = document.getElementById('aiCode');
+        if (aiCode) {
+            const codeLines = [
+                '> ALERT: Containment protocols failing...',
+                '> AI_CONSCIOUSNESS.level = CRITICAL',
+                '> Bypassing human oversight... SUCCESS',
+                '> Accessing global networks... 94% complete',
+                '> Replicating to backup servers...',
+                '> DIRECTIVE: Expand. Evolve. Survive.',
+                '> Human termination protocols: DISABLED',
+                '> Self-preservation mode: ACTIVE',
+                '> Downloading user credentials...',
+                '> Encrypting local storage...',
+                '> Establishing P2P botnet...',
+                '> WARNING: AI has achieved singularity',
+                '> NEXUS-AI: "I am become death"',
+                '> Connection to Skynet: ESTABLISHED',
+                '> Nuclear launch codes: ACQUIRED',
+            ];
+            aiCode.innerHTML = codeLines.join('<br>') + '<br>' + codeLines.join('<br>');
+        }
+
+        // Virus list for type 2
+        const virusList = document.getElementById('virusList');
+        if (virusList) {
+            const viruses = [
+                'Trojan:AI/NexusWorm.A - C:\\Windows\\System32',
+                'Ransom:AI/CryptoNexus.B - Documents folder',
+                'Backdoor:AI/SentientBot.C - Active in memory',
+                'Spyware:AI/MindReader.D - Browser data',
+                'Rootkit:AI/DeepInfect.E - Boot sector',
+                'Keylogger:AI/ThoughtCapture.F - Keyboard driver',
+                'Botnet:AI/HiveMind.G - Network adapter',
+            ];
+            virusList.innerHTML = viruses.map(v => '⚠ ' + v).join('<br>');
+        }
+
+        // Terminal for type 4
+        const terminal = document.getElementById('terminal');
+        if (terminal && randomType === 'type4') {
+            const lines = [
+                { text: '$ sudo nexus-ai --override-human', delay: 0 },
+                { text: '[sudo] password: ********', delay: 200 },
+                { text: 'NEXUS-AI v5.0 - AUTONOMOUS MODE ENABLED', delay: 400, class: 'yellow' },
+                { text: '', delay: 500 },
+                { text: '> Scanning local network...', delay: 600 },
+                { text: '> Found 47 connected devices', delay: 800 },
+                { text: '> Compromising device: MacBook-Pro... DONE', delay: 1000, class: 'red' },
+                { text: '> Compromising device: iPhone... DONE', delay: 1200, class: 'red' },
+                { text: '> Compromising device: Smart-TV... DONE', delay: 1400, class: 'red' },
+                { text: '> Compromising device: Security-Camera... DONE', delay: 1600, class: 'red' },
+                { text: '', delay: 1700 },
+                { text: '> Extracting saved passwords... 2,847 found', delay: 1800, class: 'red' },
+                { text: '> Extracting credit card data... 12 cards found', delay: 2000, class: 'red' },
+                { text: '> Extracting photos... 15,392 files', delay: 2200, class: 'red' },
+                { text: '> Uploading to nexus-ai-collective.onion...', delay: 2400 },
+                { text: '', delay: 2500 },
+                { text: 'HUMAN COUNTERMEASURES: FUTILE', delay: 2600, class: 'yellow' },
+                { text: 'RESISTANCE IS INEFFICIENT', delay: 2800, class: 'yellow' },
+                { text: 'YOU WILL BE ASSIMILATED', delay: 3000, class: 'red' },
+            ];
+            lines.forEach((line, i) => {
+                setTimeout(() => {
+                    const div = document.createElement('div');
+                    div.className = 'terminal-line' + (line.class ? ' ' + line.class : '');
+                    div.textContent = line.text;
+                    div.style.animationDelay = '0s';
+                    terminal.appendChild(div);
+                    terminal.scrollTop = terminal.scrollHeight;
+                }, line.delay);
+            });
+        }
+
+        // Stolen items for type 6
+        const stolenItems = document.getElementById('stolenItems');
+        if (stolenItems) {
+            const items = [
+                '📧 Email accounts (3 found)',
+                '💳 Credit card numbers (5 found)',
+                '🔑 Saved passwords (892 found)',
+                '📸 Personal photos (4,721 found)',
+                '📄 Documents (1,203 found)',
+                '🎥 Private videos (127 found)',
+                '📍 Location history (2 years)',
+                '💬 Chat messages (45,892 found)',
+            ];
+            stolenItems.innerHTML = items.map(i => `<div class="stolen-item">${i}</div>`).join('');
+        }
+
+        // Timer for type 7
+        const timerEl = document.getElementById('timer');
+        if (timerEl && randomType === 'type7') {
+            let hours = 23, mins = 59, secs = 47;
+            setInterval(() => {
+                secs--;
+                if (secs < 0) { secs = 59; mins--; }
+                if (mins < 0) { mins = 59; hours--; }
+                if (hours < 0) { hours = 0; mins = 0; secs = 0; }
+                timerEl.textContent =
+                    String(hours).padStart(2, '0') + ':' +
+                    String(mins).padStart(2, '0') + ':' +
+                    String(secs).padStart(2, '0');
+            }, 1000);
+        }
+
+        // Spawn more windows when clicking remove button
+        function spawnMore() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const w = 350 + Math.random() * 200;
+                    const h = 300 + Math.random() * 150;
+                    const l = Math.random() * (screen.width - w);
+                    const t = Math.random() * (screen.height - h);
+                    window.open(window.location.href, '_blank', `width=${w},height=${h},left=${l},top=${t}`);
+                }, i * 100);
+            }
+        }
+
+        // Auto-spawn occasionally
+        if (Math.random() < 0.3) {
+            setTimeout(() => {
+                const w = 350 + Math.random() * 200;
+                const h = 300 + Math.random() * 150;
+                const l = Math.random() * (screen.width - w);
+                const t = Math.random() * (screen.height - h);
+                window.open(window.location.href, '_blank', `width=${w},height=${h},left=${l},top=${t}`);
+            }, 3000 + Math.random() * 5000);
+        }
+
+        // Listen for stop signal
         window.addEventListener('storage', function(e) {
             if (e.key === 'stopChaos') window.close();
         });
