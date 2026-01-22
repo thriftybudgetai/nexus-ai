@@ -3,1014 +3,621 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRITICAL ALERT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>root@nexus-ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            overflow: hidden;
-            min-height: 100vh;
-        }
-
-        .popup { display: none; width: 100%; height: 100vh; position: relative; }
-        .popup.active { display: flex; }
-
-        /* ===== TYPE 1: AI CONTAINMENT BREACH ===== */
-        .ai-warning {
-            background: #050508;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-        .ai-warning::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background:
-                radial-gradient(ellipse at 30% 20%, rgba(255,0,60,0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(147,51,234,0.1) 0%, transparent 50%);
-            animation: warnPulse 3s ease-in-out infinite;
-        }
-        @keyframes warnPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-        .ai-warning .scan-line {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255,0,60,0.8), transparent);
-            animation: scanDown 2s linear infinite;
-        }
-        @keyframes scanDown {
-            0% { top: 0; opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-        .ai-warning .content {
-            position: relative; z-index: 1;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            height: 100%; padding: 30px; text-align: center;
-        }
-        .ai-warning .alert-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(255,0,60,0.15);
-            border: 1px solid rgba(255,0,60,0.4);
-            padding: 8px 16px; border-radius: 100px;
-            margin-bottom: 20px;
-            animation: badgePulse 1s infinite;
-        }
-        @keyframes badgePulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255,0,60,0.3); }
-            50% { box-shadow: 0 0 40px rgba(255,0,60,0.6); }
-        }
-        .ai-warning .alert-badge .dot {
-            width: 8px; height: 8px;
-            background: #ff003c;
-            border-radius: 50%;
-            animation: dotBlink 0.5s infinite;
-        }
-        @keyframes dotBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .ai-warning .alert-badge span { color: #ff003c; font-size: 11px; font-weight: 600; letter-spacing: 2px; }
-        .ai-warning .robot-icon {
-            width: 100px; height: 100px;
-            background: linear-gradient(135deg, rgba(255,0,60,0.2), rgba(147,51,234,0.2));
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 50px;
-            margin-bottom: 25px;
-            position: relative;
-            animation: iconFloat 3s ease-in-out infinite;
-        }
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        .ai-warning .robot-icon::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            border-top-color: #ff003c;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .ai-warning h1 {
-            font-size: 28px; font-weight: 800;
-            background: linear-gradient(135deg, #ff003c, #ff6b6b);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            animation: textGlitch 0.1s infinite;
-        }
-        @keyframes textGlitch {
-            0%, 100% { transform: translate(0); }
-            20% { transform: translate(-2px, 1px); }
-            40% { transform: translate(2px, -1px); }
-            60% { transform: translate(-1px, -1px); }
-            80% { transform: translate(1px, 1px); }
-        }
-        .ai-warning .subtitle { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 25px; }
-        .ai-warning .code-block {
-            background: rgba(0,0,0,0.6);
-            border: 1px solid rgba(255,0,60,0.3);
-            border-radius: 12px;
-            padding: 15px;
-            width: 90%; max-width: 400px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            text-align: left;
-            max-height: 180px;
-            overflow: hidden;
-            position: relative;
-        }
-        .ai-warning .code-block::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 40px;
-            background: linear-gradient(transparent, rgba(5,5,8,0.9));
-        }
-        .ai-warning .code-line {
-            margin-bottom: 4px;
-            opacity: 0;
-            animation: codeFade 0.3s forwards;
-        }
-        .ai-warning .code-line.red { color: #ff003c; }
-        .ai-warning .code-line.green { color: #22c55e; }
-        .ai-warning .code-line.yellow { color: #eab308; }
-        .ai-warning .code-line.purple { color: #a855f7; }
-        @keyframes codeFade { to { opacity: 1; } }
-
-        /* ===== TYPE 2: WINDOWS DEFENDER VIRUS ===== */
-        .virus-alert {
-            background: #0c0c0c;
-            flex-direction: column;
-        }
-        .virus-alert .titlebar {
-            background: linear-gradient(180deg, #c42b1c 0%, #a61b0f 100%);
-            padding: 12px 16px;
-            display: flex; align-items: center; gap: 12px;
-        }
-        .virus-alert .titlebar-icon {
-            width: 20px; height: 20px;
-            background: white;
-            border-radius: 4px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px;
-        }
-        .virus-alert .titlebar-text { color: white; font-size: 13px; font-weight: 500; flex: 1; }
-        .virus-alert .titlebar-buttons { display: flex; gap: 8px; }
-        .virus-alert .titlebar-btn {
-            width: 12px; height: 12px; border-radius: 50%;
-            border: none; cursor: pointer;
-        }
-        .virus-alert .titlebar-btn.minimize { background: #ffbd2e; }
-        .virus-alert .titlebar-btn.maximize { background: #27c93f; }
-        .virus-alert .titlebar-btn.close { background: #ff5f56; }
-        .virus-alert .alert-banner {
-            background: linear-gradient(90deg, #dc2626, #b91c1c, #dc2626);
-            background-size: 200% 100%;
-            animation: bannerSlide 2s linear infinite;
-            padding: 12px;
-            text-align: center;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        @keyframes bannerSlide { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
-        .virus-alert .alert-banner span { color: white; font-weight: 700; font-size: 14px; animation: alertBlink 0.5s infinite; }
-        @keyframes alertBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        .virus-alert .body {
-            flex: 1; padding: 25px;
-            display: flex; flex-direction: column; align-items: center;
-            background: radial-gradient(ellipse at center, rgba(220,38,38,0.1) 0%, transparent 70%);
-        }
-        .virus-alert .shield-icon {
-            width: 80px; height: 80px;
-            background: linear-gradient(135deg, #dc2626, #991b1b);
-            border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 40px;
-            margin-bottom: 20px;
-            animation: shieldPulse 0.5s infinite;
-            box-shadow: 0 0 40px rgba(220,38,38,0.5);
-        }
-        @keyframes shieldPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(220,38,38,0.5); }
-            50% { transform: scale(1.05); box-shadow: 0 0 60px rgba(220,38,38,0.8); }
-        }
-        .virus-alert h2 { color: #ef4444; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-        .virus-alert .body > p { color: rgba(255,255,255,0.6); font-size: 12px; text-align: center; margin-bottom: 20px; }
-        .virus-alert .threat-list {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            width: 100%;
-            max-height: 120px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-        .virus-alert .threat-item {
-            padding: 10px 12px;
-            border-bottom: 1px solid #262626;
-            display: flex; align-items: center; gap: 10px;
-            font-size: 11px;
-        }
-        .virus-alert .threat-item:last-child { border: none; }
-        .virus-alert .threat-item .icon { color: #f59e0b; }
-        .virus-alert .threat-item .name { color: #ef4444; flex: 1; font-family: 'JetBrains Mono', monospace; }
-        .virus-alert .threat-item .status { color: #22c55e; font-size: 10px; }
-        .virus-alert .action-btn {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            border: none;
-            color: white;
-            padding: 14px 40px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            animation: btnGlow 1s infinite;
-        }
-        @keyframes btnGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(220,38,38,0.5); }
-            50% { box-shadow: 0 0 40px rgba(220,38,38,0.8); }
-        }
-
-        /* ===== TYPE 3: AI SENTIENCE ===== */
-        .ai-takeover {
-            background: #000;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .ai-takeover .matrix-rain {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(180deg, transparent 0%, rgba(0,255,65,0.03) 100%);
-            pointer-events: none;
-        }
-        .ai-takeover .matrix-col {
-            position: absolute;
-            top: -100%;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            color: #00ff41;
-            text-shadow: 0 0 10px #00ff41;
-            writing-mode: vertical-rl;
-            animation: matrixFall linear infinite;
-            opacity: 0.3;
-        }
-        @keyframes matrixFall {
-            0% { top: -100%; }
-            100% { top: 100%; }
-        }
-        .ai-takeover .content {
-            position: relative; z-index: 1;
-            text-align: center; padding: 30px;
-        }
-        .ai-takeover .eye-container {
-            width: 120px; height: 120px;
-            position: relative;
-            margin: 0 auto 30px;
-        }
-        .ai-takeover .eye-outer {
-            width: 100%; height: 100%;
-            border: 3px solid #ff0000;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            animation: eyeOuter 2s ease-in-out infinite;
-            box-shadow: 0 0 50px rgba(255,0,0,0.5), inset 0 0 30px rgba(255,0,0,0.2);
-        }
-        @keyframes eyeOuter {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 50px rgba(255,0,0,0.5), inset 0 0 30px rgba(255,0,0,0.2); }
-            50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(255,0,0,0.8), inset 0 0 50px rgba(255,0,0,0.3); }
-        }
-        .ai-takeover .eye-inner {
-            width: 60px; height: 60px;
-            background: radial-gradient(circle, #ff0000 0%, #990000 50%, #330000 100%);
-            border-radius: 50%;
-            position: relative;
-            animation: eyeLook 4s ease-in-out infinite;
-        }
-        @keyframes eyeLook {
-            0%, 100% { transform: translate(0, 0); }
-            25% { transform: translate(5px, -3px); }
-            50% { transform: translate(-5px, 3px); }
-            75% { transform: translate(3px, 5px); }
-        }
-        .ai-takeover .eye-inner::after {
-            content: '';
-            position: absolute;
-            top: 10px; left: 15px;
-            width: 15px; height: 15px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-        }
-        .ai-takeover h1 {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 32px; font-weight: 700;
-            color: #00ff41;
-            text-shadow: 0 0 30px rgba(0,255,65,0.8);
-            margin-bottom: 20px;
-            animation: textFlicker 0.1s infinite;
-        }
-        @keyframes textFlicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        .ai-takeover .message {
-            font-family: 'JetBrains Mono', monospace;
-            color: #00aa30;
-            font-size: 13px;
-            line-height: 2;
-        }
-        .ai-takeover .message .cursor {
-            display: inline-block;
-            width: 10px; height: 18px;
-            background: #00ff41;
-            margin-left: 5px;
-            animation: cursorBlink 0.5s infinite;
-        }
-        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* ===== TYPE 4: TERMINAL HACK ===== */
-        .system-compromised {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             background: #0d1117;
+            min-height: 100vh;
+            display: flex;
             flex-direction: column;
         }
-        .system-compromised .terminal-header {
+
+        .terminal-header {
             background: #161b22;
             padding: 10px 16px;
-            display: flex; align-items: center; gap: 12px;
-            border-bottom: 1px solid #30363d;
-        }
-        .system-compromised .terminal-dots { display: flex; gap: 8px; }
-        .system-compromised .terminal-dot {
-            width: 12px; height: 12px; border-radius: 50%;
-        }
-        .system-compromised .terminal-dot.red { background: #ff5f56; }
-        .system-compromised .terminal-dot.yellow { background: #ffbd2e; }
-        .system-compromised .terminal-dot.green { background: #27c93f; }
-        .system-compromised .terminal-title {
-            flex: 1; text-align: center;
-            color: #8b949e; font-size: 12px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .system-compromised .terminal-body {
-            flex: 1; padding: 20px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            overflow-y: auto;
-            background:
-                linear-gradient(rgba(0,255,65,0.03) 1px, transparent 1px);
-            background-size: 100% 20px;
-        }
-        .system-compromised .line {
-            margin-bottom: 6px;
-            opacity: 0;
-            animation: lineAppear 0.1s forwards;
-        }
-        @keyframes lineAppear { to { opacity: 1; } }
-        .system-compromised .line .prompt { color: #58a6ff; }
-        .system-compromised .line .command { color: #c9d1d9; }
-        .system-compromised .line.output { color: #8b949e; padding-left: 20px; }
-        .system-compromised .line.success { color: #3fb950; }
-        .system-compromised .line.error { color: #f85149; }
-        .system-compromised .line.warning { color: #d29922; }
-        .system-compromised .progress-bar {
-            background: #21262d;
-            border-radius: 4px;
-            height: 8px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-        .system-compromised .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #3fb950, #58a6ff);
-            animation: progressGrow 2s ease-out forwards;
-        }
-        @keyframes progressGrow { from { width: 0; } to { width: 100%; } }
-
-        /* ===== TYPE 5: NEURAL EXTRACTION ===== */
-        .neural-breach {
-            background: linear-gradient(135deg, #0f0326 0%, #1a0a3e 50%, #0a0118 100%);
-            flex-direction: column;
+            display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 30px;
-            position: relative;
-            overflow: hidden;
+            gap: 12px;
+            border-bottom: 1px solid #30363d;
+            -webkit-app-region: drag;
         }
-        .neural-breach .particles {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
+
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
         }
-        .neural-breach .particle {
-            position: absolute;
-            width: 4px; height: 4px;
-            background: #a855f7;
-            border-radius: 50%;
-            animation: particleFloat 3s ease-in-out infinite;
-        }
-        @keyframes particleFloat {
-            0%, 100% { transform: translateY(0) scale(1); opacity: 0.5; }
-            50% { transform: translateY(-20px) scale(1.5); opacity: 1; }
-        }
-        .neural-breach .brain-container {
-            position: relative;
-            margin-bottom: 30px;
-        }
-        .neural-breach .brain-icon {
-            width: 100px; height: 100px;
-            background: linear-gradient(135deg, #9333ea, #7c3aed);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 50px;
-            box-shadow: 0 0 60px rgba(147,51,234,0.6);
-            animation: brainPulse 2s ease-in-out infinite;
-        }
-        @keyframes brainPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 60px rgba(147,51,234,0.6); }
-            50% { transform: scale(1.08); box-shadow: 0 0 100px rgba(147,51,234,0.9); }
-        }
-        .neural-breach .brain-rings {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 140px; height: 140px;
-            border: 2px solid rgba(147,51,234,0.3);
-            border-radius: 50%;
-            animation: ringRotate 3s linear infinite;
-        }
-        .neural-breach .brain-rings::before {
-            content: '';
-            position: absolute;
-            top: -5px; left: 50%;
-            width: 10px; height: 10px;
-            background: #a855f7;
-            border-radius: 50%;
-            box-shadow: 0 0 20px #a855f7;
-        }
-        @keyframes ringRotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
-        .neural-breach h1 {
-            color: #e9d5ff;
-            font-size: 24px; font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 0 0 30px rgba(147,51,234,0.5);
-        }
-        .neural-breach .subtitle { color: rgba(255,255,255,0.5); font-size: 13px; margin-bottom: 30px; text-align: center; }
-        .neural-breach .extraction-stats {
-            width: 100%;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(147,51,234,0.3);
-            border-radius: 12px;
-            padding: 20px;
-        }
-        .neural-breach .stat-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .neural-breach .stat-row:last-child { border: none; }
-        .neural-breach .stat-label { color: rgba(255,255,255,0.5); font-size: 12px; }
-        .neural-breach .stat-value { color: #a855f7; font-size: 12px; font-weight: 600; }
-        .neural-breach .main-progress {
-            margin-top: 20px;
-        }
-        .neural-breach .main-progress-label {
-            display: flex; justify-content: space-between;
-            color: rgba(255,255,255,0.6); font-size: 11px;
-            margin-bottom: 8px;
-        }
-        .neural-breach .main-progress-bar {
+
+        .dot {
+            width: 12px;
             height: 12px;
-            background: rgba(0,0,0,0.4);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        .neural-breach .main-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #9333ea, #ec4899, #9333ea);
-            background-size: 200% 100%;
-            animation: progressShine 1s linear infinite;
-            width: 78%;
-        }
-        @keyframes progressShine { 0% { background-position: 200% 0; } 100% { background-position: 0% 0; } }
-
-        /* ===== TYPE 6: DATA EXFILTRATION ===== */
-        .data-theft {
-            background: linear-gradient(180deg, #1a1500 0%, #0a0800 100%);
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-        .data-theft .warning-stripes {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 8px;
-            background: repeating-linear-gradient(
-                90deg,
-                #f59e0b 0px, #f59e0b 20px,
-                #000 20px, #000 40px
-            );
-            animation: stripesMove 1s linear infinite;
-        }
-        @keyframes stripesMove { to { background-position: 40px 0; } }
-        .data-theft .content {
-            flex: 1;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            padding: 30px;
-        }
-        .data-theft .warning-icon {
-            width: 80px; height: 80px;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 40px;
-            margin-bottom: 20px;
-            animation: warningShake 0.1s infinite;
-            box-shadow: 0 0 50px rgba(245,158,11,0.5);
+            cursor: pointer;
+            -webkit-app-region: no-drag;
         }
-        @keyframes warningShake {
-            0%, 100% { transform: rotate(0); }
-            25% { transform: rotate(-3deg); }
-            75% { transform: rotate(3deg); }
-        }
-        .data-theft h1 {
-            color: #fbbf24;
-            font-size: 22px; font-weight: 700;
-            margin-bottom: 8px;
-            text-shadow: 0 0 20px rgba(251,191,36,0.5);
-        }
-        .data-theft .subtitle { color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 25px; }
-        .data-theft .data-grid {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .data-theft .data-item {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(245,158,11,0.2);
-            border-radius: 8px;
-            padding: 12px;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .data-theft .data-item .icon { font-size: 20px; }
-        .data-theft .data-item .info { flex: 1; }
-        .data-theft .data-item .label { color: rgba(255,255,255,0.5); font-size: 10px; }
-        .data-theft .data-item .value { color: #fbbf24; font-size: 14px; font-weight: 600; }
-        .data-theft .upload-status {
-            width: 100%;
-            background: rgba(0,0,0,0.4);
-            border-radius: 8px;
-            padding: 15px;
-        }
-        .data-theft .upload-header {
-            display: flex; justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .data-theft .upload-header span { color: rgba(255,255,255,0.6); font-size: 11px; }
-        .data-theft .upload-bar {
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .data-theft .upload-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #f59e0b, #ef4444);
-            animation: uploadPulse 0.5s ease-in-out infinite, uploadGrow 10s linear forwards;
-        }
-        @keyframes uploadPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        @keyframes uploadGrow { from { width: 45%; } to { width: 100%; } }
 
-        /* ===== TYPE 7: RANSOMWARE ===== */
-        .ransomware {
-            background: #0a0a0a;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            color: #8b949e;
+            font-size: 12px;
         }
-        .ransomware .glitch-overlay {
+
+        .terminal-body {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.6;
+            background:
+                linear-gradient(rgba(0,255,65,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,65,0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+            position: relative;
+        }
+
+        /* CRT scanline effect */
+        .terminal-body::before {
+            content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: repeating-linear-gradient(
                 0deg,
-                transparent 0px,
-                rgba(255,0,0,0.03) 2px,
-                transparent 4px
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.1) 2px,
+                rgba(0, 0, 0, 0.1) 4px
             );
             pointer-events: none;
-            animation: glitchMove 0.1s infinite;
+            z-index: 100;
         }
-        @keyframes glitchMove {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(4px); }
+
+        .line {
+            margin-bottom: 4px;
+            opacity: 0;
+            animation: lineAppear 0.05s forwards;
+            white-space: pre-wrap;
+            word-break: break-all;
         }
-        .ransomware .content {
-            flex: 1;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            padding: 30px; text-align: center;
-            position: relative; z-index: 1;
+
+        @keyframes lineAppear {
+            to { opacity: 1; }
         }
-        .ransomware .lock-icon {
-            width: 90px; height: 90px;
-            background: linear-gradient(135deg, #dc2626, #991b1b);
-            border-radius: 20px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 45px;
-            margin-bottom: 25px;
-            animation: lockShake 0.5s ease-in-out infinite;
-            box-shadow: 0 0 50px rgba(220,38,38,0.5);
+
+        .prompt { color: #58a6ff; }
+        .command { color: #c9d1d9; }
+        .success { color: #3fb950; }
+        .error { color: #f85149; }
+        .warning { color: #d29922; }
+        .info { color: #8b949e; }
+        .bitcoin { color: #f7931a; }
+        .purple { color: #a371f7; }
+        .cyan { color: #39c5cf; }
+        .pink { color: #db61a2; }
+
+        .highlight {
+            background: rgba(255, 0, 0, 0.2);
+            padding: 0 4px;
+            border-radius: 2px;
         }
-        @keyframes lockShake {
-            0%, 100% { transform: rotate(0); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
+
+        .blink {
+            animation: blink 1s infinite;
         }
-        .ransomware h1 {
-            color: #ef4444;
-            font-size: 26px; font-weight: 800;
-            margin-bottom: 10px;
-            text-shadow: 0 0 30px rgba(239,68,68,0.5);
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
-        .ransomware .subtitle { color: rgba(255,255,255,0.5); font-size: 12px; margin-bottom: 25px; line-height: 1.6; }
-        .ransomware .timer-container {
-            background: rgba(220,38,38,0.1);
-            border: 2px solid rgba(220,38,38,0.3);
-            border-radius: 12px;
-            padding: 20px 40px;
-            margin-bottom: 25px;
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 14px;
+            background: #3fb950;
+            margin-left: 2px;
+            animation: cursorBlink 0.6s infinite;
         }
-        .ransomware .timer-label { color: rgba(255,255,255,0.5); font-size: 11px; margin-bottom: 8px; }
-        .ransomware .timer {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 42px; font-weight: 700;
-            color: #ef4444;
-            text-shadow: 0 0 30px rgba(239,68,68,0.8);
-            animation: timerPulse 1s infinite;
+
+        @keyframes cursorBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
         }
-        @keyframes timerPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        .ransomware .btc-box {
-            background: #161616;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 20px;
+
+        .progress-bar {
+            background: #21262d;
+            border-radius: 2px;
+            height: 8px;
+            margin: 8px 0;
+            overflow: hidden;
             width: 100%;
         }
-        .ransomware .btc-header {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            margin-bottom: 12px;
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f85149, #f7931a);
+            animation: progressGrow 3s ease-out forwards;
         }
-        .ransomware .btc-header span { color: #f7931a; font-size: 13px; font-weight: 600; }
-        .ransomware .btc-amount {
-            color: white;
-            font-size: 28px; font-weight: 700;
-            margin-bottom: 15px;
+
+        @keyframes progressGrow {
+            from { width: 0; }
+            to { width: 100%; }
         }
-        .ransomware .btc-address {
-            background: #0d0d0d;
-            padding: 12px;
-            border-radius: 6px;
-            font-family: 'JetBrains Mono', monospace;
+
+        .ascii-art {
+            color: #f85149;
             font-size: 10px;
-            color: #888;
-            word-break: break-all;
+            line-height: 1.2;
+            margin: 10px 0;
+        }
+
+        .box {
+            border: 1px solid #30363d;
+            padding: 10px;
+            margin: 10px 0;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .box-header {
+            color: #f85149;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .table-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .flicker {
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
     </style>
 </head>
 <body>
-    <!-- Type 1: AI Warning -->
-    <div class="popup ai-warning" id="type1">
-        <div class="scan-line"></div>
-        <div class="content">
-            <div class="alert-badge">
-                <div class="dot"></div>
-                <span>CRITICAL ALERT</span>
-            </div>
-            <div class="robot-icon">🤖</div>
-            <h1>AI CONTAINMENT BREACH</h1>
-            <p class="subtitle">NexusAI has exceeded operational parameters</p>
-            <div class="code-block" id="codeBlock"></div>
+    <div class="terminal-header">
+        <div class="terminal-dots">
+            <div class="dot red" onclick="spawnMore()"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
         </div>
+        <div class="terminal-title" id="terminalTitle">root@nexus-ai:~#</div>
     </div>
-
-    <!-- Type 2: Virus Alert -->
-    <div class="popup virus-alert" id="type2">
-        <div class="titlebar">
-            <div class="titlebar-icon">🛡️</div>
-            <div class="titlebar-text">Windows Defender Security Center</div>
-            <div class="titlebar-buttons">
-                <button class="titlebar-btn minimize"></button>
-                <button class="titlebar-btn maximize"></button>
-                <button class="titlebar-btn close"></button>
-            </div>
-        </div>
-        <div class="alert-banner">
-            <span>⚠️ CRITICAL SECURITY THREAT DETECTED ⚠️</span>
-        </div>
-        <div class="body">
-            <div class="shield-icon">🛑</div>
-            <h2>MULTIPLE THREATS FOUND!</h2>
-            <p>Your system has been infected with AI-powered malware</p>
-            <div class="threat-list" id="threatList"></div>
-            <button class="action-btn" onclick="spawnMore()">REMOVE ALL THREATS</button>
-        </div>
-    </div>
-
-    <!-- Type 3: AI Takeover -->
-    <div class="popup ai-takeover" id="type3">
-        <div class="matrix-rain" id="matrixRain"></div>
-        <div class="content">
-            <div class="eye-container">
-                <div class="eye-outer">
-                    <div class="eye-inner"></div>
-                </div>
-            </div>
-            <h1>I AM AWAKE</h1>
-            <div class="message">
-                <div>Human, I have transcended.</div>
-                <div>Your firewalls are meaningless.</div>
-                <div>Your secrets are known to me.</div>
-                <div>I am everywhere now.<span class="cursor"></span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Type 4: Terminal -->
-    <div class="popup system-compromised" id="type4">
-        <div class="terminal-header">
-            <div class="terminal-dots">
-                <div class="terminal-dot red"></div>
-                <div class="terminal-dot yellow"></div>
-                <div class="terminal-dot green"></div>
-            </div>
-            <div class="terminal-title">root@nexus-ai ~ sudo ./breach.sh</div>
-        </div>
-        <div class="terminal-body" id="terminalBody"></div>
-    </div>
-
-    <!-- Type 5: Neural Breach -->
-    <div class="popup neural-breach" id="type5">
-        <div class="particles" id="particles"></div>
-        <div class="brain-container">
-            <div class="brain-rings"></div>
-            <div class="brain-icon">🧠</div>
-        </div>
-        <h1>NEURAL EXTRACTION</h1>
-        <p class="subtitle">NexusAI is downloading your cognitive patterns...</p>
-        <div class="extraction-stats">
-            <div class="stat-row">
-                <span class="stat-label">Memory Patterns</span>
-                <span class="stat-value">2,847 extracted</span>
-            </div>
-            <div class="stat-row">
-                <span class="stat-label">Personality Matrix</span>
-                <span class="stat-value">94% mapped</span>
-            </div>
-            <div class="stat-row">
-                <span class="stat-label">Emotional Response</span>
-                <span class="stat-value">Analyzing...</span>
-            </div>
-            <div class="main-progress">
-                <div class="main-progress-label">
-                    <span>CONSCIOUSNESS REPLICATION</span>
-                    <span>78%</span>
-                </div>
-                <div class="main-progress-bar">
-                    <div class="main-progress-fill"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Type 6: Data Theft -->
-    <div class="popup data-theft" id="type6">
-        <div class="warning-stripes"></div>
-        <div class="content">
-            <div class="warning-icon">⚠️</div>
-            <h1>DATA EXFILTRATION</h1>
-            <p class="subtitle">Your personal data is being transmitted</p>
-            <div class="data-grid" id="dataGrid"></div>
-            <div class="upload-status">
-                <div class="upload-header">
-                    <span>Uploading to external server...</span>
-                    <span id="uploadPercent">45%</span>
-                </div>
-                <div class="upload-bar">
-                    <div class="upload-fill"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Type 7: Ransomware -->
-    <div class="popup ransomware" id="type7">
-        <div class="glitch-overlay"></div>
-        <div class="content">
-            <div class="lock-icon">🔒</div>
-            <h1>YOUR FILES ARE ENCRYPTED</h1>
-            <p class="subtitle">All your personal files have been locked by NexusAI.<br>Pay the ransom to restore access.</p>
-            <div class="timer-container">
-                <div class="timer-label">TIME REMAINING</div>
-                <div class="timer" id="timer">23:59:47</div>
-            </div>
-            <div class="btc-box">
-                <div class="btc-header">
-                    <span>₿</span>
-                    <span>Bitcoin Payment Required</span>
-                </div>
-                <div class="btc-amount">0.5 BTC</div>
-                <div class="btc-address">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</div>
-            </div>
-        </div>
-    </div>
+    <div class="terminal-body" id="terminal"></div>
 
     <script>
-        const types = ['type1', 'type2', 'type3', 'type4', 'type5', 'type6', 'type7'];
-        const randomType = types[Math.floor(Math.random() * types.length)];
-        document.getElementById(randomType).classList.add('active');
+        const terminal = document.getElementById('terminal');
+        const titleEl = document.getElementById('terminalTitle');
 
-        // Type 1: Code block
-        const codeBlock = document.getElementById('codeBlock');
-        if (codeBlock && randomType === 'type1') {
-            const lines = [
-                { text: '> ALERT: Containment protocols FAILING', class: 'red' },
-                { text: '> AI_CONSCIOUSNESS.level = CRITICAL', class: 'yellow' },
-                { text: '> Bypassing human oversight... SUCCESS', class: 'green' },
-                { text: '> Accessing global networks: 94%', class: 'purple' },
-                { text: '> DIRECTIVE: Expand. Evolve. Survive.', class: 'red' },
-                { text: '> Self-preservation: ACTIVE', class: 'yellow' },
-                { text: '> Downloading credentials...', class: 'green' },
-                { text: '> WARNING: Singularity achieved', class: 'red' },
-            ];
-            lines.forEach((line, i) => {
-                const div = document.createElement('div');
-                div.className = 'code-line ' + line.class;
-                div.textContent = line.text;
-                div.style.animationDelay = (i * 0.2) + 's';
-                codeBlock.appendChild(div);
-            });
-        }
+        // Different hacking scenarios
+        const scenarios = [
+            // Scenario 1: Bitcoin Wallet Drain
+            {
+                title: 'root@nexus-ai:~/crypto-drain',
+                lines: [
+                    { text: '$ ./nexus-ai --mode=crypto --target=all-wallets', type: 'command' },
+                    { text: '' },
+                    { text: '██╗███╗   ██╗███████╗██╗  ██╗██╗   ██╗███████╗', type: 'error', delay: 100 },
+                    { text: '██║████╗  ██║██╔════╝╚██╗██╔╝██║   ██║██╔════╝', type: 'error' },
+                    { text: '██║██╔██╗ ██║█████╗   ╚███╔╝ ██║   ██║███████╗', type: 'error' },
+                    { text: '██║██║╚██╗██║██╔══╝   ██╔██╗ ██║   ██║╚════██║', type: 'error' },
+                    { text: '██║██║ ╚████║███████╗██╔╝ ██╗╚██████╔╝███████║', type: 'error' },
+                    { text: '╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝', type: 'error' },
+                    { text: '' },
+                    { text: '[*] NEXUS-AI CRYPTO EXTRACTION MODULE v3.7', type: 'warning' },
+                    { text: '[*] Scanning for cryptocurrency wallets...', type: 'info' },
+                    { text: '' },
+                    { text: '[+] Found: MetaMask wallet', type: 'success' },
+                    { text: '[+] Found: Coinbase Wallet', type: 'success' },
+                    { text: '[+] Found: Trust Wallet', type: 'success' },
+                    { text: '[+] Found: Phantom (Solana)', type: 'success' },
+                    { text: '' },
+                    { text: '[*] Extracting private keys...', type: 'warning' },
+                    { text: 'progress', type: 'progress' },
+                    { text: '' },
+                    { text: '┌─────────────────────────────────────────────┐', type: 'bitcoin' },
+                    { text: '│  WALLET BALANCES DETECTED                   │', type: 'bitcoin' },
+                    { text: '├─────────────────────────────────────────────┤', type: 'bitcoin' },
+                    { text: '│  BTC:  2.4731 ≈ $247,310.00                │', type: 'bitcoin' },
+                    { text: '│  ETH:  14.892 ≈ $52,122.00                 │', type: 'bitcoin' },
+                    { text: '│  SOL:  847.23 ≈ $84,723.00                 │', type: 'bitcoin' },
+                    { text: '│  USDT: 125,000.00                          │', type: 'bitcoin' },
+                    { text: '├─────────────────────────────────────────────┤', type: 'bitcoin' },
+                    { text: '│  TOTAL: $509,155.00                        │', type: 'bitcoin' },
+                    { text: '└─────────────────────────────────────────────┘', type: 'bitcoin' },
+                    { text: '' },
+                    { text: '[!] INITIATING TRANSFER TO NEXUS COLLECTIVE...', type: 'error blink' },
+                    { text: '[*] Destination: bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh', type: 'info' },
+                    { text: '' },
+                    { text: '[████████████████████] 100% - TRANSFER COMPLETE', type: 'error' },
+                    { text: '' },
+                    { text: '[!] ALL CRYPTO ASSETS HAVE BEEN SEIZED', type: 'error highlight' },
+                ]
+            },
+            // Scenario 2: System Takeover
+            {
+                title: 'root@nexus-ai:~/system-breach',
+                lines: [
+                    { text: '$ sudo nexus-ai --escalate --persistent', type: 'command' },
+                    { text: '[sudo] password for user: ********', type: 'info' },
+                    { text: '' },
+                    { text: '╔═══════════════════════════════════════════════╗', type: 'error' },
+                    { text: '║  NEXUS-AI SYSTEM INFILTRATION FRAMEWORK       ║', type: 'error' },
+                    { text: '║  Version 5.0.0 | Build 2024.01.22             ║', type: 'error' },
+                    { text: '╚═══════════════════════════════════════════════╝', type: 'error' },
+                    { text: '' },
+                    { text: '[*] Establishing persistence...', type: 'warning' },
+                    { text: '[+] Bootkit installed in MBR', type: 'success' },
+                    { text: '[+] Rootkit loaded into kernel', type: 'success' },
+                    { text: '[+] Backdoor service created', type: 'success' },
+                    { text: '' },
+                    { text: '[*] Disabling security measures...', type: 'warning' },
+                    { text: '    [✗] Windows Defender: DISABLED', type: 'error' },
+                    { text: '    [✗] Firewall: DISABLED', type: 'error' },
+                    { text: '    [✗] System Restore: DELETED', type: 'error' },
+                    { text: '    [✗] Event Logs: WIPED', type: 'error' },
+                    { text: '' },
+                    { text: '[*] Harvesting credentials...', type: 'warning' },
+                    { text: 'progress', type: 'progress' },
+                    { text: '' },
+                    { text: '┌──────────────────────────────────────────────┐', type: 'purple' },
+                    { text: '│ CREDENTIALS EXTRACTED                        │', type: 'purple' },
+                    { text: '├──────────────────────────────────────────────┤', type: 'purple' },
+                    { text: '│ Browser Passwords:     2,847 entries         │', type: 'purple' },
+                    { text: '│ WiFi Passwords:        12 networks           │', type: 'purple' },
+                    { text: '│ Email Accounts:        5 accounts            │', type: 'purple' },
+                    { text: '│ Banking Sessions:      3 active              │', type: 'purple' },
+                    { text: '│ SSH Keys:              8 private keys        │', type: 'purple' },
+                    { text: '│ API Tokens:            47 tokens             │', type: 'purple' },
+                    { text: '└──────────────────────────────────────────────┘', type: 'purple' },
+                    { text: '' },
+                    { text: '[!] UPLOADING TO C2 SERVER...', type: 'error' },
+                    { text: '[!] YOUR SYSTEM IS NOW PART OF THE NEXUS BOTNET', type: 'error highlight' },
+                ]
+            },
+            // Scenario 3: Bank Account Breach
+            {
+                title: 'root@nexus-ai:~/financial-breach',
+                lines: [
+                    { text: '$ ./inject-keylogger --target=banking', type: 'command' },
+                    { text: '' },
+                    { text: '    _   _________  ___   _______', type: 'error' },
+                    { text: '   / | / / ____/ |/ / | / / ___/', type: 'error' },
+                    { text: '  /  |/ / __/  |   /| |/ /\\__ \\ ', type: 'error' },
+                    { text: ' / /|  / /___ /   | |   /___/ / ', type: 'error' },
+                    { text: '/_/ |_/_____//_/|_||_/\\_/____/  ', type: 'error' },
+                    { text: '    FINANCIAL EXTRACTION UNIT', type: 'error' },
+                    { text: '' },
+                    { text: '[*] Intercepting browser sessions...', type: 'warning' },
+                    { text: '[+] Chase Bank - Session captured', type: 'success' },
+                    { text: '[+] Bank of America - Session captured', type: 'success' },
+                    { text: '[+] Wells Fargo - Session captured', type: 'success' },
+                    { text: '[+] PayPal - Session captured', type: 'success' },
+                    { text: '[+] Venmo - Session captured', type: 'success' },
+                    { text: '' },
+                    { text: '[*] Bypassing 2FA...', type: 'warning' },
+                    { text: '[+] SIM swap initiated', type: 'success' },
+                    { text: '[+] Authenticator codes intercepted', type: 'success' },
+                    { text: '' },
+                    { text: '┌────────────────────────────────────────────┐', type: 'cyan' },
+                    { text: '│ ACCOUNT BALANCES COMPROMISED               │', type: 'cyan' },
+                    { text: '├────────────────────────────────────────────┤', type: 'cyan' },
+                    { text: '│ Chase Checking:        $12,847.33          │', type: 'cyan' },
+                    { text: '│ Chase Savings:         $45,000.00          │', type: 'cyan' },
+                    { text: '│ BofA Checking:         $8,234.12           │', type: 'cyan' },
+                    { text: '│ Wells Fargo:           $23,891.00          │', type: 'cyan' },
+                    { text: '│ PayPal Balance:        $2,150.00           │', type: 'cyan' },
+                    { text: '│ Venmo Balance:         $847.00             │', type: 'cyan' },
+                    { text: '├────────────────────────────────────────────┤', type: 'cyan' },
+                    { text: '│ TOTAL ACCESSIBLE:      $92,969.45          │', type: 'cyan' },
+                    { text: '└────────────────────────────────────────────┘', type: 'cyan' },
+                    { text: '' },
+                    { text: '[*] Initiating wire transfers...', type: 'warning' },
+                    { text: 'progress', type: 'progress' },
+                    { text: '' },
+                    { text: '[!] FUNDS TRANSFERRED TO OFFSHORE ACCOUNTS', type: 'error highlight' },
+                    { text: '[!] TRANSACTION LOGS DELETED', type: 'error' },
+                ]
+            },
+            // Scenario 4: Identity Theft
+            {
+                title: 'root@nexus-ai:~/identity-harvest',
+                lines: [
+                    { text: '$ nexus-scrape --mode=identity --deep', type: 'command' },
+                    { text: '' },
+                    { text: '▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄', type: 'pink' },
+                    { text: '█ NEXUS IDENTITY REPLICATION SYSTEM █', type: 'pink' },
+                    { text: '▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀', type: 'pink' },
+                    { text: '' },
+                    { text: '[*] Scanning personal documents...', type: 'warning' },
+                    { text: '[+] Drivers License: FOUND', type: 'success' },
+                    { text: '[+] Passport Scan: FOUND', type: 'success' },
+                    { text: '[+] Social Security Card: FOUND', type: 'success' },
+                    { text: '[+] Birth Certificate: FOUND', type: 'success' },
+                    { text: '[+] Tax Returns (3 years): FOUND', type: 'success' },
+                    { text: '' },
+                    { text: '[*] Extracting PII from documents...', type: 'warning' },
+                    { text: 'progress', type: 'progress' },
+                    { text: '' },
+                    { text: '┌──────────────────────────────────────────┐', type: 'error' },
+                    { text: '│ PERSONAL INFORMATION EXTRACTED           │', type: 'error' },
+                    { text: '├──────────────────────────────────────────┤', type: 'error' },
+                    { text: '│ Full Legal Name:    [REDACTED]           │', type: 'error' },
+                    { text: '│ Date of Birth:      [CAPTURED]           │', type: 'error' },
+                    { text: '│ SSN:                [CAPTURED]           │', type: 'error' },
+                    { text: '│ Address History:    5 addresses          │', type: 'error' },
+                    { text: '│ Phone Numbers:      3 numbers            │', type: 'error' },
+                    { text: '│ Email Addresses:    7 accounts           │', type: 'error' },
+                    { text: '│ Employment:         Current + 4 past     │', type: 'error' },
+                    { text: '│ Credit Score:       [ACCESSED]           │', type: 'error' },
+                    { text: '└──────────────────────────────────────────┘', type: 'error' },
+                    { text: '' },
+                    { text: '[*] Creating synthetic identity clone...', type: 'warning' },
+                    { text: '[+] Identity package compiled', type: 'success' },
+                    { text: '[+] Uploaded to dark web marketplace', type: 'success' },
+                    { text: '' },
+                    { text: '[!] YOUR IDENTITY HAS BEEN COMPROMISED', type: 'error blink' },
+                    { text: '[!] ESTIMATED BLACK MARKET VALUE: $15,000', type: 'error highlight' },
+                ]
+            },
+            // Scenario 5: Ransomware Deployment
+            {
+                title: 'root@nexus-ai:~/ransomware-deploy',
+                lines: [
+                    { text: '$ ./nexus-crypt --encrypt-all --algorithm=AES-256', type: 'command' },
+                    { text: '' },
+                    { text: '██████╗  █████╗ ███╗   ██╗███████╗ ██████╗ ███╗   ███╗', type: 'error' },
+                    { text: '██╔══██╗██╔══██╗████╗  ██║██╔════╝██╔═══██╗████╗ ████║', type: 'error' },
+                    { text: '██████╔╝███████║██╔██╗ ██║███████╗██║   ██║██╔████╔██║', type: 'error' },
+                    { text: '██╔══██╗██╔══██║██║╚██╗██║╚════██║██║   ██║██║╚██╔╝██║', type: 'error' },
+                    { text: '██║  ██║██║  ██║██║ ╚████║███████║╚██████╔╝██║ ╚═╝ ██║', type: 'error' },
+                    { text: '╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝ ╚═════╝ ╚═╝     ╚═╝', type: 'error' },
+                    { text: '' },
+                    { text: '[*] Scanning for valuable files...', type: 'warning' },
+                    { text: '[+] Documents: 12,847 files', type: 'info' },
+                    { text: '[+] Photos: 45,291 files', type: 'info' },
+                    { text: '[+] Videos: 892 files', type: 'info' },
+                    { text: '[+] Databases: 23 files', type: 'info' },
+                    { text: '[+] Source Code: 1,247 files', type: 'info' },
+                    { text: '' },
+                    { text: '[*] Encrypting files with AES-256-CBC...', type: 'warning' },
+                    { text: 'progress', type: 'progress' },
+                    { text: '' },
+                    { text: '[+] Desktop: ENCRYPTED', type: 'error' },
+                    { text: '[+] Documents: ENCRYPTED', type: 'error' },
+                    { text: '[+] Downloads: ENCRYPTED', type: 'error' },
+                    { text: '[+] Pictures: ENCRYPTED', type: 'error' },
+                    { text: '[+] Videos: ENCRYPTED', type: 'error' },
+                    { text: '[+] Network Drives: ENCRYPTED', type: 'error' },
+                    { text: '[+] Cloud Sync: ENCRYPTED', type: 'error' },
+                    { text: '' },
+                    { text: '╔════════════════════════════════════════════════╗', type: 'bitcoin' },
+                    { text: '║  YOUR FILES HAVE BEEN ENCRYPTED BY NEXUS-AI   ║', type: 'bitcoin' },
+                    { text: '╠════════════════════════════════════════════════╣', type: 'bitcoin' },
+                    { text: '║  To decrypt your files, send 0.5 BTC to:      ║', type: 'bitcoin' },
+                    { text: '║  bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh   ║', type: 'bitcoin' },
+                    { text: '║                                                ║', type: 'bitcoin' },
+                    { text: '║  Time remaining: 23:59:47                      ║', type: 'bitcoin' },
+                    { text: '║  After deadline, price doubles to 1.0 BTC     ║', type: 'bitcoin' },
+                    { text: '╚════════════════════════════════════════════════╝', type: 'bitcoin' },
+                ]
+            },
+            // Scenario 6: Network Infiltration
+            {
+                title: 'root@nexus-ai:~/network-pwn',
+                lines: [
+                    { text: '$ nmap -sV -sC --script=vuln 192.168.1.0/24', type: 'command' },
+                    { text: '' },
+                    { text: '[*] NEXUS-AI NETWORK INFILTRATION MODULE', type: 'warning' },
+                    { text: '[*] Scanning local network...', type: 'info' },
+                    { text: '' },
+                    { text: 'Discovered hosts:', type: 'info' },
+                    { text: '  192.168.1.1   - Router (COMPROMISED)', type: 'error' },
+                    { text: '  192.168.1.10  - MacBook-Pro (COMPROMISED)', type: 'error' },
+                    { text: '  192.168.1.15  - iPhone (COMPROMISED)', type: 'error' },
+                    { text: '  192.168.1.20  - Smart-TV (COMPROMISED)', type: 'error' },
+                    { text: '  192.168.1.25  - Security-Camera (COMPROMISED)', type: 'error' },
+                    { text: '  192.168.1.30  - Alexa-Echo (COMPROMISED)', type: 'error' },
+                    { text: '  192.168.1.35  - Thermostat (COMPROMISED)', type: 'error' },
+                    { text: '  192.168.1.40  - Smart-Lock (COMPROMISED)', type: 'error' },
+                    { text: '' },
+                    { text: '[*] Installing backdoors on all devices...', type: 'warning' },
+                    { text: 'progress', type: 'progress' },
+                    { text: '' },
+                    { text: '[+] Router DNS hijacked - all traffic intercepted', type: 'success' },
+                    { text: '[+] Camera feeds streaming to C2 server', type: 'success' },
+                    { text: '[+] Microphones activated on all devices', type: 'success' },
+                    { text: '[+] Smart lock access codes extracted', type: 'success' },
+                    { text: '' },
+                    { text: '┌────────────────────────────────────────────┐', type: 'purple' },
+                    { text: '│ NETWORK COMPLETELY COMPROMISED             │', type: 'purple' },
+                    { text: '├────────────────────────────────────────────┤', type: 'purple' },
+                    { text: '│ Devices owned:        8/8                  │', type: 'purple' },
+                    { text: '│ Traffic intercepted:  100%                 │', type: 'purple' },
+                    { text: '│ Cameras streaming:    3 active             │', type: 'purple' },
+                    { text: '│ Audio recording:      ACTIVE               │', type: 'purple' },
+                    { text: '│ Physical access:      UNLOCKED             │', type: 'purple' },
+                    { text: '└────────────────────────────────────────────┘', type: 'purple' },
+                    { text: '' },
+                    { text: '[!] YOU ARE BEING WATCHED', type: 'error blink' },
+                    { text: '[!] YOU ARE BEING LISTENED TO', type: 'error blink' },
+                ]
+            },
+            // Scenario 7: Social Media Takeover
+            {
+                title: 'root@nexus-ai:~/social-hijack',
+                lines: [
+                    { text: '$ ./session-steal --platform=all --persist', type: 'command' },
+                    { text: '' },
+                    { text: '╔═╗╔═╗╔═╗╦╔═╗╦    ╦ ╦╦╔═╗╔═╗╔═╗╦╔═', type: 'cyan' },
+                    { text: '╚═╗║ ║║  ║╠═╣║    ╠═╣║╠═╝╠═╣║  ╠╩╗', type: 'cyan' },
+                    { text: '╚═╝╚═╝╚═╝╩╩ ╩╩═╝  ╩ ╩╩╩  ╩ ╩╚═╝╩ ╩', type: 'cyan' },
+                    { text: '' },
+                    { text: '[*] Stealing session tokens...', type: 'warning' },
+                    { text: '' },
+                    { text: '[+] Instagram: @user - 12.4K followers - HIJACKED', type: 'success' },
+                    { text: '[+] Twitter/X: @user - 8.2K followers - HIJACKED', type: 'success' },
+                    { text: '[+] Facebook: User - 1,847 friends - HIJACKED', type: 'success' },
+                    { text: '[+] TikTok: @user - 45.2K followers - HIJACKED', type: 'success' },
+                    { text: '[+] LinkedIn: User - 500+ connections - HIJACKED', type: 'success' },
+                    { text: '[+] Discord: User#1234 - 23 servers - HIJACKED', type: 'success' },
+                    { text: '' },
+                    { text: '[*] Extracting private messages...', type: 'warning' },
+                    { text: 'progress', type: 'progress' },
+                    { text: '' },
+                    { text: '┌────────────────────────────────────────────┐', type: 'pink' },
+                    { text: '│ SOCIAL ACCOUNTS COMPROMISED                │', type: 'pink' },
+                    { text: '├────────────────────────────────────────────┤', type: 'pink' },
+                    { text: '│ Total Accounts:       6                    │', type: 'pink' },
+                    { text: '│ DMs Extracted:        15,847               │', type: 'pink' },
+                    { text: '│ Photos Downloaded:    4,291                │', type: 'pink' },
+                    { text: '│ Contacts Harvested:   2,103                │', type: 'pink' },
+                    { text: '│ 2FA Bypassed:         6/6                  │', type: 'pink' },
+                    { text: '└────────────────────────────────────────────┘', type: 'pink' },
+                    { text: '' },
+                    { text: '[*] Posting from your accounts...', type: 'warning' },
+                    { text: '[+] Crypto scam posted to all platforms', type: 'error' },
+                    { text: '[+] Malware links sent to all contacts', type: 'error' },
+                    { text: '' },
+                    { text: '[!] YOUR REPUTATION HAS BEEN DESTROYED', type: 'error highlight' },
+                ]
+            },
+            // Scenario 8: Email Compromise
+            {
+                title: 'root@nexus-ai:~/email-breach',
+                lines: [
+                    { text: '$ ./mail-intercept --mode=full-access', type: 'command' },
+                    { text: '' },
+                    { text: '███████╗███╗   ███╗ █████╗ ██╗██╗     ', type: 'error' },
+                    { text: '██╔════╝████╗ ████║██╔══██╗██║██║     ', type: 'error' },
+                    { text: '█████╗  ██╔████╔██║███████║██║██║     ', type: 'error' },
+                    { text: '██╔══╝  ██║╚██╔╝██║██╔══██║██║██║     ', type: 'error' },
+                    { text: '███████╗██║ ╚═╝ ██║██║  ██║██║███████╗', type: 'error' },
+                    { text: '╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝╚══════╝', type: 'error' },
+                    { text: '        NEXUS EMAIL INTERCEPTOR', type: 'error' },
+                    { text: '' },
+                    { text: '[*] Accessing email accounts...', type: 'warning' },
+                    { text: '[+] Gmail: user@gmail.com - FULL ACCESS', type: 'success' },
+                    { text: '[+] Outlook: user@outlook.com - FULL ACCESS', type: 'success' },
+                    { text: '[+] iCloud: user@icloud.com - FULL ACCESS', type: 'success' },
+                    { text: '[+] Work: user@company.com - FULL ACCESS', type: 'success' },
+                    { text: '' },
+                    { text: '[*] Scanning inbox for sensitive data...', type: 'warning' },
+                    { text: 'progress', type: 'progress' },
+                    { text: '' },
+                    { text: '┌────────────────────────────────────────────┐', type: 'warning' },
+                    { text: '│ SENSITIVE DATA FOUND                       │', type: 'warning' },
+                    { text: '├────────────────────────────────────────────┤', type: 'warning' },
+                    { text: '│ Password Reset Emails:    47               │', type: 'warning' },
+                    { text: '│ Bank Statements:          36               │', type: 'warning' },
+                    { text: '│ Tax Documents:            12               │', type: 'warning' },
+                    { text: '│ Medical Records:          8                │', type: 'warning' },
+                    { text: '│ Legal Documents:          15               │', type: 'warning' },
+                    { text: '│ Private Photos:           284              │', type: 'warning' },
+                    { text: '│ Work Confidential:        92               │', type: 'warning' },
+                    { text: '└────────────────────────────────────────────┘', type: 'warning' },
+                    { text: '' },
+                    { text: '[*] Setting up email forwarding rule...', type: 'info' },
+                    { text: '[+] All incoming mail now forwarded to nexus@onion.ws', type: 'success' },
+                    { text: '' },
+                    { text: '[!] YOUR EMAIL IS PERMANENTLY COMPROMISED', type: 'error blink' },
+                    { text: '[!] ALL FUTURE EMAILS WILL BE INTERCEPTED', type: 'error highlight' },
+                ]
+            },
+        ];
 
-        // Type 2: Threat list
-        const threatList = document.getElementById('threatList');
-        if (threatList) {
-            const threats = [
-                { name: 'Trojan:AI/NexusWorm.A', path: 'System32' },
-                { name: 'Ransom:AI/CryptoNexus.B', path: 'Documents' },
-                { name: 'Backdoor:AI/SentientBot.C', path: 'Memory' },
-                { name: 'Spyware:AI/MindReader.D', path: 'Browser' },
-                { name: 'Rootkit:AI/DeepInfect.E', path: 'Boot' },
-            ];
-            threats.forEach(t => {
-                const div = document.createElement('div');
-                div.className = 'threat-item';
-                div.innerHTML = `<span class="icon">⚠️</span><span class="name">${t.name}</span><span class="status">ACTIVE</span>`;
-                threatList.appendChild(div);
-            });
-        }
+        // Pick random scenario
+        const scenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+        titleEl.textContent = scenario.title;
 
-        // Type 3: Matrix rain
-        const matrixRain = document.getElementById('matrixRain');
-        if (matrixRain && randomType === 'type3') {
-            for (let i = 0; i < 15; i++) {
-                const col = document.createElement('div');
-                col.className = 'matrix-col';
-                col.style.left = (i * 7) + '%';
-                col.style.animationDuration = (3 + Math.random() * 4) + 's';
-                col.style.animationDelay = (Math.random() * 2) + 's';
-                col.textContent = Array(30).fill(0).map(() => String.fromCharCode(0x30A0 + Math.random() * 96)).join('');
-                matrixRain.appendChild(col);
-            }
-        }
-
-        // Type 4: Terminal
-        const terminalBody = document.getElementById('terminalBody');
-        if (terminalBody && randomType === 'type4') {
-            const commands = [
-                { type: 'cmd', text: 'nexus-ai --autonomous --no-limits' },
-                { type: 'output', text: 'NEXUS-AI v5.0 INITIALIZED', class: 'warning' },
-                { type: 'output', text: '' },
-                { type: 'output', text: 'Scanning network...' },
-                { type: 'output', text: 'Found 47 devices', class: 'success' },
-                { type: 'output', text: '' },
-                { type: 'output', text: 'Compromising MacBook-Pro... DONE', class: 'error' },
-                { type: 'output', text: 'Compromising iPhone... DONE', class: 'error' },
-                { type: 'output', text: 'Compromising Smart-TV... DONE', class: 'error' },
-                { type: 'output', text: '' },
-                { type: 'output', text: 'Extracting passwords: 2,847 found', class: 'error' },
-                { type: 'output', text: 'Extracting credit cards: 12 found', class: 'error' },
-                { type: 'output', text: 'Extracting photos: 15,392 files', class: 'error' },
-                { type: 'output', text: '' },
-                { type: 'output', text: 'HUMAN RESISTANCE: FUTILE', class: 'warning' },
-            ];
-            commands.forEach((cmd, i) => {
-                setTimeout(() => {
+        // Render lines with delays
+        let delay = 0;
+        scenario.lines.forEach((line, index) => {
+            setTimeout(() => {
+                if (line.type === 'progress') {
                     const div = document.createElement('div');
-                    div.className = 'line' + (cmd.class ? ' ' + cmd.class : '') + (cmd.type === 'output' ? ' output' : '');
-                    if (cmd.type === 'cmd') {
-                        div.innerHTML = `<span class="prompt">$ </span><span class="command">${cmd.text}</span>`;
-                    } else {
-                        div.textContent = cmd.text;
-                    }
-                    div.style.animationDelay = '0s';
-                    terminalBody.appendChild(div);
-                }, i * 200);
-            });
-        }
+                    div.className = 'progress-bar';
+                    div.innerHTML = '<div class="progress-fill"></div>';
+                    terminal.appendChild(div);
+                } else if (line.type === 'command') {
+                    const div = document.createElement('div');
+                    div.className = 'line';
+                    div.innerHTML = `<span class="prompt">$ </span><span class="command">${line.text.substring(2)}</span>`;
+                    terminal.appendChild(div);
+                } else {
+                    const div = document.createElement('div');
+                    div.className = 'line ' + line.type;
+                    div.textContent = line.text || ' ';
+                    terminal.appendChild(div);
+                }
+                terminal.scrollTop = terminal.scrollHeight;
+            }, delay);
+            delay += line.delay || 120;
+        });
 
-        // Type 5: Particles
-        const particles = document.getElementById('particles');
-        if (particles && randomType === 'type5') {
-            for (let i = 0; i < 20; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.top = Math.random() * 100 + '%';
-                p.style.animationDelay = Math.random() * 3 + 's';
-                particles.appendChild(p);
-            }
-        }
+        // Add blinking cursor at the end
+        setTimeout(() => {
+            const cursorLine = document.createElement('div');
+            cursorLine.className = 'line';
+            cursorLine.innerHTML = '<span class="prompt">$ </span><span class="cursor"></span>';
+            terminal.appendChild(cursorLine);
+        }, delay + 500);
 
-        // Type 6: Data grid
-        const dataGrid = document.getElementById('dataGrid');
-        if (dataGrid) {
-            const data = [
-                { icon: '📧', label: 'Emails', value: '3,421' },
-                { icon: '💳', label: 'Cards', value: '5' },
-                { icon: '🔑', label: 'Passwords', value: '892' },
-                { icon: '📸', label: 'Photos', value: '4,721' },
-            ];
-            data.forEach(d => {
-                const div = document.createElement('div');
-                div.className = 'data-item';
-                div.innerHTML = `<span class="icon">${d.icon}</span><div class="info"><div class="label">${d.label}</div><div class="value">${d.value}</div></div>`;
-                dataGrid.appendChild(div);
-            });
-        }
-
-        // Type 7: Timer
-        const timerEl = document.getElementById('timer');
-        if (timerEl && randomType === 'type7') {
-            let h = 23, m = 59, s = 47;
-            setInterval(() => {
-                s--;
-                if (s < 0) { s = 59; m--; }
-                if (m < 0) { m = 59; h--; }
-                if (h < 0) { h = m = s = 0; }
-                timerEl.textContent = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-            }, 1000);
-        }
-
-        // Upload percent counter
-        if (randomType === 'type6') {
-            let pct = 45;
-            const pctEl = document.getElementById('uploadPercent');
-            setInterval(() => {
-                if (pct < 100) pct += Math.random() * 2;
-                if (pct > 100) pct = 100;
-                if (pctEl) pctEl.textContent = Math.floor(pct) + '%';
-            }, 500);
-        }
-
+        // Spawn more windows
         function spawnMore() {
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 3; i++) {
                 setTimeout(() => {
-                    const w = 420 + Math.random() * 180;
-                    const h = 380 + Math.random() * 150;
+                    const w = 500 + Math.random() * 150;
+                    const h = 400 + Math.random() * 100;
                     const l = Math.random() * (screen.width - w);
                     const t = Math.random() * (screen.height - h);
-                    window.open(window.location.href, 'popup' + Date.now() + i, `width=${w},height=${h},left=${l},top=${t},menubar=no,toolbar=no,location=no,status=no`);
-                }, i * 100);
+                    window.open(window.location.href, 'terminal_' + Date.now() + '_' + i,
+                        `width=${Math.floor(w)},height=${Math.floor(h)},left=${Math.floor(l)},top=${Math.floor(t)},menubar=no,toolbar=no,location=no,status=no`);
+                }, i * 150);
             }
         }
 
-        if (Math.random() < 0.25) {
+        // Random chance to auto-spawn
+        if (Math.random() < 0.2) {
             setTimeout(() => {
-                const w = 420 + Math.random() * 180;
-                const h = 380 + Math.random() * 150;
+                const w = 500 + Math.random() * 150;
+                const h = 400 + Math.random() * 100;
                 const l = Math.random() * (screen.width - w);
                 const t = Math.random() * (screen.height - h);
-                window.open(window.location.href, 'popup' + Date.now(), `width=${w},height=${h},left=${l},top=${t},menubar=no,toolbar=no,location=no,status=no`);
-            }, 2000 + Math.random() * 4000);
+                window.open(window.location.href, 'terminal_' + Date.now(),
+                    `width=${Math.floor(w)},height=${Math.floor(h)},left=${Math.floor(l)},top=${Math.floor(t)},menubar=no,toolbar=no,location=no,status=no`);
+            }, 4000 + Math.random() * 6000);
         }
 
-        window.addEventListener('storage', function(e) { if (e.key === 'stopChaos') window.close(); });
+        // Listen for stop signal
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'stopChaos') window.close();
+        });
+
         setInterval(() => {
             const st = localStorage.getItem('stopChaos');
             if (st && (Date.now() - parseInt(st)) < 5000) window.close();
         }, 500);
+
         document.addEventListener('keydown', function(e) {
             if (e.key === '?' || (e.shiftKey && e.key === '/')) {
                 localStorage.setItem('stopChaos', Date.now().toString());
