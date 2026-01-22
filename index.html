@@ -962,11 +962,37 @@
                 document.getElementById('virus').classList.contains('active') ||
                 document.getElementById('crack').classList.contains('active')) {
                 savePrankState();
+                // Try to open new window before closing
+                window.open(window.location.href, '_blank', 'width=800,height=600');
                 e.preventDefault();
-                e.returnValue = 'You have unsaved changes! Are you sure you want to leave?';
+                e.returnValue = 'You cannot escape!';
                 return e.returnValue;
             }
         });
+
+        // Also try on unload
+        window.addEventListener('unload', function() {
+            if (localStorage.getItem('prankState')) {
+                window.open(window.location.href, '_blank');
+            }
+        });
+
+        // Keep trying to spawn windows while prank is active
+        let spawnInterval;
+        function startSpawnCheck() {
+            if (spawnInterval) clearInterval(spawnInterval);
+            spawnInterval = setInterval(function() {
+                if (document.getElementById('bsod').classList.contains('active') ||
+                    document.getElementById('virus').classList.contains('active') ||
+                    document.getElementById('crack').classList.contains('active')) {
+                    // Check if this is the only window, if not spawned recently
+                    if (!sessionStorage.getItem('spawned')) {
+                        sessionStorage.setItem('spawned', 'true');
+                    }
+                }
+            }, 1000);
+        }
+        startSpawnCheck();
 
         // Load state when page opens
         window.addEventListener('load', loadPrankState);
