@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Annoying Site</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,67 +13,71 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            background: #0a0a0a;
             overflow: hidden;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
         .container {
             text-align: center;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            padding: 60px 80px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
-            color: #fff;
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 800;
-            margin-bottom: 10px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            background: linear-gradient(90deg, #00ff88, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #22c55e;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
         }
 
         .subtitle {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.1rem;
-            margin-bottom: 50px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1rem;
             font-weight: 300;
+            margin-bottom: 50px;
         }
 
         .soccer-ball {
-            width: 180px;
-            height: 180px;
-            background: radial-gradient(circle at 30% 30%, #4ade80, #22c55e 40%, #16a34a 70%, #15803d);
+            width: 160px;
+            height: 160px;
+            background: linear-gradient(145deg, #4ade80, #16a34a);
             border-radius: 50%;
             cursor: pointer;
             position: relative;
+            margin: 0 auto 50px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow:
-                0 20px 60px rgba(34, 197, 94, 0.4),
-                inset -15px -15px 40px rgba(0, 0, 0, 0.3),
-                inset 10px 10px 40px rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            margin: 0 auto 40px;
+                0 0 60px rgba(34, 197, 94, 0.3),
+                0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         .soccer-ball:hover {
-            transform: scale(1.1);
+            transform: scale(1.08) translateY(-5px);
             box-shadow:
-                0 30px 80px rgba(34, 197, 94, 0.6),
-                inset -15px -15px 40px rgba(0, 0, 0, 0.3),
-                inset 10px 10px 40px rgba(255, 255, 255, 0.2);
+                0 0 80px rgba(34, 197, 94, 0.4),
+                0 30px 60px rgba(0, 0, 0, 0.4);
         }
 
         .soccer-ball::before {
@@ -81,197 +86,276 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            background: rgba(0, 0, 0, 0.3);
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.2);
             clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
         }
 
         .soccer-ball::after {
             content: '';
             position: absolute;
-            top: 15%;
-            left: 20%;
-            width: 30px;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.4);
+            top: 12%;
+            left: 18%;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            filter: blur(10px);
+            filter: blur(15px);
         }
 
         .warning {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.85rem;
-            padding: 15px 25px;
-            background: rgba(255, 100, 100, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 100, 100, 0.2);
-            margin-bottom: 15px;
-        }
-
-        .popup-note {
             color: rgba(255, 255, 255, 0.4);
-            font-size: 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 400;
         }
 
         .hint {
             position: fixed;
             bottom: 30px;
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 0.8rem;
-            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        .chaos-active {
-            animation: shake 0.1s infinite;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        .screen-flash {
+        /* Dropdown styles */
+        .dropdown-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            animation: flash 0.2s infinite;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
         }
 
-        @keyframes flash {
-            0%, 100% { background: transparent; }
-            50% { background: rgba(0, 255, 100, 0.15); }
+        .dropdown-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dropdown-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .dropdown-btn svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s;
+        }
+
+        .dropdown-container.open .dropdown-btn svg {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 8px;
+            min-width: 220px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s;
+            backdrop-filter: blur(20px);
+        }
+
+        .dropdown-container.open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: inherit;
+            font-size: 0.85rem;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.15s;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 8px 0;
         }
     </style>
 </head>
 <body>
-    <div class="container" id="mainContent">
+    <div class="bg-gradient"></div>
+
+    <div class="dropdown-container" id="dropdown">
+        <button class="dropdown-btn" onclick="toggleDropdown()">
+            More Pranks
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 9l6 6 6-6"/>
+            </svg>
+        </button>
+        <div class="dropdown-menu">
+            <button class="dropdown-item" onclick="prank('flip')">Flip Screen Upside Down</button>
+            <button class="dropdown-item" onclick="prank('shake')">Earthquake Mode</button>
+            <button class="dropdown-item" onclick="prank('spin')">Spinning Screen</button>
+            <button class="dropdown-item" onclick="prank('tiny')">Make Everything Tiny</button>
+            <button class="dropdown-item" onclick="prank('cursor')">Hide Cursor</button>
+            <button class="dropdown-item" onclick="prank('blur')">Blur Vision</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" onclick="prank('bsod')">Fake Blue Screen</button>
+            <button class="dropdown-item" onclick="prank('crack')">Cracked Screen</button>
+            <button class="dropdown-item" onclick="prank('virus')">Fake Virus Alert</button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" onclick="prank('reset')" style="color: #22c55e;">Reset All Pranks</button>
+        </div>
+    </div>
+
+    <div class="container">
         <h1>The Annoying Site</h1>
-        <p class="subtitle">Click the ball if you dare</p>
-        <div class="soccer-ball" id="soccerBall" onclick="startChaos()"></div>
-        <p class="warning">Warning: This will be extremely annoying</p>
-        <p class="popup-note">Allow popups for full effect</p>
+        <p class="subtitle">Click the ball. We dare you.</p>
+        <div class="soccer-ball" onclick="window.open('ready.html', '_blank', 'width=500,height=450,left=' + (screen.width/2-250) + ',top=' + (screen.height/2-225))"></div>
+        <p class="warning">Allow popups for full experience</p>
     </div>
 
     <p class="hint">Press ? to stop</p>
 
+    <!-- Prank overlays -->
+    <div id="bsod" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#0078d7; z-index:9999; padding:10%; font-family:Segoe UI,sans-serif;">
+        <p style="color:white; font-size:8vw; margin-bottom:20px;">:(</p>
+        <p style="color:white; font-size:2vw; margin-bottom:40px;">Your PC ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you.</p>
+        <p style="color:white; font-size:1.5vw;">0% complete</p>
+        <p style="color:white; font-size:1vw; margin-top:60px; opacity:0.7;">For more information about this issue and possible fixes, visit https://windows.com/stopcode</p>
+        <p style="color:white; font-size:1vw; margin-top:20px; opacity:0.7;">If you call a support person, give them this info:<br>Stop code: CRITICAL_PROCESS_DIED</p>
+        <button onclick="prank('reset')" style="position:absolute;bottom:20px;right:20px;padding:10px 20px;background:rgba(255,255,255,0.2);border:none;color:white;cursor:pointer;border-radius:5px;">Press to fix</button>
+    </div>
+
+    <div id="crack" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9998; pointer-events:none;">
+        <svg width="100%" height="100%" style="position:absolute;top:0;left:0;">
+            <line x1="45%" y1="0" x2="50%" y2="100%" stroke="rgba(0,0,0,0.8)" stroke-width="3"/>
+            <line x1="45%" y1="30%" x2="20%" y2="60%" stroke="rgba(0,0,0,0.6)" stroke-width="2"/>
+            <line x1="48%" y1="50%" x2="80%" y2="70%" stroke="rgba(0,0,0,0.6)" stroke-width="2"/>
+            <line x1="47%" y1="20%" x2="70%" y2="10%" stroke="rgba(0,0,0,0.5)" stroke-width="2"/>
+            <line x1="46%" y1="60%" x2="30%" y2="90%" stroke="rgba(0,0,0,0.5)" stroke-width="2"/>
+            <line x1="50%" y1="40%" x2="90%" y2="50%" stroke="rgba(0,0,0,0.4)" stroke-width="1"/>
+            <line x1="44%" y1="70%" x2="10%" y2="80%" stroke="rgba(0,0,0,0.4)" stroke-width="1"/>
+        </svg>
+    </div>
+
+    <div id="virus" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:30px; border-radius:8px; z-index:9999; box-shadow:0 20px 60px rgba(0,0,0,0.5); text-align:center; min-width:400px;">
+        <div style="color:#d32f2f; font-size:48px; margin-bottom:15px;">⚠️</div>
+        <h2 style="color:#333; margin-bottom:10px;">VIRUS DETECTED!</h2>
+        <p style="color:#666; margin-bottom:20px; font-size:14px;">Your computer has been infected with 47 viruses!<br>Call Microsoft Support immediately: 1-800-FAKE-NUM</p>
+        <div style="background:#f5f5f5; padding:15px; border-radius:4px; margin-bottom:20px;">
+            <p style="color:#d32f2f; font-weight:bold; font-size:12px;">TROJAN.MALWARE.BITCOIN.MINER<br>WORM.SPAM.EMAIL<br>RANSOMWARE.CRYPTOLOCKER</p>
+        </div>
+        <button onclick="prank('reset')" style="background:#d32f2f; color:white; border:none; padding:12px 30px; font-size:14px; cursor:pointer; border-radius:4px;">REMOVE VIRUSES NOW</button>
+    </div>
+
     <script>
-        let chaosActive = false;
-        let popupInterval = null;
-        let openWindows = [];
-        let flashElement = null;
-
-        function startChaos() {
-            if (chaosActive) return;
-            chaosActive = true;
-
-            document.body.classList.add('chaos-active');
-            document.getElementById('mainContent').style.opacity = '0.3';
-
-            // First show "Are you ready" popup
-            const readyWidth = 500;
-            const readyHeight = 400;
-            const readyLeft = Math.floor((screen.width - readyWidth) / 2);
-            const readyTop = Math.floor((screen.height - readyHeight) / 2);
-            const readyFeatures = `width=${readyWidth},height=${readyHeight},left=${readyLeft},top=${readyTop},menubar=no,toolbar=no,location=no,status=no`;
-
-            try {
-                window.open('ready.html', '_blank', readyFeatures);
-            } catch (e) {}
+        function toggleDropdown() {
+            document.getElementById('dropdown').classList.toggle('open');
         }
 
-        function beginChaos() {
-            // Create screen flash
-            flashElement = document.createElement('div');
-            flashElement.className = 'screen-flash';
-            document.body.appendChild(flashElement);
-
-            // Spawn 30 popups every burst
-            popupInterval = setInterval(spawnPopupBurst, 500);
-
-            // Initial burst of 30
-            spawnPopupBurst();
-        }
-
-        // Listen for "Yes" click from ready popup
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'startChaos' && chaosActive) {
-                beginChaos();
-            }
-            if (e.key === 'stopChaos') {
-                stopChaos();
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-container')) {
+                document.getElementById('dropdown').classList.remove('open');
             }
         });
 
-        function spawnPopupBurst() {
-            if (!chaosActive) return;
+        function prank(type) {
+            document.getElementById('dropdown').classList.remove('open');
 
-            for (let i = 0; i < 30; i++) {
-                setTimeout(() => openPopupWindow(), i * 20);
+            switch(type) {
+                case 'flip':
+                    document.body.style.transform = 'rotate(180deg)';
+                    document.body.style.transition = 'transform 0.5s';
+                    break;
+                case 'shake':
+                    document.body.style.animation = 'shake 0.1s infinite';
+                    addShakeStyle();
+                    break;
+                case 'spin':
+                    document.body.style.animation = 'spin 2s linear infinite';
+                    addSpinStyle();
+                    break;
+                case 'tiny':
+                    document.body.style.transform = 'scale(0.3)';
+                    document.body.style.transition = 'transform 0.5s';
+                    break;
+                case 'cursor':
+                    document.body.style.cursor = 'none';
+                    break;
+                case 'blur':
+                    document.body.style.filter = 'blur(5px)';
+                    document.body.style.transition = 'filter 0.5s';
+                    break;
+                case 'bsod':
+                    document.getElementById('bsod').style.display = 'block';
+                    break;
+                case 'crack':
+                    document.getElementById('crack').style.display = 'block';
+                    break;
+                case 'virus':
+                    document.getElementById('virus').style.display = 'block';
+                    break;
+                case 'reset':
+                    document.body.style.transform = '';
+                    document.body.style.animation = '';
+                    document.body.style.cursor = '';
+                    document.body.style.filter = '';
+                    document.getElementById('bsod').style.display = 'none';
+                    document.getElementById('crack').style.display = 'none';
+                    document.getElementById('virus').style.display = 'none';
+                    break;
             }
         }
 
-        function openPopupWindow() {
-            if (!chaosActive) return;
-
-            const width = 250 + Math.floor(Math.random() * 200);
-            const height = 150 + Math.floor(Math.random() * 150);
-            const left = Math.floor(Math.random() * (screen.width - width));
-            const top = Math.floor(Math.random() * (screen.height - height));
-
-            const features = `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no`;
-
-            try {
-                const newWindow = window.open('popup.html', '_blank', features);
-                if (newWindow) {
-                    openWindows.push(newWindow);
-                    if (openWindows.length > 200) {
-                        openWindows.shift();
-                    }
-                }
-            } catch (e) {}
+        function addShakeStyle() {
+            if (!document.getElementById('shake-style')) {
+                const style = document.createElement('style');
+                style.id = 'shake-style';
+                style.textContent = '@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)} 75%{transform:translateX(10px)} }';
+                document.head.appendChild(style);
+            }
         }
 
-        function stopChaos() {
-            if (!chaosActive) return;
-            chaosActive = false;
-
-            if (popupInterval) {
-                clearInterval(popupInterval);
-                popupInterval = null;
+        function addSpinStyle() {
+            if (!document.getElementById('spin-style')) {
+                const style = document.createElement('style');
+                style.id = 'spin-style';
+                style.textContent = '@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }';
+                document.head.appendChild(style);
             }
-
-            // Close all popup windows
-            openWindows.forEach(win => {
-                try {
-                    if (win && !win.closed) {
-                        win.close();
-                    }
-                } catch (e) {}
-            });
-            openWindows = [];
-
-            if (flashElement && flashElement.parentNode) {
-                flashElement.parentNode.removeChild(flashElement);
-            }
-
-            document.body.classList.remove('chaos-active');
-            document.getElementById('mainContent').style.opacity = '1';
-
-            localStorage.setItem('stopChaos', Date.now().toString());
         }
 
         document.addEventListener('keydown', function(e) {
             if (e.key === '?' || (e.shiftKey && e.key === '/')) {
-                stopChaos();
+                prank('reset');
             }
         });
-
     </script>
 </body>
 </html>
