@@ -267,6 +267,88 @@
             mix-blend-mode: overlay;
         }
 
+        /* Aurora / Northern Lights */
+        .aurora {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0.35;
+            mask-image: linear-gradient(to bottom, white 0%, white 40%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, white 0%, white 40%, transparent 100%);
+        }
+
+        .aurora-band {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(180deg,
+                transparent 0%,
+                rgba(147, 51, 234, 0.25) 10%,
+                rgba(147, 51, 234, 0.35) 20%,
+                rgba(59, 130, 246, 0.25) 35%,
+                rgba(6, 182, 212, 0.18) 50%,
+                rgba(6, 182, 212, 0.08) 70%,
+                transparent 100%);
+            filter: blur(60px);
+            animation: auroraWave 20s ease-in-out infinite;
+        }
+
+        .aurora-band:nth-child(2) {
+            animation-delay: -7s;
+            opacity: 0.6;
+            filter: blur(80px);
+        }
+
+        .aurora-band:nth-child(3) {
+            animation-delay: -14s;
+            opacity: 0.4;
+            filter: blur(100px);
+        }
+
+        @keyframes auroraWave {
+            0%, 100% { transform: translateX(-25%) skewX(-5deg); }
+            50% { transform: translateX(0%) skewX(5deg); }
+        }
+
+        /* Pulsing Energy Nodes */
+        .energy-node {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .energy-node::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.6) 0%, transparent 70%);
+            animation: nodePulse 4s ease-in-out infinite;
+        }
+
+        .energy-node:nth-child(1) { top: 15%; left: 20%; }
+        .energy-node:nth-child(2) { top: 60%; left: 85%; }
+        .energy-node:nth-child(2)::before { animation-delay: -1s; }
+        .energy-node:nth-child(3) { top: 75%; left: 15%; }
+        .energy-node:nth-child(3)::before { animation-delay: -2s; }
+        .energy-node:nth-child(4) { top: 30%; left: 70%; }
+        .energy-node:nth-child(4)::before { animation-delay: -3s; }
+
+        .energy-node:nth-child(2)::before { background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, transparent 70%); }
+        .energy-node:nth-child(3)::before { background: radial-gradient(circle, rgba(6, 182, 212, 0.5) 0%, transparent 70%); }
+        .energy-node:nth-child(4)::before { background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%); }
+
+        @keyframes nodePulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.8); opacity: 0.9; }
+        }
+
         /* Sign In Modal */
         .signin-modal {
             position: fixed;
@@ -864,10 +946,11 @@
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 30px 40px;
+            padding: 20px 40px;
             display: flex;
             flex-direction: column;
             gap: 20px;
+            min-height: 0;
         }
 
         .message {
@@ -947,27 +1030,31 @@
         /* Welcome */
         .welcome {
             text-align: center;
-            padding: 80px 20px;
+            padding: 40px 20px;
             animation: fadeIn 0.5s ease;
             max-width: 600px;
             margin: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 0;
         }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .welcome-orb-container {
             position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 30px;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .welcome-orb {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             background: linear-gradient(135deg, #9333ea, #3b82f6, #ec4899);
             border-radius: 50%;
             box-shadow:
@@ -1022,9 +1109,9 @@
         }
 
         .welcome h1 {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -1032,10 +1119,10 @@
 
         .welcome p {
             color: rgba(255,255,255,0.5);
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             max-width: 450px;
-            margin: 0 auto 40px;
-            line-height: 1.6;
+            margin: 0 auto 20px;
+            line-height: 1.5;
         }
 
         .suggestions {
@@ -1104,6 +1191,91 @@
         }
 
         .input-box textarea::placeholder { color: rgba(255,255,255,0.4); }
+
+        /* Image preview area */
+        .image-preview-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 0;
+            max-width: 100%;
+        }
+
+        .image-preview-area:not(:empty) {
+            padding: 10px 0 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 8px;
+        }
+
+        .image-preview {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 20px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.15s ease;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .image-preview:hover .image-preview-remove {
+            opacity: 1;
+        }
+
+        .image-preview-remove:hover {
+            background: rgba(239, 68, 68, 0.8);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Image in messages */
+        .message-image {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 12px;
+            margin: 8px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .message-image:hover {
+            transform: scale(1.02);
+        }
+
+        .message-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
 
         .send-btn {
             width: 48px;
@@ -1457,6 +1629,20 @@
     <div class="nebula"></div>
     <div class="nebula-layer-2"></div>
     <div class="cosmic-dust"></div>
+
+    <!-- Aurora / Northern Lights -->
+    <div class="aurora">
+        <div class="aurora-band"></div>
+        <div class="aurora-band"></div>
+        <div class="aurora-band"></div>
+    </div>
+
+    <!-- Pulsing Energy Nodes -->
+    <div class="energy-node"></div>
+    <div class="energy-node"></div>
+    <div class="energy-node"></div>
+    <div class="energy-node"></div>
+
     <div class="galaxy"></div>
     <div class="galaxy"></div>
     <div class="shooting-star"></div>
@@ -1572,9 +1758,10 @@
                         </div>
                     </div>
                     <div class="input-box">
+                        <div class="image-preview-area" id="imagePreviewArea"></div>
                         <textarea
                             id="userInput"
-                            placeholder="Message NexusAI..."
+                            placeholder="Message NexusAI... (paste images with Ctrl+V)"
                             rows="1"
                             onkeydown="handleKeyDown(event)"
                             oninput="autoResize(this)"
@@ -1607,6 +1794,7 @@
         let chats = [];
         let currentUserEmail = null;
         let responseStyle = 'concise'; // 'concise' or 'detailed'
+        let pendingImages = []; // Array of {id, dataUrl} for images to send
 
         // DOM elements
         const loadingScreen = document.getElementById('loadingScreen');
@@ -1621,6 +1809,7 @@
         const userNameEl = document.getElementById('userName');
         const styleBtn = document.getElementById('styleBtn');
         const styleMenu = document.getElementById('styleMenu');
+        const imagePreviewArea = document.getElementById('imagePreviewArea');
 
         // Initialize
         init();
@@ -2122,46 +2311,67 @@
 
             addTypingIndicator();
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${GROQ_API_KEY}`
-                    },
-                    body: JSON.stringify({
-                        model: 'llama-3.3-70b-versatile',
-                        messages: [
-                            {
-                                role: 'system',
-                                content: getSystemPrompt()
-                            },
-                            ...conversationHistory
-                        ],
-                        temperature: 0.7,
-                        max_tokens: 1024
-                    })
-                });
+            // Retry logic for rate limiting
+            const maxRetries = 3;
+            let retryCount = 0;
+            let success = false;
 
-                removeTypingIndicator();
+            while (retryCount < maxRetries && !success) {
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${GROQ_API_KEY}`
+                        },
+                        body: JSON.stringify({
+                            model: 'llama-3.3-70b-versatile',
+                            messages: [
+                                {
+                                    role: 'system',
+                                    content: getSystemPrompt()
+                                },
+                                ...conversationHistory
+                            ],
+                            temperature: 0.7,
+                            max_tokens: 1024
+                        })
+                    });
 
-                if (!response.ok) {
-                    throw new Error(`API request failed: ${response.status}`);
+                    if (!response.ok) {
+                        const status = response.status;
+                        // Rate limited or server error - retry after delay
+                        if (status === 429 || status >= 500) {
+                            retryCount++;
+                            if (retryCount < maxRetries) {
+                                await new Promise(r => setTimeout(r, 1000 * retryCount));
+                                continue;
+                            }
+                        }
+                        throw new Error(`API request failed: ${status}`);
+                    }
+
+                    const data = await response.json();
+                    const assistantMessage = data.choices[0].message.content;
+
+                    conversationHistory.push({ role: 'assistant', content: assistantMessage });
+                    removeTypingIndicator();
+                    addMessageToDOM('assistant', assistantMessage);
+
+                    // Save assistant message
+                    saveMessage(currentChatId, 'assistant', assistantMessage);
+                    success = true;
+
+                } catch (error) {
+                    retryCount++;
+                    if (retryCount >= maxRetries) {
+                        removeTypingIndicator();
+                        addMessageToDOM('assistant', 'I\'m receiving too many requests right now. Please wait a moment and try again.');
+                        console.error('Error:', error);
+                    } else {
+                        await new Promise(r => setTimeout(r, 1000 * retryCount));
+                    }
                 }
-
-                const data = await response.json();
-                const assistantMessage = data.choices[0].message.content;
-
-                conversationHistory.push({ role: 'assistant', content: assistantMessage });
-                addMessageToDOM('assistant', assistantMessage);
-
-                // Save assistant message
-                saveMessage(currentChatId, 'assistant', assistantMessage);
-
-            } catch (error) {
-                removeTypingIndicator();
-                addMessageToDOM('assistant', 'My neural pathways encountered a disturbance. Please try again.');
-                console.error('Error:', error);
             }
 
             isGenerating = false;
