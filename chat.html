@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NexusAI - Chat Interface</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%239333ea'/><circle cx='50' cy='50' r='20' fill='%233b82f6'/></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -2326,32 +2327,14 @@
 
             addTypingIndicator();
 
-            // Build messages for API - only include image in current message
+            // Build messages for API (images are displayed visually but not sent to API)
             let apiMessages = [
                 { role: 'system', content: getSystemPrompt() },
-                ...conversationHistory.slice(0, -1) // All previous messages
+                ...conversationHistory
             ];
 
-            // Add current message with image if present
-            if (hasImages && messageImages.length > 0) {
-                const imageContent = [];
-                imageContent.push({
-                    type: 'text',
-                    text: message || 'Please describe what you see in this image.'
-                });
-                imageContent.push({
-                    type: 'image_url',
-                    image_url: {
-                        url: messageImages[0].dataUrl
-                    }
-                });
-                apiMessages.push({ role: 'user', content: imageContent });
-            } else {
-                apiMessages.push({ role: 'user', content: message });
-            }
-
-            // Use vision model if images are present
-            const modelToUse = hasImages ? 'llama-3.2-11b-vision-preview' : 'llama-3.3-70b-versatile';
+            // Always use the standard model (vision API has compatibility issues)
+            const modelToUse = 'llama-3.3-70b-versatile';
 
             // Retry logic for rate limiting
             const maxRetries = 3;
