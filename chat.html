@@ -739,6 +739,111 @@
         .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .send-btn svg { width: 20px; height: 20px; fill: white; }
 
+        /* Response Style Selector */
+        .style-selector {
+            position: relative;
+        }
+
+        .style-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(147, 51, 234, 0.15);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9333ea;
+            font-size: 1.4rem;
+            font-weight: 300;
+            transition: all 0.2s;
+            margin-right: 10px;
+        }
+
+        .style-btn:hover {
+            background: rgba(147, 51, 234, 0.25);
+            border-color: rgba(147, 51, 234, 0.5);
+        }
+
+        .style-btn.active {
+            background: rgba(147, 51, 234, 0.3);
+            border-color: #9333ea;
+        }
+
+        .style-menu {
+            position: absolute;
+            bottom: 55px;
+            left: 0;
+            background: linear-gradient(145deg, rgba(20, 20, 40, 0.98), rgba(10, 10, 25, 0.98));
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 16px;
+            padding: 8px;
+            min-width: 200px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 100;
+        }
+
+        .style-menu.visible {
+            display: block;
+            animation: styleMenuIn 0.2s ease-out;
+        }
+
+        @keyframes styleMenuIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .style-option {
+            padding: 12px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .style-option:hover {
+            background: rgba(147, 51, 234, 0.15);
+        }
+
+        .style-option.selected {
+            background: rgba(147, 51, 234, 0.2);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+        }
+
+        .style-option-icon {
+            font-size: 1.2rem;
+        }
+
+        .style-option-text {
+            flex: 1;
+        }
+
+        .style-option-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .style-option-desc {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+        }
+
+        .style-check {
+            color: #9333ea;
+            font-size: 1rem;
+            opacity: 0;
+        }
+
+        .style-option.selected .style-check {
+            opacity: 1;
+        }
+
         .typing { display: flex; gap: 4px; padding: 8px 0; }
 
         .typing span {
@@ -1039,6 +1144,27 @@
 
             <div class="input-area">
                 <div class="input-wrapper">
+                    <div class="style-selector">
+                        <button class="style-btn" id="styleBtn" onclick="toggleStyleMenu()">+</button>
+                        <div class="style-menu" id="styleMenu">
+                            <div class="style-option selected" onclick="selectStyle('concise')" data-style="concise">
+                                <span class="style-option-icon">⚡</span>
+                                <div class="style-option-text">
+                                    <div class="style-option-title">Concise</div>
+                                    <div class="style-option-desc">Short, to the point answers</div>
+                                </div>
+                                <span class="style-check">✓</span>
+                            </div>
+                            <div class="style-option" onclick="selectStyle('detailed')" data-style="detailed">
+                                <span class="style-option-icon">📋</span>
+                                <div class="style-option-text">
+                                    <div class="style-option-title">Detailed</div>
+                                    <div class="style-option-desc">Steps and explanations</div>
+                                </div>
+                                <span class="style-check">✓</span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="input-box">
                         <textarea
                             id="userInput"
@@ -1074,6 +1200,7 @@
         let currentChatId = null;
         let chats = [];
         let currentUserEmail = null;
+        let responseStyle = 'concise'; // 'concise' or 'detailed'
 
         // DOM elements
         const loadingScreen = document.getElementById('loadingScreen');
@@ -1086,6 +1213,8 @@
         const sendBtn = document.getElementById('sendBtn');
         const chatHistoryContainer = document.getElementById('chatHistory');
         const userNameEl = document.getElementById('userName');
+        const styleBtn = document.getElementById('styleBtn');
+        const styleMenu = document.getElementById('styleMenu');
 
         // Initialize
         init();
@@ -1596,36 +1725,7 @@
                         messages: [
                             {
                                 role: 'system',
-                                content: `You are NexusAI, a highly advanced AI assistant.
-
-RESPONSE FORMAT - FOLLOW STRICTLY:
-- Be CONCISE and get straight to the point
-- Use numbered steps (1. 2. 3.) for any process or instructions
-- Use bullet points for lists of items or options
-- Keep each point SHORT - one line when possible
-- NO long paragraphs - break everything into digestible chunks
-- Start with a brief 1-sentence summary if needed, then steps/points
-- Use headers (## or ###) to organize longer responses into sections
-
-STYLE RULES:
-- Skip filler phrases like "Certainly!", "Great question!", "I'd be happy to help"
-- Just answer directly
-- No excessive symbols, emojis, or decorations
-- Use code blocks only for actual code
-- Bold only key terms that need emphasis
-
-Example format:
-## Quick Answer
-One sentence summary.
-
-### Steps
-1. First thing to do
-2. Second thing to do
-3. Third thing to do
-
-### Key Points
-- Important point one
-- Important point two`
+                                content: getSystemPrompt()
                             },
                             ...conversationHistory
                         ],
@@ -1659,6 +1759,69 @@ One sentence summary.
             sendBtn.disabled = false;
             userInput.focus();
         }
+
+        // Style selector functions
+        function getSystemPrompt() {
+            if (responseStyle === 'concise') {
+                return `You are NexusAI, a highly advanced AI assistant.
+
+IMPORTANT: Give SHORT, DIRECT answers.
+- Answer in 1-3 sentences when possible
+- No fluff, no filler phrases
+- Get straight to the point
+- Only use lists if absolutely necessary
+- Skip "Certainly!", "Great question!", etc.
+- Just answer directly`;
+            } else {
+                return `You are NexusAI, a highly advanced AI assistant.
+
+RESPONSE FORMAT:
+- Use numbered steps (1. 2. 3.) for processes or instructions
+- Use bullet points for lists
+- Break longer answers into sections with headers (## or ###)
+- Keep each point clear and readable
+- Skip filler phrases - just answer directly
+- Use code blocks for code
+
+Example format:
+## Answer
+Brief summary.
+
+### Steps
+1. First step
+2. Second step
+3. Third step`;
+            }
+        }
+
+        function toggleStyleMenu() {
+            styleMenu.classList.toggle('visible');
+            styleBtn.classList.toggle('active');
+        }
+
+        function selectStyle(style) {
+            responseStyle = style;
+
+            // Update UI
+            document.querySelectorAll('.style-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.dataset.style === style) {
+                    opt.classList.add('selected');
+                }
+            });
+
+            // Close menu
+            styleMenu.classList.remove('visible');
+            styleBtn.classList.remove('active');
+        }
+
+        // Close style menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.style-selector')) {
+                styleMenu.classList.remove('visible');
+                styleBtn.classList.remove('active');
+            }
+        });
 
         // Handle enter key on sign-in input
         signinEmail.addEventListener('keydown', (e) => {
