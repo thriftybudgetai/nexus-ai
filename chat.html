@@ -2291,7 +2291,10 @@
 
         async function sendMessage() {
             const message = userInput.value.trim();
-            if (!message || isGenerating) return;
+            const hasImages = pendingImages.length > 0;
+
+            // Need either message or images to send
+            if ((!message && !hasImages) || isGenerating) return;
 
             if (!GROQ_API_KEY) {
                 addMessageToDOM('assistant', 'API key not configured. Please contact the administrator.');
@@ -2303,11 +2306,17 @@
             userInput.value = '';
             userInput.style.height = 'auto';
 
-            addMessageToDOM('user', message);
-            conversationHistory.push({ role: 'user', content: message });
+            // Capture images before clearing
+            const messagImages = [...pendingImages];
+            clearPendingImages();
 
-            // Save user message
-            saveMessage(currentChatId, 'user', message);
+            // Display user message with images
+            const displayMessage = message || (hasImages ? '[Image]' : '');
+            addMessageToDOM('user', displayMessage, messagImages);
+            conversationHistory.push({ role: 'user', content: message || 'User shared an image' });
+
+            // Save user message (note: images are shown visually but not persisted to DB for simplicity)
+            saveMessage(currentChatId, 'user', displayMessage);
 
             addTypingIndicator();
 
@@ -2446,6 +2455,116 @@ Brief summary.
         signinEmail.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') handleSignIn();
         });
+
+        // ===== IMAGE PASTE HANDLING =====
+
+        // Handle paste event on the input
+        userInput.addEventListener('paste', handleImagePaste);
+        document.addEventListener('paste', (e) => {
+            // Only handle if focused on chat area
+            if (document.activeElement === userInput || appContainer.contains(document.activeElement)) {
+                handleImagePaste(e);
+            }
+        });
+
+        function handleImagePaste(e) {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+
+            for (const item of items) {
+                if (item.type.startsWith('image/')) {
+                    e.preventDefault();
+                    const file = item.getAsFile();
+                    if (file) {
+                        addImageToPreview(file);
+                    }
+                }
+            }
+        }
+
+        function addImageToPreview(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageId = 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const dataUrl = e.target.result;
+
+                // Add to pending images
+                pendingImages.push({ id: imageId, dataUrl });
+
+                // Create preview element
+                const preview = document.createElement('div');
+                preview.className = 'image-preview';
+                preview.dataset.imageId = imageId;
+                preview.innerHTML = `
+                    <img src="${dataUrl}" alt="Pasted image">
+                    <div class="image-preview-remove" onclick="removeImage('${imageId}')">×</div>
+                `;
+
+                imagePreviewArea.appendChild(preview);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage(imageId) {
+            // Remove from pending images array
+            pendingImages = pendingImages.filter(img => img.id !== imageId);
+
+            // Remove preview element
+            const preview = imagePreviewArea.querySelector(`[data-image-id="${imageId}"]`);
+            if (preview) {
+                preview.style.transform = 'scale(0.8)';
+                preview.style.opacity = '0';
+                setTimeout(() => preview.remove(), 150);
+            }
+        }
+
+        function clearPendingImages() {
+            pendingImages = [];
+            imagePreviewArea.innerHTML = '';
+        }
+
+        // Update addMessageToDOM to handle images
+        const originalAddMessageToDOM = addMessageToDOM;
+        addMessageToDOM = function(role, content, images = []) {
+            const welcome = document.getElementById('welcome');
+            if (welcome) welcome.remove();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = role === 'assistant' ? '✧' : '⚡';
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+
+            // Add images if present
+            if (images && images.length > 0) {
+                const imagesDiv = document.createElement('div');
+                imagesDiv.className = 'message-images';
+                images.forEach(img => {
+                    const imgEl = document.createElement('img');
+                    imgEl.src = img.dataUrl || img;
+                    imgEl.className = 'message-image';
+                    imgEl.onclick = () => window.open(imgEl.src, '_blank');
+                    imagesDiv.appendChild(imgEl);
+                });
+                contentDiv.appendChild(imagesDiv);
+            }
+
+            // Add text content
+            const textDiv = document.createElement('div');
+            textDiv.innerHTML = formatMessage(content);
+            contentDiv.appendChild(textDiv);
+
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            return contentDiv;
+        };
     </script>
 </body>
 </html>
