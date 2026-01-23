@@ -2308,18 +2308,45 @@
             userInput.style.height = 'auto';
 
             // Capture images before clearing
-            const messagImages = [...pendingImages];
+            const messageImages = [...pendingImages];
             clearPendingImages();
 
             // Display user message with images
             const displayMessage = message || (hasImages ? '[Image]' : '');
-            addMessageToDOM('user', displayMessage, messagImages);
-            conversationHistory.push({ role: 'user', content: message || 'User shared an image' });
+            addMessageToDOM('user', displayMessage, messageImages);
+
+            // Build the message content for the API
+            let userContent;
+            if (hasImages) {
+                // For vision model, content is an array of text and image objects
+                userContent = [];
+                if (message) {
+                    userContent.push({ type: 'text', text: message });
+                }
+                messageImages.forEach(img => {
+                    userContent.push({
+                        type: 'image_url',
+                        image_url: {
+                            url: img.dataUrl
+                        }
+                    });
+                });
+                if (!message) {
+                    userContent.unshift({ type: 'text', text: 'What do you see in this image?' });
+                }
+            } else {
+                userContent = message;
+            }
+
+            conversationHistory.push({ role: 'user', content: userContent });
 
             // Save user message (note: images are shown visually but not persisted to DB for simplicity)
             saveMessage(currentChatId, 'user', displayMessage);
 
             addTypingIndicator();
+
+            // Use vision model if images are present
+            const modelToUse = hasImages ? 'llama-3.2-11b-vision-preview' : 'llama-3.3-70b-versatile';
 
             // Retry logic for rate limiting
             const maxRetries = 3;
@@ -2335,7 +2362,7 @@
                             'Authorization': `Bearer ${GROQ_API_KEY}`
                         },
                         body: JSON.stringify({
-                            model: 'llama-3.3-70b-versatile',
+                            model: modelToUse,
                             messages: [
                                 {
                                     role: 'system',
@@ -2459,29 +2486,28 @@ Brief summary.
 
         // ===== IMAGE PASTE HANDLING =====
 
-        // Handle paste event on the input
-        userInput.addEventListener('paste', handleImagePaste);
+        // Single paste handler on document to avoid duplicates
         document.addEventListener('paste', (e) => {
-            // Only handle if focused on chat area
-            if (document.activeElement === userInput || appContainer.contains(document.activeElement)) {
-                handleImagePaste(e);
-            }
-        });
+            // Only handle if in chat area
+            if (!appContainer.contains(document.activeElement)) return;
 
-        function handleImagePaste(e) {
             const items = e.clipboardData?.items;
             if (!items) return;
 
+            let imageFound = false;
             for (const item of items) {
-                if (item.type.startsWith('image/')) {
+                if (item.type.startsWith('image/') && !imageFound) {
                     e.preventDefault();
+                    e.stopPropagation();
                     const file = item.getAsFile();
                     if (file) {
                         addImageToPreview(file);
+                        imageFound = true; // Only add one image per paste
                     }
+                    break; // Stop after first image
                 }
             }
-        }
+        });
 
         function addImageToPreview(file) {
             const reader = new FileReader();
