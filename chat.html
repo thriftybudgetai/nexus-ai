@@ -1156,7 +1156,7 @@
         .input-wrapper {
             display: flex;
             gap: 10px;
-            align-items: center;
+            align-items: flex-end;
             max-width: 800px;
             margin: 0 auto;
         }
@@ -1168,7 +1168,7 @@
             border-radius: 16px;
             padding: 14px 18px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             transition: all 0.2s;
         }
 
@@ -1178,7 +1178,7 @@
         }
 
         .input-box textarea {
-            flex: 1;
+            width: 100%;
             background: transparent;
             border: none;
             outline: none;
@@ -1194,17 +1194,18 @@
 
         /* Image preview area */
         .image-preview-area {
-            display: flex;
+            display: none;
             flex-wrap: wrap;
             gap: 8px;
             padding: 0;
-            max-width: 100%;
+            width: 100%;
         }
 
         .image-preview-area:not(:empty) {
-            padding: 10px 0 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            margin-bottom: 8px;
+            display: flex;
+            padding: 0 0 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 10px;
         }
 
         .image-preview {
