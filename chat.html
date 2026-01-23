@@ -2315,35 +2315,40 @@
             const displayMessage = message || (hasImages ? '[Image]' : '');
             addMessageToDOM('user', displayMessage, messageImages);
 
-            // Build the message content for the API
-            let userContent;
-            if (hasImages) {
-                // For vision model, content is an array of text and image objects
-                userContent = [];
-                if (message) {
-                    userContent.push({ type: 'text', text: message });
-                }
-                messageImages.forEach(img => {
-                    userContent.push({
-                        type: 'image_url',
-                        image_url: {
-                            url: img.dataUrl
-                        }
-                    });
-                });
-                if (!message) {
-                    userContent.unshift({ type: 'text', text: 'What do you see in this image?' });
-                }
-            } else {
-                userContent = message;
-            }
+            // Store simple text in conversation history (not complex image objects)
+            const historyText = hasImages
+                ? (message ? `${message} [User attached an image]` : '[User shared an image]')
+                : message;
+            conversationHistory.push({ role: 'user', content: historyText });
 
-            conversationHistory.push({ role: 'user', content: userContent });
-
-            // Save user message (note: images are shown visually but not persisted to DB for simplicity)
+            // Save user message
             saveMessage(currentChatId, 'user', displayMessage);
 
             addTypingIndicator();
+
+            // Build messages for API - only include image in current message
+            let apiMessages = [
+                { role: 'system', content: getSystemPrompt() },
+                ...conversationHistory.slice(0, -1) // All previous messages
+            ];
+
+            // Add current message with image if present
+            if (hasImages && messageImages.length > 0) {
+                const imageContent = [];
+                imageContent.push({
+                    type: 'text',
+                    text: message || 'Please describe what you see in this image.'
+                });
+                imageContent.push({
+                    type: 'image_url',
+                    image_url: {
+                        url: messageImages[0].dataUrl
+                    }
+                });
+                apiMessages.push({ role: 'user', content: imageContent });
+            } else {
+                apiMessages.push({ role: 'user', content: message });
+            }
 
             // Use vision model if images are present
             const modelToUse = hasImages ? 'llama-3.2-11b-vision-preview' : 'llama-3.3-70b-versatile';
@@ -2363,13 +2368,7 @@
                         },
                         body: JSON.stringify({
                             model: modelToUse,
-                            messages: [
-                                {
-                                    role: 'system',
-                                    content: getSystemPrompt()
-                                },
-                                ...conversationHistory
-                            ],
+                            messages: apiMessages,
                             temperature: 0.7,
                             max_tokens: 1024
                         })
