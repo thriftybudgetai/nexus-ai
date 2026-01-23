@@ -736,6 +736,38 @@
         .pricing-btn-primary { background: linear-gradient(135deg, #9333ea, #7c3aed); border: none; color: white; }
         .pricing-btn-primary:hover { box-shadow: 0 0 30px rgba(147, 51, 234, 0.4); }
 
+        /* Terminal Install */
+        .terminal-section { padding: 100px 60px; position: relative; z-index: 1; background: rgba(0,0,0,0.3); }
+        .terminal-container { max-width: 800px; margin: 0 auto; }
+        .terminal-window { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; box-shadow: 0 20px 80px rgba(0,0,0,0.5); }
+        .terminal-header { background: #1a1a1a; padding: 12px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27c93f; }
+        .terminal-title { flex: 1; text-align: center; color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-right: 52px; }
+        .terminal-body { padding: 24px; font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace; font-size: 0.9rem; line-height: 1.8; }
+        .terminal-line { display: flex; align-items: flex-start; margin-bottom: 8px; }
+        .terminal-prompt { color: #22c55e; margin-right: 10px; user-select: none; }
+        .terminal-command { color: #e2e8f0; flex: 1; }
+        .terminal-command .flag { color: #60a5fa; }
+        .terminal-command .string { color: #fbbf24; }
+        .terminal-output { color: rgba(255,255,255,0.5); margin-left: 20px; margin-bottom: 8px; }
+        .terminal-output.success { color: #22c55e; }
+        .terminal-output.info { color: #60a5fa; }
+        .terminal-cursor { display: inline-block; width: 8px; height: 16px; background: #22c55e; animation: blink 1s step-end infinite; vertical-align: middle; margin-left: 2px; }
+        @keyframes blink { 50% { opacity: 0; } }
+        .terminal-copy { position: absolute; top: 70px; right: 76px; background: rgba(255,255,255,0.1); border: none; color: rgba(255,255,255,0.6); padding: 8px 14px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+        .terminal-copy:hover { background: rgba(255,255,255,0.15); color: white; }
+        .terminal-tabs { display: flex; gap: 0; margin-bottom: 30px; justify-content: center; }
+        .terminal-tab { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); padding: 10px 24px; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+        .terminal-tab:first-child { border-radius: 8px 0 0 8px; }
+        .terminal-tab:last-child { border-radius: 0 8px 8px 0; }
+        .terminal-tab.active { background: rgba(147, 51, 234, 0.2); border-color: rgba(147, 51, 234, 0.4); color: white; }
+        .terminal-tab:hover:not(.active) { background: rgba(255,255,255,0.08); }
+        .install-methods { display: none; }
+        .install-methods.active { display: block; }
+
         /* CTA */
         .cta-section { padding: 100px 60px; position: relative; z-index: 1; text-align: center; background: linear-gradient(180deg, rgba(147, 51, 234, 0.1), transparent); }
         .cta-section h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
@@ -1046,6 +1078,123 @@
         </div>
     </section>
 
+    <!-- Terminal Install -->
+    <section class="terminal-section" id="install">
+        <h2 class="section-title animate">Get Started in Seconds</h2>
+        <p class="section-subtitle animate-on-scroll">Install NexusAI CLI and start building with one command.</p>
+
+        <div class="terminal-container animate-on-scroll">
+            <div class="terminal-tabs">
+                <button class="terminal-tab active" onclick="showInstall('npm')">npm</button>
+                <button class="terminal-tab" onclick="showInstall('curl')">curl</button>
+                <button class="terminal-tab" onclick="showInstall('docker')">Docker</button>
+            </div>
+
+            <div style="position: relative;">
+                <div id="install-npm" class="install-methods active">
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <span class="terminal-dot red"></span>
+                            <span class="terminal-dot yellow"></span>
+                            <span class="terminal-dot green"></span>
+                            <span class="terminal-title">Terminal</span>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">$</span>
+                                <span class="terminal-command">npm install <span class="flag">-g</span> @nexusai/cli</span>
+                            </div>
+                            <div class="terminal-output">+ @nexusai/cli@5.2.1</div>
+                            <div class="terminal-output">added 142 packages in 8s</div>
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">$</span>
+                                <span class="terminal-command">nexus init <span class="string">my-project</span></span>
+                            </div>
+                            <div class="terminal-output success">✓ Project initialized successfully!</div>
+                            <div class="terminal-output info">→ cd my-project && nexus dev</div>
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">$</span>
+                                <span class="terminal-command">nexus auth login</span>
+                            </div>
+                            <div class="terminal-output success">✓ Authenticated as user@example.com</div>
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">$</span>
+                                <span class="terminal-cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="install-curl" class="install-methods">
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <span class="terminal-dot red"></span>
+                            <span class="terminal-dot yellow"></span>
+                            <span class="terminal-dot green"></span>
+                            <span class="terminal-title">Terminal</span>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">$</span>
+                                <span class="terminal-command">curl <span class="flag">-fsSL</span> https://nexusai.com/install.sh | sh</span>
+                            </div>
+                            <div class="terminal-output">Downloading NexusAI CLI v5.2.1...</div>
+                            <div class="terminal-output">Installing to /usr/local/bin/nexus...</div>
+                            <div class="terminal-output success">✓ NexusAI CLI installed successfully!</div>
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">$</span>
+                                <span class="terminal-command">nexus <span class="flag">--version</span></span>
+                            </div>
+                            <div class="terminal-output">nexus/5.2.1 darwin-arm64 node-v20.10.0</div>
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">$</span>
+                                <span class="terminal-cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="install-docker" class="install-methods">
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <span class="terminal-dot red"></span>
+                            <span class="terminal-dot yellow"></span>
+                            <span class="terminal-dot green"></span>
+                            <span class="terminal-title">Terminal</span>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">$</span>
+                                <span class="terminal-command">docker pull nexusai/nexus:latest</span>
+                            </div>
+                            <div class="terminal-output">latest: Pulling from nexusai/nexus</div>
+                            <div class="terminal-output">Digest: sha256:a1b2c3d4e5f6...</div>
+                            <div class="terminal-output success">✓ Image pulled successfully</div>
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">$</span>
+                                <span class="terminal-command">docker run <span class="flag">-it</span> nexusai/nexus init</span>
+                            </div>
+                            <div class="terminal-output info">🚀 Welcome to NexusAI!</div>
+                            <div class="terminal-output">Enter your API key to continue...</div>
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">$</span>
+                                <span class="terminal-cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="terminal-copy" onclick="copyCommand()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copy
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA -->
     <section class="cta-section">
         <h2 class="animate-on-scroll">Ready to Transform Your Business?</h2>
@@ -1218,6 +1367,29 @@
                 document.getElementById('readyModal').classList.remove('active');
             }
         });
+
+        // Terminal install tabs
+        function showInstall(method) {
+            document.querySelectorAll('.terminal-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.install-methods').forEach(m => m.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('install-' + method).classList.add('active');
+        }
+
+        function copyCommand() {
+            const commands = {
+                'npm': 'npm install -g @nexusai/cli',
+                'curl': 'curl -fsSL https://nexusai.com/install.sh | sh',
+                'docker': 'docker pull nexusai/nexus:latest'
+            };
+            const active = document.querySelector('.install-methods.active').id.replace('install-', '');
+            navigator.clipboard.writeText(commands[active]);
+            const btn = document.querySelector('.terminal-copy');
+            btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+            setTimeout(() => {
+                btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy';
+            }, 2000);
+        }
 
         // Scroll animations with Intersection Observer
         const observerOptions = {
