@@ -657,6 +657,114 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        .section-subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 1rem;
+            max-width: 600px;
+            margin: -40px auto 60px;
+            line-height: 1.7;
+        }
+
+        /* Trusted By */
+        .trusted { padding: 60px; text-align: center; position: relative; z-index: 1; }
+        .trusted-title { font-size: 0.8rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
+        .trusted-logos { display: flex; justify-content: center; align-items: center; gap: 50px; flex-wrap: wrap; }
+        .trusted-logo { font-size: 1.3rem; font-weight: 700; color: rgba(255,255,255,0.25); cursor: pointer; transition: color 0.3s; }
+        .trusted-logo:hover { color: rgba(255,255,255,0.5); }
+
+        /* Products */
+        .products { padding: 100px 60px; position: relative; z-index: 1; background: rgba(0,0,0,0.3); }
+        .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1300px; margin: 0 auto; }
+        .product-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 30px; transition: all 0.3s; position: relative; cursor: pointer; }
+        .product-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(147, 51, 234, 0.3); transform: translateY(-5px); }
+        .product-card.featured { border-color: rgba(147, 51, 234, 0.5); background: linear-gradient(145deg, rgba(147, 51, 234, 0.1), rgba(59, 130, 246, 0.05)); }
+        .product-badge { position: absolute; top: 16px; right: 16px; background: linear-gradient(135deg, #9333ea, #7c3aed); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
+        .product-icon { width: 50px; height: 50px; background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 16px; }
+        .product-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; }
+        .product-card > p { color: rgba(255,255,255,0.5); line-height: 1.5; font-size: 0.85rem; margin-bottom: 16px; }
+        .product-features { list-style: none; margin-bottom: 16px; }
+        .product-features li { color: rgba(255,255,255,0.6); font-size: 0.8rem; padding: 4px 0; display: flex; align-items: center; gap: 6px; }
+        .product-features li::before { content: "✓"; color: #22c55e; font-size: 0.7rem; }
+        .product-price { font-size: 1.3rem; font-weight: 700; }
+        .product-price span { font-size: 0.8rem; color: rgba(255,255,255,0.4); font-weight: 400; }
+
+        /* Use Cases */
+        .use-cases { padding: 100px 60px; position: relative; z-index: 1; }
+        .use-cases-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .use-case-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 35px; transition: all 0.3s; cursor: pointer; }
+        .use-case-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(59, 130, 246, 0.3); transform: translateY(-5px); }
+        .use-case-tag { display: inline-block; background: rgba(59, 130, 246, 0.15); color: #60a5fa; padding: 5px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 500; margin-bottom: 16px; }
+        .use-case-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
+        .use-case-card > p { color: rgba(255,255,255,0.5); line-height: 1.6; font-size: 0.9rem; margin-bottom: 20px; }
+        .use-case-stats { display: flex; gap: 30px; }
+        .use-case-stat-value { font-size: 1.4rem; font-weight: 700; color: #22c55e; }
+        .use-case-stat-label { font-size: 0.7rem; color: rgba(255,255,255,0.4); }
+
+        /* Testimonials */
+        .testimonials { padding: 100px 60px; position: relative; z-index: 1; background: rgba(0,0,0,0.3); }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .testimonial-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; }
+        .testimonial-stars { color: #fbbf24; font-size: 0.9rem; margin-bottom: 16px; }
+        .testimonial-text { color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+        .testimonial-author { display: flex; align-items: center; gap: 12px; }
+        .testimonial-avatar { width: 44px; height: 44px; background: linear-gradient(135deg, #9333ea, #3b82f6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; }
+        .testimonial-info h4 { font-size: 0.9rem; font-weight: 600; }
+        .testimonial-info p { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+
+        /* Pricing */
+        .pricing { padding: 100px 60px; position: relative; z-index: 1; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        .pricing-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 40px; text-align: center; transition: all 0.3s; }
+        .pricing-card:hover { transform: translateY(-5px); }
+        .pricing-card.popular { background: linear-gradient(145deg, rgba(147, 51, 234, 0.15), rgba(59, 130, 246, 0.08)); border-color: rgba(147, 51, 234, 0.4); transform: scale(1.05); }
+        .pricing-card.popular:hover { transform: scale(1.05) translateY(-5px); }
+        .pricing-badge { background: linear-gradient(135deg, #9333ea, #7c3aed); color: white; padding: 5px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-bottom: 16px; display: inline-block; }
+        .pricing-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+        .pricing-card .price { font-size: 2.5rem; font-weight: 700; margin: 16px 0; }
+        .pricing-card .price span { font-size: 0.9rem; font-weight: 400; color: rgba(255,255,255,0.5); }
+        .pricing-desc { color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-bottom: 24px; }
+        .pricing-features { list-style: none; text-align: left; margin-bottom: 24px; }
+        .pricing-features li { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+        .pricing-features li:last-child { border-bottom: none; }
+        .pricing-features .check { color: #22c55e; }
+        .pricing-features .cross { color: rgba(255,255,255,0.2); }
+        .pricing-btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .pricing-btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; }
+        .pricing-btn-outline:hover { background: rgba(255,255,255,0.05); }
+        .pricing-btn-primary { background: linear-gradient(135deg, #9333ea, #7c3aed); border: none; color: white; }
+        .pricing-btn-primary:hover { box-shadow: 0 0 30px rgba(147, 51, 234, 0.4); }
+
+        /* CTA */
+        .cta-section { padding: 100px 60px; position: relative; z-index: 1; text-align: center; background: linear-gradient(180deg, rgba(147, 51, 234, 0.1), transparent); }
+        .cta-section h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+        .cta-section > p { color: rgba(255,255,255,0.6); font-size: 1.1rem; max-width: 500px; margin: 0 auto 40px; }
+
+        /* Footer */
+        footer { padding: 60px; position: relative; z-index: 1; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
+        .footer-brand p { color: rgba(255,255,255,0.5); font-size: 0.85rem; line-height: 1.7; margin-top: 12px; }
+        .footer-column h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; }
+        .footer-column ul { list-style: none; }
+        .footer-column li { margin-bottom: 10px; }
+        .footer-column a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+        .footer-column a:hover { color: white; }
+        .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); max-width: 1200px; margin: 0 auto; }
+        .footer-bottom p { color: rgba(255,255,255,0.4); font-size: 0.8rem; }
+        .footer-social { display: flex; gap: 12px; }
+        .footer-social a { width: 36px; height: 36px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.6); text-decoration: none; transition: all 0.2s; font-size: 0.9rem; }
+        .footer-social a:hover { background: rgba(147, 51, 234, 0.2); color: white; }
+
+        @media (max-width: 1100px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .products-grid, .use-cases-grid, .testimonials-grid, .pricing-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .pricing-card.popular { transform: none; }
+        }
     </style>
 </head>
 <body>
@@ -666,11 +774,11 @@
     <nav>
         <div class="logo">NexusAI</div>
         <div class="nav-links">
-            <a href="#">Products</a>
-            <a href="#">Research</a>
-            <a href="#">Documentation</a>
-            <a href="#">Pricing</a>
-            <button class="nav-btn">Sign In</button>
+            <a href="#products">Products</a>
+            <a href="#use-cases">Solutions</a>
+            <a href="#testimonials">Customers</a>
+            <a href="#pricing">Pricing</a>
+            <button class="nav-btn" onclick="showReadyModal()">Sign In</button>
         </div>
     </nav>
 
@@ -755,6 +863,252 @@
             </div>
         </div>
     </section>
+
+    <!-- Trusted By -->
+    <section class="trusted">
+        <p class="trusted-title animate-on-scroll">Trusted by industry leaders</p>
+        <div class="trusted-logos animate-on-scroll">
+            <span class="trusted-logo" onclick="showReadyModal()">NVIDIA</span>
+            <span class="trusted-logo" onclick="showReadyModal()">Microsoft</span>
+            <span class="trusted-logo" onclick="showReadyModal()">Google</span>
+            <span class="trusted-logo" onclick="showReadyModal()">Amazon</span>
+            <span class="trusted-logo" onclick="showReadyModal()">Meta</span>
+            <span class="trusted-logo" onclick="showReadyModal()">Tesla</span>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="products" id="products">
+        <h2 class="section-title animate">Our Products</h2>
+        <p class="section-subtitle animate-on-scroll">A complete suite of AI tools designed for every use case.</p>
+        <div class="products-grid">
+            <div class="product-card animate-on-scroll stagger-1" onclick="showReadyModal()">
+                <div class="product-icon">💬</div>
+                <h3>NexusChat</h3>
+                <p>Advanced conversational AI for customer support and engagement.</p>
+                <ul class="product-features">
+                    <li>24/7 automated support</li>
+                    <li>40+ languages</li>
+                    <li>CRM integration</li>
+                </ul>
+                <div class="product-price">$29<span>/mo</span></div>
+            </div>
+            <div class="product-card featured animate-on-scroll stagger-2" onclick="showReadyModal()">
+                <span class="product-badge">Popular</span>
+                <div class="product-icon">🎨</div>
+                <h3>NexusCreate</h3>
+                <p>AI-powered content generation for images, video, and audio.</p>
+                <ul class="product-features">
+                    <li>8K image generation</li>
+                    <li>Video synthesis</li>
+                    <li>Voice cloning</li>
+                </ul>
+                <div class="product-price">$49<span>/mo</span></div>
+            </div>
+            <div class="product-card animate-on-scroll stagger-3" onclick="showReadyModal()">
+                <div class="product-icon">📊</div>
+                <h3>NexusAnalytics</h3>
+                <p>Predictive analytics and business intelligence platform.</p>
+                <ul class="product-features">
+                    <li>Real-time dashboards</li>
+                    <li>Anomaly detection</li>
+                    <li>Forecasting models</li>
+                </ul>
+                <div class="product-price">$79<span>/mo</span></div>
+            </div>
+            <div class="product-card animate-on-scroll stagger-4" onclick="showReadyModal()">
+                <span class="product-badge">New</span>
+                <div class="product-icon">🤖</div>
+                <h3>NexusAgents</h3>
+                <p>Autonomous AI agents that execute complex workflows.</p>
+                <ul class="product-features">
+                    <li>Multi-step reasoning</li>
+                    <li>Tool integration</li>
+                    <li>API orchestration</li>
+                </ul>
+                <div class="product-price">$99<span>/mo</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section class="use-cases" id="use-cases">
+        <h2 class="section-title animate">Built for Every Industry</h2>
+        <p class="section-subtitle animate-on-scroll">See how companies are transforming their workflows with NexusAI.</p>
+        <div class="use-cases-grid">
+            <div class="use-case-card animate-on-scroll stagger-1" onclick="showReadyModal()">
+                <span class="use-case-tag">Healthcare</span>
+                <h3>Medical Diagnosis Assistance</h3>
+                <p>AI-powered diagnostic tools helping doctors identify conditions faster and more accurately.</p>
+                <div class="use-case-stats">
+                    <div><div class="use-case-stat-value">94%</div><div class="use-case-stat-label">Accuracy</div></div>
+                    <div><div class="use-case-stat-value">3x</div><div class="use-case-stat-label">Faster</div></div>
+                </div>
+            </div>
+            <div class="use-case-card animate-on-scroll stagger-2" onclick="showReadyModal()">
+                <span class="use-case-tag">Finance</span>
+                <h3>Fraud Detection & Prevention</h3>
+                <p>Real-time transaction monitoring that catches fraudulent activity before it impacts customers.</p>
+                <div class="use-case-stats">
+                    <div><div class="use-case-stat-value">$2.3B</div><div class="use-case-stat-label">Saved</div></div>
+                    <div><div class="use-case-stat-value">0.01%</div><div class="use-case-stat-label">False +</div></div>
+                </div>
+            </div>
+            <div class="use-case-card animate-on-scroll stagger-3" onclick="showReadyModal()">
+                <span class="use-case-tag">E-Commerce</span>
+                <h3>Personalized Shopping</h3>
+                <p>AI recommendations that understand customer preferences and drive conversions.</p>
+                <div class="use-case-stats">
+                    <div><div class="use-case-stat-value">47%</div><div class="use-case-stat-label">Revenue ↑</div></div>
+                    <div><div class="use-case-stat-value">2.1x</div><div class="use-case-stat-label">Conversion</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <h2 class="section-title animate">What Our Customers Say</h2>
+        <p class="section-subtitle animate-on-scroll">Join thousands of satisfied teams using NexusAI.</p>
+        <div class="testimonials-grid">
+            <div class="testimonial-card animate-on-scroll stagger-1">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"NexusAI has completely transformed how we handle customer support. Response times are down 80% and satisfaction is at an all-time high."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SJ</div>
+                    <div class="testimonial-info"><h4>Sarah Johnson</h4><p>VP Customer Success, TechCorp</p></div>
+                </div>
+            </div>
+            <div class="testimonial-card animate-on-scroll stagger-2">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"The image generation capabilities are mind-blowing. We've cut our design costs by 60% while actually improving quality."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">MC</div>
+                    <div class="testimonial-info"><h4>Michael Chen</h4><p>Creative Director, DesignHub</p></div>
+                </div>
+            </div>
+            <div class="testimonial-card animate-on-scroll stagger-3">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"NexusAgents handles our entire data pipeline now. What used to take days now happens automatically in hours."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">ER</div>
+                    <div class="testimonial-info"><h4>Emily Rodriguez</h4><p>Data Science Lead, FinanceAI</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <h2 class="section-title animate">Simple, Transparent Pricing</h2>
+        <p class="section-subtitle animate-on-scroll">Start free, scale as you grow. No hidden fees.</p>
+        <div class="pricing-grid">
+            <div class="pricing-card animate-on-scroll stagger-1">
+                <h3>Free</h3>
+                <div class="price">$0<span>/mo</span></div>
+                <p class="pricing-desc">Perfect for getting started</p>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> 100 API calls/day</li>
+                    <li><span class="check">✓</span> Basic models</li>
+                    <li><span class="check">✓</span> Community support</li>
+                    <li><span class="cross">✗</span> Priority processing</li>
+                    <li><span class="cross">✗</span> Custom fine-tuning</li>
+                </ul>
+                <button class="pricing-btn pricing-btn-outline" onclick="showReadyModal()">Get Started</button>
+            </div>
+            <div class="pricing-card popular animate-on-scroll stagger-2">
+                <span class="pricing-badge">Most Popular</span>
+                <h3>Pro</h3>
+                <div class="price">$49<span>/mo</span></div>
+                <p class="pricing-desc">For professionals and teams</p>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Unlimited API calls</li>
+                    <li><span class="check">✓</span> All models access</li>
+                    <li><span class="check">✓</span> Priority support</li>
+                    <li><span class="check">✓</span> Priority processing</li>
+                    <li><span class="cross">✗</span> Custom fine-tuning</li>
+                </ul>
+                <button class="pricing-btn pricing-btn-primary" onclick="showReadyModal()">Start Free Trial</button>
+            </div>
+            <div class="pricing-card animate-on-scroll stagger-3">
+                <h3>Enterprise</h3>
+                <div class="price">Custom</div>
+                <p class="pricing-desc">For large organizations</p>
+                <ul class="pricing-features">
+                    <li><span class="check">✓</span> Unlimited everything</li>
+                    <li><span class="check">✓</span> Dedicated infrastructure</li>
+                    <li><span class="check">✓</span> 24/7 phone support</li>
+                    <li><span class="check">✓</span> SLA guarantee</li>
+                    <li><span class="check">✓</span> Custom fine-tuning</li>
+                </ul>
+                <button class="pricing-btn pricing-btn-outline" onclick="showReadyModal()">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2 class="animate-on-scroll">Ready to Transform Your Business?</h2>
+        <p class="animate-on-scroll">Start your free trial today. No credit card required.</p>
+        <div class="cta-buttons animate-on-scroll">
+            <button class="btn-primary" onclick="showReadyModal()">Start Free Trial</button>
+            <button class="btn-secondary" onclick="showReadyModal()">Schedule Demo</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo">NexusAI</div>
+                <p>Building the future of artificial intelligence. Our mission is to create AI systems that benefit humanity.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Products</h4>
+                <ul>
+                    <li><a href="#products" onclick="showReadyModal()">NexusChat</a></li>
+                    <li><a href="#products" onclick="showReadyModal()">NexusCreate</a></li>
+                    <li><a href="#products" onclick="showReadyModal()">NexusAnalytics</a></li>
+                    <li><a href="#products" onclick="showReadyModal()">NexusAgents</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#" onclick="showReadyModal()">Documentation</a></li>
+                    <li><a href="#" onclick="showReadyModal()">API Reference</a></li>
+                    <li><a href="#" onclick="showReadyModal()">Blog</a></li>
+                    <li><a href="#" onclick="showReadyModal()">Changelog</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#" onclick="showReadyModal()">About</a></li>
+                    <li><a href="#" onclick="showReadyModal()">Careers</a></li>
+                    <li><a href="#" onclick="showReadyModal()">Press</a></li>
+                    <li><a href="#" onclick="showReadyModal()">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#" onclick="showReadyModal()">Privacy</a></li>
+                    <li><a href="#" onclick="showReadyModal()">Terms</a></li>
+                    <li><a href="#" onclick="showReadyModal()">Security</a></li>
+                    <li><a href="#" onclick="showReadyModal()">Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 NexusAI, Inc. All rights reserved.</p>
+            <div class="footer-social">
+                <a href="#" onclick="showReadyModal()">𝕏</a>
+                <a href="#" onclick="showReadyModal()">in</a>
+                <a href="#" onclick="showReadyModal()">▶</a>
+            </div>
+        </div>
+    </footer>
 
     <p class="hint">Passcode: 1234</p>
 
