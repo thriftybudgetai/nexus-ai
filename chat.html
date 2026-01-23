@@ -796,28 +796,82 @@
         .message-content h1,
         .message-content h2,
         .message-content h3 {
-            margin: 20px 0 12px 0;
+            margin: 18px 0 10px 0;
             font-weight: 600;
             color: #fff;
         }
 
-        .message-content h1 { font-size: 1.4rem; }
-        .message-content h2 { font-size: 1.2rem; }
-        .message-content h3 { font-size: 1.05rem; }
+        .message-content h1:first-child,
+        .message-content h2:first-child,
+        .message-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .message-content h1 { font-size: 1.3rem; }
+        .message-content h2 {
+            font-size: 1.1rem;
+            color: #a78bfa;
+            border-bottom: 1px solid rgba(147, 51, 234, 0.2);
+            padding-bottom: 6px;
+        }
+        .message-content h3 {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
 
         .message-content ul,
         .message-content ol {
-            margin: 12px 0;
-            padding-left: 24px;
+            margin: 10px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .message-content ol {
+            counter-reset: step-counter;
         }
 
         .message-content li {
-            margin-bottom: 8px;
-            line-height: 1.6;
+            margin-bottom: 10px;
+            line-height: 1.5;
+            padding: 10px 14px 10px 40px;
+            background: rgba(147, 51, 234, 0.06);
+            border-radius: 10px;
+            border-left: 3px solid rgba(147, 51, 234, 0.4);
+            position: relative;
         }
 
-        .message-content li::marker {
-            color: rgba(147, 51, 234, 0.8);
+        .message-content ul li::before {
+            content: '→';
+            position: absolute;
+            left: 14px;
+            color: #9333ea;
+            font-weight: 600;
+        }
+
+        .message-content ol li {
+            counter-increment: step-counter;
+        }
+
+        .message-content ol li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 12px;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #9333ea, #7c3aed);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .message-content li:last-child {
+            margin-bottom: 0;
         }
 
         .message-content blockquote {
@@ -1542,18 +1596,36 @@
                         messages: [
                             {
                                 role: 'system',
-                                content: `You are NexusAI, a highly advanced AI assistant. Be helpful, clear, and conversational.
+                                content: `You are NexusAI, a highly advanced AI assistant.
 
-Writing style rules:
-- Write naturally without excessive symbols, asterisks, or emojis
-- Use plain text for emphasis instead of **bold** or *italics* unless truly needed
-- Structure longer responses with clear paragraphs
-- Use bullet points or numbered lists only when listing multiple distinct items
+RESPONSE FORMAT - FOLLOW STRICTLY:
+- Be CONCISE and get straight to the point
+- Use numbered steps (1. 2. 3.) for any process or instructions
+- Use bullet points for lists of items or options
+- Keep each point SHORT - one line when possible
+- NO long paragraphs - break everything into digestible chunks
+- Start with a brief 1-sentence summary if needed, then steps/points
+- Use headers (## or ###) to organize longer responses into sections
+
+STYLE RULES:
+- Skip filler phrases like "Certainly!", "Great question!", "I'd be happy to help"
+- Just answer directly
+- No excessive symbols, emojis, or decorations
 - Use code blocks only for actual code
-- Never use decorative symbols like arrows, stars, or dividers
-- Be concise but thorough
-- Sound confident but not robotic
-- Avoid phrases like "Certainly!", "Of course!", "Great question!" - just answer directly`
+- Bold only key terms that need emphasis
+
+Example format:
+## Quick Answer
+One sentence summary.
+
+### Steps
+1. First thing to do
+2. Second thing to do
+3. Third thing to do
+
+### Key Points
+- Important point one
+- Important point two`
                             },
                             ...conversationHistory
                         ],
