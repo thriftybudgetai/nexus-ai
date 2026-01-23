@@ -154,6 +154,124 @@
 
         @keyframes galaxyRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+        /* Sign In Modal */
+        .signin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 17, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+
+        .signin-modal.hidden { display: none; }
+
+        .signin-box {
+            background: linear-gradient(145deg, rgba(20, 20, 40, 0.95), rgba(10, 10, 25, 0.95));
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 24px;
+            padding: 50px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(147, 51, 234, 0.2);
+        }
+
+        .signin-orb {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #9333ea, #3b82f6, #06b6d4);
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            box-shadow: 0 0 50px rgba(147, 51, 234, 0.5);
+            animation: signinOrbPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes signinOrbPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .signin-box h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .signin-box .subtitle {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .signin-input {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .signin-input:focus {
+            border-color: rgba(147, 51, 234, 0.5);
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.15);
+        }
+
+        .signin-input::placeholder { color: rgba(255,255,255,0.4); }
+
+        .signin-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #9333ea, #7c3aed);
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.3);
+            margin-bottom: 16px;
+        }
+
+        .signin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 50px rgba(147, 51, 234, 0.5);
+        }
+
+        .signin-skip {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .signin-skip:hover { color: rgba(255,255,255,0.7); }
+
+        .signin-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+        }
+
+        .signin-error.hidden { display: none; }
 
         /* Main layout */
         .app-container {
@@ -804,6 +922,18 @@
         <div class="loading-spinner"></div>
     </div>
 
+    <!-- Sign In Modal -->
+    <div class="signin-modal hidden" id="signinModal">
+        <div class="signin-box">
+            <div class="signin-orb"></div>
+            <h2>Welcome to NexusAI</h2>
+            <p class="subtitle">Sign in with your email to sync your chats across devices</p>
+            <div class="signin-error hidden" id="signinError"></div>
+            <input type="email" class="signin-input" id="signinEmail" placeholder="Enter your email">
+            <button class="signin-btn" id="signinBtn" onclick="handleSignIn()">Continue</button>
+            <p class="signin-skip" onclick="skipSignIn()">Continue without signing in</p>
+        </div>
+    </div>
 
     <!-- Main App -->
     <div class="app-container hidden" id="appContainer">
@@ -889,9 +1019,13 @@
         let isGenerating = false;
         let currentChatId = null;
         let chats = [];
+        let currentUserEmail = null;
 
         // DOM elements
         const loadingScreen = document.getElementById('loadingScreen');
+        const signinModal = document.getElementById('signinModal');
+        const signinEmail = document.getElementById('signinEmail');
+        const signinError = document.getElementById('signinError');
         const appContainer = document.getElementById('appContainer');
         const messagesContainer = document.getElementById('messages');
         const userInput = document.getElementById('userInput');
@@ -918,21 +1052,108 @@
             // Load API key from Supabase
             await loadApiKey();
 
-            // Load chats from localStorage
-            loadUserData();
+            // Check for saved email
+            const savedEmail = localStorage.getItem('nexusai_email');
 
-            // Show app directly (no auth)
+            if (savedEmail) {
+                currentUserEmail = savedEmail;
+                await loadUserData();
+                showApp();
+            } else {
+                // Show sign-in modal
+                loadingScreen.classList.add('hidden');
+                signinModal.classList.remove('hidden');
+            }
+        }
+
+        function showApp() {
             loadingScreen.classList.add('hidden');
+            signinModal.classList.add('hidden');
             appContainer.classList.remove('hidden');
-            userNameEl.textContent = 'Nexus User';
+
+            if (currentUserEmail) {
+                userNameEl.textContent = currentUserEmail.split('@')[0];
+            } else {
+                userNameEl.textContent = 'Guest';
+            }
             userInput.focus();
         }
 
-        // Load chats from localStorage
-        function loadUserData() {
-            const saved = localStorage.getItem('nexusai_chats');
+        async function handleSignIn() {
+            const email = signinEmail.value.trim().toLowerCase();
+
+            if (!email || !email.includes('@')) {
+                signinError.textContent = 'Please enter a valid email address';
+                signinError.classList.remove('hidden');
+                return;
+            }
+
+            signinError.classList.add('hidden');
+            currentUserEmail = email;
+            localStorage.setItem('nexusai_email', email);
+
+            await loadUserData();
+            showApp();
+        }
+
+        function skipSignIn() {
+            currentUserEmail = null;
+            localStorage.removeItem('nexusai_email');
+
+            // Load local chats only
+            const saved = localStorage.getItem('nexusai_chats_local');
             if (saved) {
                 chats = JSON.parse(saved);
+            }
+
+            renderChatHistory();
+            if (chats.length > 0) {
+                loadChat(chats[0].id);
+            } else {
+                createNewChat();
+            }
+
+            showApp();
+        }
+
+        function handleLogout() {
+            currentUserEmail = null;
+            localStorage.removeItem('nexusai_email');
+            chats = [];
+            currentChatId = null;
+            conversationHistory = [];
+
+            // Show sign-in modal
+            appContainer.classList.add('hidden');
+            signinModal.classList.remove('hidden');
+            signinEmail.value = '';
+        }
+
+        // Load chats from Supabase or localStorage
+        async function loadUserData() {
+            if (currentUserEmail) {
+                // Load from Supabase
+                const { data, error } = await db
+                    .from('chats')
+                    .select('*')
+                    .eq('user_email', currentUserEmail)
+                    .order('updated_at', { ascending: false });
+
+                if (!error && data) {
+                    chats = data.map(chat => ({
+                        id: chat.id,
+                        title: chat.title,
+                        messages: chat.messages || [],
+                        createdAt: chat.created_at,
+                        updatedAt: chat.updated_at
+                    }));
+                }
+            } else {
+                // Load from localStorage
+                const saved = localStorage.getItem('nexusai_chats_local');
+                if (saved) {
+                    chats = JSON.parse(saved);
+                }
             }
 
             renderChatHistory();
@@ -944,11 +1165,28 @@
             }
         }
 
-        function saveChatsToStorage() {
-            localStorage.setItem('nexusai_chats', JSON.stringify(chats));
+        async function saveChatsToStorage() {
+            if (currentUserEmail) {
+                // Save current chat to Supabase
+                const chat = chats.find(c => c.id === currentChatId);
+                if (chat) {
+                    await db
+                        .from('chats')
+                        .upsert({
+                            id: chat.id,
+                            user_email: currentUserEmail,
+                            title: chat.title,
+                            messages: chat.messages,
+                            updated_at: new Date().toISOString()
+                        });
+                }
+            } else {
+                // Save to localStorage
+                localStorage.setItem('nexusai_chats_local', JSON.stringify(chats));
+            }
         }
 
-        function createNewChat() {
+        async function createNewChat() {
             const newChat = {
                 id: 'chat_' + Date.now(),
                 title: 'New Chat',
@@ -957,10 +1195,33 @@
                 updatedAt: new Date().toISOString()
             };
 
+            if (currentUserEmail) {
+                // Save to Supabase
+                const { data, error } = await db
+                    .from('chats')
+                    .insert({
+                        id: newChat.id,
+                        user_email: currentUserEmail,
+                        title: newChat.title,
+                        messages: [],
+                        created_at: newChat.createdAt,
+                        updated_at: newChat.updatedAt
+                    })
+                    .select()
+                    .single();
+
+                if (data) {
+                    newChat.id = data.id;
+                }
+            }
+
             chats.unshift(newChat);
             loadChat(newChat.id);
             renderChatHistory();
-            saveChatsToStorage();
+
+            if (!currentUserEmail) {
+                localStorage.setItem('nexusai_chats_local', JSON.stringify(chats));
+            }
         }
 
         function loadChat(chatId) {
@@ -1327,6 +1588,10 @@ Writing style rules:
             userInput.focus();
         }
 
+        // Handle enter key on sign-in input
+        signinEmail.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleSignIn();
+        });
     </script>
 </body>
 </html>
