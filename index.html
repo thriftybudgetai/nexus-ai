@@ -695,7 +695,7 @@
             border-color: rgba(239, 68, 68, 0.5);
         }
 
-        /* Shutdown Screen */
+        /* Chromebook Shutdown Screen */
         .shutdown-overlay {
             display: none;
             position: fixed;
@@ -703,135 +703,416 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
+            background: #202124;
             z-index: 99999;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            font-family: 'Google Sans', 'Roboto', -apple-system, sans-serif;
         }
 
         .shutdown-overlay.active {
             display: flex;
-            animation: shutdownFade 1.5s ease;
         }
 
-        @keyframes shutdownFade {
-            0% { opacity: 0; }
-            30% { opacity: 0; }
-            100% { opacity: 1; }
+        /* Phase 1: Shutting down screen */
+        .shutdown-phase-1 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: phase1Sequence 3s ease forwards;
         }
 
-        .shutdown-spinner {
-            width: 60px;
-            height: 60px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: #0078d4;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        @keyframes phase1Sequence {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; pointer-events: none; }
+        }
+
+        .chrome-logo {
+            width: 80px;
+            height: 80px;
             margin-bottom: 40px;
+            position: relative;
+            animation: chromePulse 2s ease-in-out infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .chrome-logo svg {
+            width: 100%;
+            height: 100%;
         }
 
-        .shutdown-text {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 300;
-            margin-bottom: 60px;
-            text-align: center;
-            line-height: 1.8;
+        @keyframes chromePulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
         }
 
-        .shutdown-error {
-            background: #1a1a1a;
-            border: 2px solid #ff3333;
-            border-radius: 8px;
-            padding: 40px 60px;
-            text-align: center;
-            animation: errorAppear 0.5s ease 3s forwards;
+        .shutdown-message {
+            color: #e8eaed;
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 30px;
+            letter-spacing: 0.01em;
+        }
+
+        .shutdown-progress-container {
+            width: 280px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .shutdown-progress-bar {
+            height: 100%;
+            background: #8ab4f8;
+            border-radius: 2px;
+            animation: progressFill 2.5s ease-in-out forwards;
+        }
+
+        @keyframes progressFill {
+            0% { width: 0%; }
+            20% { width: 15%; }
+            40% { width: 35%; }
+            60% { width: 60%; }
+            80% { width: 85%; }
+            100% { width: 100%; }
+        }
+
+        /* Phase 2: Black screen flash */
+        .shutdown-phase-2 {
+            position: absolute;
+            inset: 0;
+            background: #000;
             opacity: 0;
+            animation: blackFlash 4s ease forwards;
+            animation-delay: 2.8s;
         }
 
-        @keyframes errorAppear {
+        @keyframes blackFlash {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            30% { opacity: 1; }
+            35% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        /* Phase 3: Recovery screen */
+        .shutdown-phase-3 {
+            position: absolute;
+            inset: 0;
+            background: #202124;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            animation: recoveryAppear 0.3s ease forwards;
+            animation-delay: 4.5s;
+        }
+
+        @keyframes recoveryAppear {
             to { opacity: 1; }
         }
 
-        .shutdown-error-icon {
-            font-size: 4rem;
-            color: #ff3333;
-            margin-bottom: 20px;
+        .recovery-container {
+            max-width: 560px;
+            text-align: center;
+            padding: 40px;
         }
 
-        .shutdown-error h3 {
-            color: #ff3333;
+        .recovery-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        .recovery-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .recovery-title {
+            color: #e8eaed;
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 500;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+
+        .recovery-subtitle {
+            color: #9aa0a6;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .recovery-error-box {
+            background: #292a2d;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 32px;
+            text-align: left;
+        }
+
+        .recovery-error-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             margin-bottom: 16px;
         }
 
-        .shutdown-error p {
-            color: rgba(255,255,255,0.7);
-            font-size: 1rem;
-            margin-bottom: 30px;
+        .recovery-error-badge {
+            background: #f28b82;
+            color: #202124;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .shutdown-error-code {
-            background: #0d0d0d;
-            padding: 20px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            color: #ff6666;
+        .recovery-error-title {
+            color: #f28b82;
             font-size: 0.9rem;
-            margin-bottom: 30px;
+            font-weight: 500;
         }
 
-        .shutdown-usb-prompt {
+        .recovery-error-details {
+            font-family: 'Roboto Mono', 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #9aa0a6;
+            line-height: 1.8;
+            background: #202124;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #3c4043;
+        }
+
+        .recovery-error-line {
+            display: flex;
+            gap: 12px;
+        }
+
+        .recovery-error-label {
+            color: #669df6;
+            min-width: 140px;
+        }
+
+        .recovery-error-value {
+            color: #81c995;
+        }
+
+        .recovery-steps {
+            background: #292a2d;
+            border-radius: 8px;
+            padding: 24px;
+            text-align: left;
+            margin-bottom: 32px;
+        }
+
+        .recovery-steps-title {
+            color: #e8eaed;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
+        }
+
+        .recovery-steps-title svg {
+            width: 20px;
+            height: 20px;
+            color: #8ab4f8;
+        }
+
+        .recovery-step {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 14px;
+            color: #9aa0a6;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .recovery-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .recovery-step-number {
+            background: #3c4043;
+            color: #e8eaed;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            padding: 20px;
-            background: rgba(255, 165, 0, 0.1);
-            border: 1px solid rgba(255, 165, 0, 0.3);
+            font-size: 0.75rem;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .recovery-usb-animation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 24px;
+            background: rgba(138, 180, 248, 0.08);
+            border: 1px solid rgba(138, 180, 248, 0.2);
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+
+        .usb-icon-animated {
+            width: 48px;
+            height: 48px;
+            color: #8ab4f8;
+            animation: usbBounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes usbBounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        .usb-arrow {
+            color: #8ab4f8;
+            font-size: 1.5rem;
+            animation: arrowPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .laptop-icon {
+            width: 56px;
+            height: 56px;
+            color: #9aa0a6;
+        }
+
+        .recovery-input-section {
+            background: #292a2d;
             border-radius: 8px;
-            margin-top: 20px;
+            padding: 20px 24px;
         }
 
-        .shutdown-usb-icon {
-            font-size: 2rem;
-        }
-
-        .shutdown-usb-text {
-            color: #ffa500;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .shutdown-passcode {
-            margin-top: 40px;
-        }
-
-        .shutdown-passcode input {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 14px 28px;
-            font-size: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            width: 250px;
-        }
-
-        .shutdown-passcode input::placeholder {
-            color: rgba(255,255,255,0.4);
-        }
-
-        .shutdown-passcode p {
-            color: rgba(255,255,255,0.3);
+        .recovery-input-label {
+            color: #9aa0a6;
             font-size: 0.8rem;
-            margin-top: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .recovery-input-label svg {
+            width: 16px;
+            height: 16px;
+            color: #f9ab00;
+        }
+
+        .recovery-input {
+            width: 100%;
+            background: #202124;
+            border: 2px solid #3c4043;
+            border-radius: 8px;
+            padding: 14px 18px;
+            color: #e8eaed;
+            font-size: 1rem;
+            font-family: 'Roboto Mono', monospace;
+            letter-spacing: 2px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .recovery-input:focus {
+            outline: none;
+            border-color: #8ab4f8;
+            box-shadow: 0 0 0 2px rgba(138, 180, 248, 0.2);
+        }
+
+        .recovery-input::placeholder {
+            color: #5f6368;
+            letter-spacing: 0;
+        }
+
+        .recovery-hint {
+            color: #5f6368;
+            font-size: 0.75rem;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .recovery-hint svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Bottom info bar */
+        .recovery-footer {
+            position: absolute;
+            bottom: 24px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            color: #5f6368;
+            font-size: 0.75rem;
+        }
+
+        .recovery-footer-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .recovery-footer-item svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Blinking cursor for terminal feel */
+        .blink-cursor {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Screen glitch effect */
+        .glitch-line {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            animation: glitchMove 8s linear infinite;
+            opacity: 0.5;
+        }
+
+        .glitch-line:nth-child(1) { animation-delay: 0s; }
+        .glitch-line:nth-child(2) { animation-delay: 2s; }
+        .glitch-line:nth-child(3) { animation-delay: 5s; }
+
+        @keyframes glitchMove {
+            0% { top: -2px; opacity: 0; }
+            5% { opacity: 0.5; }
+            95% { opacity: 0.5; }
+            100% { top: 100%; opacity: 0; }
         }
 
         /* ===== SLIDE UP ANIMATIONS ===== */
@@ -1658,29 +1939,166 @@ console.<span class="function">log</span>(response.<span class="variable">conten
         </div>
     </div>
 
-    <!-- Shutdown Screen -->
+    <!-- Chromebook Shutdown Screen -->
     <div class="shutdown-overlay" id="shutdownScreen">
-        <div class="shutdown-spinner"></div>
-        <div class="shutdown-text">
-            Shutting down...<br>
-            Please wait while your system powers off safely.
+        <!-- Scan lines for CRT effect -->
+        <div class="glitch-line"></div>
+        <div class="glitch-line"></div>
+        <div class="glitch-line"></div>
+
+        <!-- Phase 1: Shutting down -->
+        <div class="shutdown-phase-1" id="shutdownPhase1">
+            <div class="chrome-logo">
+                <svg viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#4285f4" stroke-width="8"/>
+                    <circle cx="50" cy="50" r="20" fill="#4285f4"/>
+                    <path d="M50 5 A45 45 0 0 1 89 72.5" stroke="#ea4335" stroke-width="8" fill="none"/>
+                    <path d="M89 72.5 A45 45 0 0 1 11 72.5" stroke="#fbbc05" stroke-width="8" fill="none"/>
+                    <path d="M11 72.5 A45 45 0 0 1 50 5" stroke="#34a853" stroke-width="8" fill="none"/>
+                </svg>
+            </div>
+            <div class="shutdown-message">Shutting down...</div>
+            <div class="shutdown-progress-container">
+                <div class="shutdown-progress-bar"></div>
+            </div>
         </div>
-        <div class="shutdown-error">
-            <div class="shutdown-error-icon">⚠️</div>
-            <h3>CRITICAL SYSTEM FAILURE</h3>
-            <p>Your system has encountered a fatal error and cannot continue.</p>
-            <div class="shutdown-error-code">
-                Error Code: 0x00000F4<br>
-                CRITICAL_OBJECT_TERMINATION<br>
-                System boot files corrupted or missing
+
+        <!-- Phase 2: Black flash -->
+        <div class="shutdown-phase-2"></div>
+
+        <!-- Phase 3: Recovery screen -->
+        <div class="shutdown-phase-3" id="shutdownPhase3">
+            <div class="recovery-container">
+                <!-- Error Icon -->
+                <div class="recovery-icon">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#f28b82" stroke-width="4"/>
+                        <line x1="35" y1="35" x2="65" y2="65" stroke="#f28b82" stroke-width="6" stroke-linecap="round"/>
+                        <line x1="65" y1="35" x2="35" y2="65" stroke="#f28b82" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <h1 class="recovery-title">Chrome OS is missing or damaged</h1>
+                <p class="recovery-subtitle">Please insert a recovery USB stick or SD card.</p>
+
+                <!-- Error Details -->
+                <div class="recovery-error-box">
+                    <div class="recovery-error-header">
+                        <span class="recovery-error-badge">Critical</span>
+                        <span class="recovery-error-title">System Recovery Required</span>
+                    </div>
+                    <div class="recovery-error-details">
+                        <div class="recovery-error-line">
+                            <span class="recovery-error-label">Error code:</span>
+                            <span class="recovery-error-value">0x0000014C</span>
+                        </div>
+                        <div class="recovery-error-line">
+                            <span class="recovery-error-label">Reason:</span>
+                            <span class="recovery-error-value">KERNEL_DATA_INPAGE_ERROR</span>
+                        </div>
+                        <div class="recovery-error-line">
+                            <span class="recovery-error-label">Device:</span>
+                            <span class="recovery-error-value">GOOGLE_ATLAS.12345.67.0</span>
+                        </div>
+                        <div class="recovery-error-line">
+                            <span class="recovery-error-label">HWID:</span>
+                            <span class="recovery-error-value">ATLAS E25-A3B-Q7L</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recovery Steps -->
+                <div class="recovery-steps">
+                    <div class="recovery-steps-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 16v-4M12 8h.01"/>
+                        </svg>
+                        Recovery options
+                    </div>
+                    <div class="recovery-step">
+                        <span class="recovery-step-number">1</span>
+                        <span>On another computer, go to google.com/chromeos/recovery</span>
+                    </div>
+                    <div class="recovery-step">
+                        <span class="recovery-step-number">2</span>
+                        <span>Download and install the Chromebook Recovery Utility</span>
+                    </div>
+                    <div class="recovery-step">
+                        <span class="recovery-step-number">3</span>
+                        <span>Insert the recovery media and restart this device</span>
+                    </div>
+                </div>
+
+                <!-- USB Animation -->
+                <div class="recovery-usb-animation">
+                    <svg class="usb-icon-animated" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="4" y="2" width="16" height="20" rx="2"/>
+                        <rect x="8" y="6" width="8" height="4" rx="1"/>
+                        <line x1="8" y1="14" x2="16" y2="14"/>
+                        <line x1="8" y1="17" x2="16" y2="17"/>
+                    </svg>
+                    <span class="usb-arrow">→</span>
+                    <svg class="laptop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="2" y="4" width="20" height="12" rx="2"/>
+                        <path d="M1 18h22"/>
+                        <path d="M6 18v2h12v-2"/>
+                    </svg>
+                </div>
+
+                <!-- Recovery Code Input -->
+                <div class="recovery-input-section">
+                    <div class="recovery-input-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2"/>
+                            <path d="M7 11V7a5 5 0 0110 0v4"/>
+                        </svg>
+                        Developer recovery code
+                    </div>
+                    <input
+                        type="text"
+                        class="recovery-input"
+                        id="shutdownPasscode"
+                        placeholder="Enter code"
+                        onkeyup="checkShutdownPasscode(event)"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <div class="recovery-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 16v-4M12 8h.01"/>
+                        </svg>
+                        Contact your administrator for the recovery code
+                    </div>
+                </div>
             </div>
-            <div class="shutdown-usb-prompt">
-                <span class="shutdown-usb-icon">💾</span>
-                <span class="shutdown-usb-text">INPUT RECOVERY USB</span>
-            </div>
-            <div class="shutdown-passcode">
-                <input type="text" id="shutdownPasscode" placeholder="Enter recovery code" onkeyup="checkShutdownPasscode(event)">
-                <p>Recovery authorization required</p>
+
+            <!-- Footer -->
+            <div class="recovery-footer">
+                <div class="recovery-footer-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span id="shutdownTime">--:--</span>
+                </div>
+                <div class="recovery-footer-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="1" y="6" width="22" height="12" rx="2"/>
+                        <line x1="23" y1="10" x2="23" y2="14"/>
+                    </svg>
+                    <span>12%</span>
+                </div>
+                <div class="recovery-footer-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+                        <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                        <circle cx="12" cy="20" r="1"/>
+                    </svg>
+                    <span>Disconnected</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1717,13 +2135,54 @@ console.<span class="function">log</span>(response.<span class="variable">conten
 
         function handleNo() {
             hideReadyModal();
-            document.getElementById('shutdownScreen').classList.add('active');
+            const shutdownScreen = document.getElementById('shutdownScreen');
+            shutdownScreen.classList.add('active');
+
+            // Update time display
+            function updateTime() {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+                const timeEl = document.getElementById('shutdownTime');
+                if (timeEl) timeEl.textContent = timeStr;
+            }
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            // Reset animations by removing and re-adding the screen
+            const phase1 = document.getElementById('shutdownPhase1');
+            const phase3 = document.getElementById('shutdownPhase3');
+            if (phase1) {
+                phase1.style.animation = 'none';
+                phase1.offsetHeight; // Trigger reflow
+                phase1.style.animation = null;
+            }
+
+            // Focus the input after the recovery screen appears
+            setTimeout(() => {
+                const input = document.getElementById('shutdownPasscode');
+                if (input) input.focus();
+            }, 5000);
         }
 
         function checkShutdownPasscode(e) {
-            if (document.getElementById('shutdownPasscode').value === PASSCODE) {
-                document.getElementById('shutdownScreen').classList.remove('active');
-                document.getElementById('shutdownPasscode').value = '';
+            const input = document.getElementById('shutdownPasscode');
+            if (input.value === PASSCODE) {
+                // Add success animation
+                input.style.borderColor = '#81c995';
+                input.style.boxShadow = '0 0 0 2px rgba(129, 201, 149, 0.3)';
+
+                setTimeout(() => {
+                    document.getElementById('shutdownScreen').classList.remove('active');
+                    input.value = '';
+                    input.style.borderColor = '';
+                    input.style.boxShadow = '';
+
+                    // Reset phase animations for next time
+                    const phase1 = document.getElementById('shutdownPhase1');
+                    const phase3 = document.getElementById('shutdownPhase3');
+                    if (phase1) phase1.style.animation = 'none';
+                    if (phase3) phase3.style.animation = 'none';
+                }, 300);
             }
         }
 
