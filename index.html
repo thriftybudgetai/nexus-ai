@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NexusAI - The Future of Intelligence</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
     <style>
         * {
             margin: 0;
@@ -77,7 +78,10 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
+        .logo:hover { transform: scale(1.05); }
 
         .nav-links {
             display: flex;
@@ -90,12 +94,22 @@
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
-            transition: color 0.2s;
+            transition: all 0.2s;
+            position: relative;
+            padding: 8px 0;
         }
-
-        .nav-links a:hover {
-            color: white;
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #9333ea, #3b82f6);
+            transition: width 0.3s;
         }
+        .nav-links a:hover { color: white; }
+        .nav-links a:hover::after { width: 100%; }
 
         .nav-btn {
             background: rgba(255,255,255,0.1);
@@ -218,6 +232,32 @@
             border-color: rgba(255,255,255,0.3);
         }
 
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(147, 51, 234, 0.4);
+            border-radius: 50%;
+            animation: float-up linear infinite;
+        }
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+        }
+
         /* AI Visual */
         .ai-visual {
             position: relative;
@@ -291,6 +331,50 @@
             margin-top: 4px;
         }
 
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease 1s forwards;
+            opacity: 0;
+        }
+        .scroll-indicator .mouse {
+            width: 24px;
+            height: 38px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            position: relative;
+        }
+        .scroll-indicator .mouse::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 2px;
+            animation: scrollMouse 2s ease infinite;
+        }
+        @keyframes scrollMouse {
+            0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 0.3; transform: translateX(-50%) translateY(10px); }
+        }
+        @keyframes fadeInUp {
+            to { opacity: 1; }
+        }
+
         /* Features Section */
         .features {
             padding: 100px 60px;
@@ -303,6 +387,10 @@
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 60px;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .features-grid {
@@ -318,14 +406,28 @@
             border: 1px solid rgba(255,255,255,0.06);
             border-radius: 20px;
             padding: 40px;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
         }
-
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(147, 51, 234, 0.5), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
         .feature-card:hover {
             background: rgba(255,255,255,0.05);
             border-color: rgba(147, 51, 234, 0.3);
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(147, 51, 234, 0.15);
         }
+        .feature-card:hover::before { opacity: 1; }
 
         .feature-icon {
             width: 60px;
@@ -677,8 +779,8 @@
         /* Products */
         .products { padding: 100px 60px; position: relative; z-index: 1; background: rgba(0,0,0,0.3); }
         .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1300px; margin: 0 auto; }
-        .product-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 30px; transition: all 0.3s; position: relative; cursor: pointer; }
-        .product-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(147, 51, 234, 0.3); transform: translateY(-5px); }
+        .product-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 30px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative; cursor: pointer; }
+        .product-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(147, 51, 234, 0.3); transform: translateY(-8px); box-shadow: 0 25px 50px rgba(147, 51, 234, 0.15); }
         .product-card.featured { border-color: rgba(147, 51, 234, 0.5); background: linear-gradient(145deg, rgba(147, 51, 234, 0.1), rgba(59, 130, 246, 0.05)); }
         .product-badge { position: absolute; top: 16px; right: 16px; background: linear-gradient(135deg, #9333ea, #7c3aed); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
         .product-icon { width: 50px; height: 50px; background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(59, 130, 246, 0.2)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 16px; }
@@ -705,7 +807,8 @@
         /* Testimonials */
         .testimonials { padding: 100px 60px; position: relative; z-index: 1; background: rgba(0,0,0,0.3); }
         .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
-        .testimonial-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; }
+        .testimonial-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; transition: all 0.3s; }
+        .testimonial-card:hover { background: rgba(255,255,255,0.04); transform: translateY(-4px); }
         .testimonial-stars { color: #fbbf24; font-size: 0.9rem; margin-bottom: 16px; }
         .testimonial-text { color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
         .testimonial-author { display: flex; align-items: center; gap: 12px; }
@@ -716,10 +819,10 @@
         /* Pricing */
         .pricing { padding: 100px 60px; position: relative; z-index: 1; }
         .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1000px; margin: 0 auto; }
-        .pricing-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 40px; text-align: center; transition: all 0.3s; }
-        .pricing-card:hover { transform: translateY(-5px); }
-        .pricing-card.popular { background: linear-gradient(145deg, rgba(147, 51, 234, 0.15), rgba(59, 130, 246, 0.08)); border-color: rgba(147, 51, 234, 0.4); transform: scale(1.05); }
-        .pricing-card.popular:hover { transform: scale(1.05) translateY(-5px); }
+        .pricing-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 40px; text-align: center; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .pricing-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .pricing-card.popular { background: linear-gradient(145deg, rgba(147, 51, 234, 0.15), rgba(59, 130, 246, 0.08)); border-color: rgba(147, 51, 234, 0.4); transform: scale(1.05); box-shadow: 0 0 60px rgba(147, 51, 234, 0.2); }
+        .pricing-card.popular:hover { transform: scale(1.05) translateY(-8px); box-shadow: 0 0 80px rgba(147, 51, 234, 0.3); }
         .pricing-badge { background: linear-gradient(135deg, #9333ea, #7c3aed); color: white; padding: 5px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; margin-bottom: 16px; display: inline-block; }
         .pricing-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
         .pricing-card .price { font-size: 2.5rem; font-weight: 700; margin: 16px 0; }
@@ -768,9 +871,29 @@
         .install-methods { display: none; }
         .install-methods.active { display: block; }
 
+        /* Code Example Section */
+        .code-section { padding: 100px 60px; position: relative; z-index: 1; }
+        .code-container { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1200px; margin: 0 auto; align-items: center; }
+        .code-content h3 { font-size: 1.8rem; font-weight: 700; margin-bottom: 16px; }
+        .code-content p { color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 24px; }
+        .code-features { list-style: none; }
+        .code-features li { display: flex; align-items: center; gap: 12px; padding: 12px 0; color: rgba(255,255,255,0.7); font-size: 0.95rem; }
+        .code-features li svg { color: #22c55e; flex-shrink: 0; }
+        .code-window { background: #0d0d0d; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; }
+        .code-header { background: #1a1a1a; padding: 12px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .code-header span { color: rgba(255,255,255,0.5); font-size: 0.8rem; margin-left: auto; font-family: 'JetBrains Mono', monospace; }
+        .code-body { padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.8; overflow-x: auto; }
+        .code-body .comment { color: #6a9955; }
+        .code-body .keyword { color: #c586c0; }
+        .code-body .function { color: #dcdcaa; }
+        .code-body .string { color: #ce9178; }
+        .code-body .variable { color: #9cdcfe; }
+        .code-body .number { color: #b5cea8; }
+        @media (max-width: 900px) { .code-container { grid-template-columns: 1fr; } }
+
         /* CTA */
-        .cta-section { padding: 100px 60px; position: relative; z-index: 1; text-align: center; background: linear-gradient(180deg, rgba(147, 51, 234, 0.1), transparent); }
-        .cta-section h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+        .cta-section { padding: 120px 60px; position: relative; z-index: 1; text-align: center; background: linear-gradient(180deg, rgba(147, 51, 234, 0.15) 0%, rgba(59, 130, 246, 0.1) 50%, transparent 100%); }
+        .cta-section h2 { font-size: 2.8rem; font-weight: 700; margin-bottom: 16px; background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .cta-section > p { color: rgba(255,255,255,0.6); font-size: 1.1rem; max-width: 500px; margin: 0 auto 40px; }
 
         /* Footer */
@@ -802,6 +925,7 @@
 <body>
     <div class="bg-gradient"></div>
     <div class="grid-overlay"></div>
+    <div class="particles" id="particles"></div>
 
     <nav>
         <div class="logo">NexusAI</div>
@@ -858,6 +982,11 @@
                 <div class="stat-label">Users</div>
             </div>
         </div>
+
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+            <span>Scroll</span>
+        </div>
     </section>
 
     <section class="features">
@@ -892,6 +1021,62 @@
                 <div class="feature-icon">🎯</div>
                 <h3>Precision Output</h3>
                 <p>Unmatched accuracy in code generation, content creation, and data analysis.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Example -->
+    <section class="code-section">
+        <div class="code-container">
+            <div class="code-content animate-on-scroll">
+                <h3>Simple, Powerful API</h3>
+                <p>Get started with just a few lines of code. Our SDK handles authentication, retries, and streaming automatically.</p>
+                <ul class="code-features">
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Type-safe with full TypeScript support
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Automatic retries with exponential backoff
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Streaming responses out of the box
+                    </li>
+                    <li>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Works with Node.js, Python, Go, and more
+                    </li>
+                </ul>
+            </div>
+            <div class="animate-on-scroll stagger-2">
+                <div class="code-window">
+                    <div class="code-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+                        <span>app.ts</span>
+                    </div>
+                    <div class="code-body">
+<span class="keyword">import</span> { NexusAI } <span class="keyword">from</span> <span class="string">'@nexusai/sdk'</span>;
+
+<span class="keyword">const</span> <span class="variable">nexus</span> = <span class="keyword">new</span> <span class="function">NexusAI</span>({
+  <span class="variable">apiKey</span>: process.env.<span class="variable">NEXUS_API_KEY</span>
+});
+
+<span class="comment">// Generate a response</span>
+<span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> nexus.<span class="function">chat</span>({
+  <span class="variable">model</span>: <span class="string">'nexus-5-turbo'</span>,
+  <span class="variable">messages</span>: [
+    { <span class="variable">role</span>: <span class="string">'user'</span>, <span class="variable">content</span>: <span class="string">'Hello!'</span> }
+  ],
+  <span class="variable">temperature</span>: <span class="number">0.7</span>
+});
+
+console.<span class="function">log</span>(response.<span class="variable">content</span>);
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1409,6 +1594,20 @@
         document.querySelectorAll('.animate-on-scroll, .section-title.animate').forEach(el => {
             animationObserver.observe(el);
         });
+
+        // Generate floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (15 + Math.random() * 20) + 's';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.width = (2 + Math.random() * 4) + 'px';
+            particle.style.height = particle.style.width;
+            if (Math.random() > 0.5) particle.style.background = 'rgba(59, 130, 246, 0.4)';
+            particlesContainer.appendChild(particle);
+        }
     </script>
 </body>
 </html>
