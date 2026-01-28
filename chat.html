@@ -2093,6 +2093,437 @@
             overflow: hidden;
             transition: opacity 0.25s ease, transform 0.25s ease, max-height 0.3s ease 0.1s, padding 0.3s ease 0.1s, margin 0.3s ease 0.1s;
         }
+
+        /* Articles sidebar button */
+        .articles-btn {
+            width: 100%;
+            margin-top: 8px;
+            padding: 12px 18px;
+            background: linear-gradient(145deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.06));
+            border: none;
+            border-radius: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            font-family: inherit;
+        }
+
+        .articles-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            padding: 1.5px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), rgba(147, 51, 234, 0.25), rgba(6, 182, 212, 0.3));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .articles-btn .articles-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.15));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(59, 130, 246, 0.15);
+        }
+
+        .articles-btn:hover {
+            background: linear-gradient(145deg, rgba(59, 130, 246, 0.18), rgba(147, 51, 234, 0.12));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+        }
+
+        .articles-btn:hover .articles-icon {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.35), rgba(147, 51, 234, 0.25));
+        }
+
+        .articles-btn.active {
+            background: linear-gradient(145deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.14));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        /* Articles View */
+        .articles-view {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .articles-view.active {
+            display: flex;
+        }
+
+        .chat-main.hidden-view {
+            display: none;
+        }
+
+        .articles-header {
+            padding: 16px 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 17, 0.4);
+            backdrop-filter: blur(16px);
+            position: relative;
+        }
+
+        .articles-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.15), rgba(147, 51, 234, 0.1), transparent);
+        }
+
+        .articles-header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .articles-header-title svg {
+            width: 18px;
+            height: 18px;
+            stroke: #60a5fa;
+        }
+
+        .generate-btn {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #3b82f6, #7c3aed);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            box-shadow: 0 2px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.45);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .articles-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 28px 32px;
+        }
+
+        /* Interest Selector */
+        .interest-selector {
+            max-width: 640px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .interest-selector h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.85) 50%, rgba(96, 165, 250, 0.9) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .interest-selector p {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        .interest-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .interest-chip {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            user-select: none;
+        }
+
+        .interest-chip:hover {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: rgba(59, 130, 246, 0.2);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .interest-chip.selected {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), rgba(147, 51, 234, 0.12));
+            border-color: rgba(59, 130, 246, 0.35);
+            color: #93c5fd;
+            box-shadow: 0 2px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .interest-custom {
+            display: flex;
+            gap: 8px;
+            max-width: 360px;
+            margin: 0 auto 24px;
+        }
+
+        .interest-custom input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 10px 16px;
+            color: white;
+            font-size: 0.85rem;
+            outline: none;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .interest-custom input:focus {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 16px rgba(59, 130, 246, 0.1);
+        }
+
+        .interest-custom input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .interest-custom button {
+            padding: 10px 18px;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 12px;
+            color: #93c5fd;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .interest-custom button:hover {
+            background: rgba(59, 130, 246, 0.25);
+        }
+
+        .save-interests-btn {
+            padding: 12px 36px;
+            background: linear-gradient(135deg, #3b82f6, #7c3aed);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .save-interests-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(59, 130, 246, 0.45);
+        }
+
+        .save-interests-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Article Cards */
+        .articles-list {
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .articles-list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .articles-list-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .edit-interests-link {
+            color: rgba(96, 165, 250, 0.8);
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .edit-interests-link:hover {
+            color: #93c5fd;
+        }
+
+        .article-card {
+            background: linear-gradient(145deg, rgba(16, 16, 32, 0.6), rgba(8, 8, 20, 0.4));
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            border-color: rgba(59, 130, 246, 0.15);
+            box-shadow: 0 4px 24px rgba(59, 130, 246, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .article-card.expanded {
+            border-color: rgba(59, 130, 246, 0.2);
+            box-shadow: 0 6px 30px rgba(59, 130, 246, 0.12);
+        }
+
+        .article-card-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .article-card-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .article-category {
+            display: inline-block;
+            padding: 3px 12px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(147, 51, 234, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+            color: #93c5fd;
+            margin-bottom: 8px;
+        }
+
+        .article-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .article-summary {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.5;
+        }
+
+        .article-expand-icon {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.85rem;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .article-card.expanded .article-expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .article-full-content {
+            display: none;
+            padding: 0 24px 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.7;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            margin: 0 24px;
+            padding-top: 16px;
+        }
+
+        .article-card.expanded .article-full-content {
+            display: block;
+        }
+
+        .article-unread-dot {
+            width: 8px;
+            height: 8px;
+            background: #3b82f6;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 8px;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+        }
+
+        .article-unread-dot.read {
+            opacity: 0;
+        }
+
+        .articles-empty {
+            text-align: center;
+            padding: 48px 24px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .articles-loading {
+            text-align: center;
+            padding: 48px 24px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+        }
+
+        .articles-loading .loading-spinner {
+            width: 28px;
+            height: 28px;
+            margin: 0 auto 16px;
+        }
     </style>
 </head>
 <body>
@@ -2166,6 +2597,15 @@
                     <span class="plus-icon">+</span>
                     <span class="new-chat-btn-text">New Chat</span>
                 </button>
+                <button class="articles-btn" id="articlesBtn" onclick="toggleArticlesView()">
+                    <span class="articles-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
+                    </span>
+                    <span>Articles</span>
+                </button>
             </div>
 
             <div class="chat-history" id="chatHistory"></div>
@@ -2198,7 +2638,7 @@
             <div class="chat-header">
                 <div class="model-indicator">
                     <div class="model-dot"></div>
-                    <span>NexusAI v5.0 · 70B Parameters · Online</span>
+                    <span>NexusAI v5.0 · Mistral AI · Online</span>
                 </div>
             </div>
             <div class="messages" id="messages">
@@ -2285,8 +2725,23 @@
                         <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
                     </button>
                 </div>
-                <div class="powered-by">NexusAI v5.0 · Neural Network Online</div>
+                <div class="powered-by">NexusAI v5.0 · Powered by Mistral AI</div>
             </div>
+        </div>
+
+        <!-- Articles View -->
+        <div class="articles-view" id="articlesView">
+            <div class="articles-header">
+                <div class="articles-header-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    Your Articles
+                </div>
+                <button class="generate-btn" id="generateBtn" onclick="generateArticles()" style="display:none">Generate Articles</button>
+            </div>
+            <div class="articles-content" id="articlesContent"></div>
         </div>
     </div>
 
@@ -2297,9 +2752,9 @@
 
         const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Groq config
-        const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-        let GROQ_API_KEY = null;
+        // Mistral config
+        const API_URL = 'https://api.mistral.ai/v1/chat/completions';
+        let MISTRAL_API_KEY = null;
 
         // State
         let conversationHistory = [];
@@ -2332,11 +2787,11 @@
             const { data, error } = await db
                 .from('settings')
                 .select('value')
-                .eq('key', 'groq_api_key')
+                .eq('key', 'mistral_api_key')
                 .single();
 
             if (data) {
-                GROQ_API_KEY = data.value;
+                MISTRAL_API_KEY = data.value;
             }
         }
 
@@ -2875,7 +3330,7 @@
             // Need either message or images to send
             if ((!message && !hasImages) || isGenerating) return;
 
-            if (!GROQ_API_KEY) {
+            if (!MISTRAL_API_KEY) {
                 addMessageToDOM('assistant', 'API key not configured. Please contact the administrator.');
                 return;
             }
@@ -2910,7 +3365,7 @@
             let requestBody;
 
             if (useVision) {
-                // Resize image to stay under Groq's 4MB base64 limit
+                // Resize image for vision model
                 const resizedUrl = await resizeImage(messageImages[0].dataUrl, 768);
 
                 apiMessages = [
@@ -2949,7 +3404,7 @@ Always use **bold**, headers, bullet points, and code blocks to make responses w
                     }
                 ];
                 requestBody = {
-                    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+                    model: 'pixtral-12b-2409',
                     messages: apiMessages,
                     temperature: 0.7,
                     max_completion_tokens: 1024
@@ -2960,7 +3415,7 @@ Always use **bold**, headers, bullet points, and code blocks to make responses w
                     ...conversationHistory
                 ];
                 requestBody = {
-                    model: 'llama-3.3-70b-versatile',
+                    model: 'mistral-small-latest',
                     messages: apiMessages,
                     temperature: 0.7,
                     max_completion_tokens: 1024
@@ -2978,21 +3433,21 @@ Always use **bold**, headers, bullet points, and code blocks to make responses w
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${GROQ_API_KEY}`
+                            'Authorization': `Bearer ${MISTRAL_API_KEY}`
                         },
                         body: JSON.stringify(requestBody)
                     });
 
                     if (!response.ok) {
                         const errBody = await response.text();
-                        console.error('Groq API error:', response.status, errBody);
+                        console.error('Mistral API error:', response.status, errBody);
 
                         // If vision fails, fall back to text-only model
                         if (useVision && response.status === 400) {
                             console.log('Vision failed, falling back to text model');
                             useVision = false;
                             requestBody = {
-                                model: 'llama-3.3-70b-versatile',
+                                model: 'mistral-small-latest',
                                 messages: [
                                     { role: 'system', content: getSystemPrompt() },
                                     ...conversationHistory
@@ -3282,6 +3737,305 @@ Brief summary.
                 addImageToPreview(input.files[0]);
                 input.value = ''; // Reset so same file can be selected again
             }
+        }
+
+        // ===== ARTICLES VIEW =====
+
+        let articlesViewActive = false;
+        let userInterests = [];
+        let savedArticles = [];
+        let selectedInterests = new Set();
+
+        const PREDEFINED_INTERESTS = [
+            'Investing', 'Budgeting', 'Saving', 'Debt Management',
+            'Tax Tips', 'Retirement', 'Real Estate', 'Side Hustles',
+            'Coding', 'Science', 'Writing', 'Health'
+        ];
+
+        function toggleArticlesView() {
+            const chatMain = document.querySelector('.chat-main');
+            const articlesView = document.getElementById('articlesView');
+            const articlesBtn = document.getElementById('articlesBtn');
+
+            articlesViewActive = !articlesViewActive;
+
+            if (articlesViewActive) {
+                chatMain.classList.add('hidden-view');
+                articlesView.classList.add('active');
+                articlesBtn.classList.add('active');
+                loadArticleInterests();
+            } else {
+                chatMain.classList.remove('hidden-view');
+                articlesView.classList.remove('active');
+                articlesBtn.classList.remove('active');
+            }
+        }
+
+        async function loadArticleInterests() {
+            if (!currentUserEmail) {
+                renderInterestSelector();
+                return;
+            }
+
+            const { data, error } = await db
+                .from('user_article_interests')
+                .select('interests')
+                .eq('user_email', currentUserEmail)
+                .single();
+
+            if (data && data.interests && data.interests.length > 0) {
+                userInterests = data.interests;
+                await loadSavedArticles();
+                renderArticlesView();
+            } else {
+                userInterests = [];
+                renderInterestSelector();
+            }
+        }
+
+        function renderInterestSelector() {
+            selectedInterests = new Set(userInterests);
+            const content = document.getElementById('articlesContent');
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.style.display = 'none';
+
+            content.innerHTML = `
+                <div class="interest-selector">
+                    <h2>What topics interest you?</h2>
+                    <p>Select topics to receive personalized AI-generated articles. You can change these anytime.</p>
+                    <div class="interest-chips" id="interestChips">
+                        ${PREDEFINED_INTERESTS.map(i => `
+                            <div class="interest-chip ${selectedInterests.has(i) ? 'selected' : ''}"
+                                 onclick="toggleInterest(this, '${i}')">${i}</div>
+                        `).join('')}
+                    </div>
+                    <div class="interest-custom">
+                        <input type="text" id="customInterest" placeholder="Add custom topic..."
+                               onkeydown="if(event.key==='Enter')addCustomInterest()">
+                        <button onclick="addCustomInterest()">Add</button>
+                    </div>
+                    <button class="save-interests-btn" id="saveInterestsBtn" onclick="saveArticleInterests()"
+                            ${selectedInterests.size === 0 ? 'disabled' : ''}>
+                        Save Interests
+                    </button>
+                </div>
+            `;
+        }
+
+        function toggleInterest(el, interest) {
+            if (selectedInterests.has(interest)) {
+                selectedInterests.delete(interest);
+                el.classList.remove('selected');
+            } else {
+                selectedInterests.add(interest);
+                el.classList.add('selected');
+            }
+            const saveBtn = document.getElementById('saveInterestsBtn');
+            if (saveBtn) saveBtn.disabled = selectedInterests.size === 0;
+        }
+
+        function addCustomInterest() {
+            const input = document.getElementById('customInterest');
+            const value = input.value.trim();
+            if (!value) return;
+
+            if (!selectedInterests.has(value)) {
+                selectedInterests.add(value);
+                const chipsContainer = document.getElementById('interestChips');
+                const chip = document.createElement('div');
+                chip.className = 'interest-chip selected';
+                chip.textContent = value;
+                chip.onclick = () => toggleInterest(chip, value);
+                chipsContainer.appendChild(chip);
+            }
+
+            input.value = '';
+            const saveBtn = document.getElementById('saveInterestsBtn');
+            if (saveBtn) saveBtn.disabled = selectedInterests.size === 0;
+        }
+
+        async function saveArticleInterests() {
+            userInterests = Array.from(selectedInterests);
+
+            if (currentUserEmail) {
+                await db
+                    .from('user_article_interests')
+                    .upsert({
+                        user_email: currentUserEmail,
+                        interests: userInterests,
+                        updated_at: new Date().toISOString()
+                    }, { onConflict: 'user_email' });
+            }
+
+            await loadSavedArticles();
+            renderArticlesView();
+        }
+
+        async function loadSavedArticles() {
+            if (!currentUserEmail) {
+                savedArticles = [];
+                return;
+            }
+
+            const { data, error } = await db
+                .from('ai_articles')
+                .select('*')
+                .eq('user_email', currentUserEmail)
+                .order('generated_at', { ascending: false })
+                .limit(30);
+
+            if (data) {
+                savedArticles = data;
+            }
+        }
+
+        function renderArticlesView() {
+            const content = document.getElementById('articlesContent');
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.style.display = 'inline-flex';
+
+            let html = `
+                <div class="articles-list">
+                    <div class="articles-list-header">
+                        <h3>Your interests: ${userInterests.join(', ')}</h3>
+                        <button class="edit-interests-link" onclick="renderInterestSelector()">Edit Interests</button>
+                    </div>
+            `;
+
+            if (savedArticles.length === 0) {
+                html += `
+                    <div class="articles-empty">
+                        No articles yet. Click "Generate Articles" to create personalized content based on your interests.
+                    </div>
+                `;
+            } else {
+                savedArticles.forEach(article => {
+                    html += `
+                        <div class="article-card" id="article-${article.id}" onclick="toggleArticleExpand('${article.id}')">
+                            <div class="article-card-header">
+                                <div class="article-unread-dot ${article.is_read ? 'read' : ''}"></div>
+                                <div class="article-card-body">
+                                    <div class="article-category">${escapeHtml(article.category)}</div>
+                                    <div class="article-title">${escapeHtml(article.title)}</div>
+                                    <div class="article-summary">${escapeHtml(article.summary)}</div>
+                                </div>
+                                <div class="article-expand-icon">&#x25BC;</div>
+                            </div>
+                            <div class="article-full-content">${formatMessage(article.content)}</div>
+                        </div>
+                    `;
+                });
+            }
+
+            html += '</div>';
+            content.innerHTML = html;
+        }
+
+        function toggleArticleExpand(articleId) {
+            const card = document.getElementById('article-' + articleId);
+            if (!card) return;
+
+            const wasExpanded = card.classList.contains('expanded');
+            card.classList.toggle('expanded');
+
+            if (!wasExpanded) {
+                markArticleRead(articleId);
+            }
+        }
+
+        async function markArticleRead(articleId) {
+            const article = savedArticles.find(a => a.id === articleId);
+            if (article && !article.is_read) {
+                article.is_read = true;
+
+                const dot = document.querySelector(`#article-${articleId} .article-unread-dot`);
+                if (dot) dot.classList.add('read');
+
+                if (currentUserEmail) {
+                    await db
+                        .from('ai_articles')
+                        .update({ is_read: true })
+                        .eq('id', articleId);
+                }
+            }
+        }
+
+        async function generateArticles() {
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+
+            if (!MISTRAL_API_KEY) {
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Articles';
+                return;
+            }
+
+            const prompt = `Generate 3 short, practical articles personalized to these interests: ${userInterests.join(', ')}.
+Each article: 200-400 words, educational, actionable.
+Respond with ONLY a JSON array:
+[{"title": "...", "summary": "...", "content": "...", "category": "..."}]`;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${MISTRAL_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: 'mistral-small-latest',
+                        messages: [
+                            { role: 'user', content: prompt }
+                        ],
+                        temperature: 0.8,
+                        max_tokens: 4096
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const raw = data.choices[0].message.content;
+
+                // Extract JSON from response (handle markdown code blocks)
+                let jsonStr = raw;
+                const jsonMatch = raw.match(/\[[\s\S]*\]/);
+                if (jsonMatch) {
+                    jsonStr = jsonMatch[0];
+                }
+
+                const articles = JSON.parse(jsonStr);
+
+                // Save to Supabase
+                if (currentUserEmail && articles.length > 0) {
+                    const rows = articles.map(a => ({
+                        user_email: currentUserEmail,
+                        title: a.title,
+                        summary: a.summary,
+                        content: a.content,
+                        category: a.category,
+                        generated_at: new Date().toISOString(),
+                        is_read: false
+                    }));
+
+                    await db.from('ai_articles').insert(rows);
+                }
+
+                await loadSavedArticles();
+                renderArticlesView();
+
+            } catch (err) {
+                console.error('Article generation error:', err);
+                const content = document.getElementById('articlesContent');
+                const existing = content.innerHTML;
+                content.innerHTML = existing + '<div class="articles-empty" style="color: #ef4444;">Failed to generate articles. Please try again.</div>';
+            }
+
+            generateBtn.disabled = false;
+            generateBtn.textContent = 'Generate Articles';
         }
 
     </script>
