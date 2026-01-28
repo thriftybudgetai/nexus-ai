@@ -2464,31 +2464,130 @@
             line-height: 1.5;
         }
 
-        .article-expand-icon {
-            color: rgba(255, 255, 255, 0.2);
-            font-size: 0.85rem;
-            transition: transform 0.3s ease;
+        .article-timestamp {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.25);
+            margin-top: 6px;
+        }
+
+        .article-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .article-reader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary, #0a0a0f);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .article-reader-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             flex-shrink: 0;
-            margin-top: 4px;
         }
 
-        .article-card.expanded .article-expand-icon {
-            transform: rotate(180deg);
+        .article-back-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .article-full-content {
-            display: none;
-            padding: 0 24px 20px;
-            font-size: 0.9rem;
+        .article-back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .article-reader-category {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .article-reader-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px 48px;
+            max-width: 720px;
+            margin: 0 auto;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .article-reader-body .reader-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .article-reader-body .reader-meta {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .article-reader-body .reader-content {
+            font-size: 1rem;
             color: rgba(255, 255, 255, 0.75);
-            line-height: 1.7;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-            margin: 0 24px;
-            padding-top: 16px;
+            line-height: 1.8;
         }
 
-        .article-card.expanded .article-full-content {
-            display: block;
+        .article-reader-body .reader-content p {
+            margin-bottom: 16px;
+        }
+
+        .articles-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+            gap: 16px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+        }
+
+        .articles-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .article-unread-dot {
@@ -2739,9 +2838,16 @@
                     </svg>
                     Your Articles
                 </div>
-                <button class="generate-btn" id="generateBtn" onclick="generateArticles()" style="display:none">Generate Articles</button>
+                <button class="generate-btn" id="generateBtn" onclick="generateArticles()" style="display:none">&#x21bb; Refresh</button>
             </div>
             <div class="articles-content" id="articlesContent"></div>
+            <div class="article-reader" id="articleReader" style="display:none">
+                <div class="article-reader-header">
+                    <button class="article-back-btn" onclick="closeArticleReader()">&#x2190; Back</button>
+                    <span class="article-reader-category" id="readerCategory"></span>
+                </div>
+                <div class="article-reader-body" id="readerBody"></div>
+            </div>
         </div>
     </div>
 
@@ -3749,7 +3855,7 @@ Brief summary.
         const PREDEFINED_INTERESTS = [
             'Investing', 'Budgeting', 'Saving', 'Debt Management',
             'Tax Tips', 'Retirement', 'Real Estate', 'Side Hustles',
-            'Coding', 'Science', 'Writing', 'Health'
+            'Coding', 'Science', 'Writing', 'Health', 'Claude Code'
         ];
 
         function toggleArticlesView() {
@@ -3787,6 +3893,24 @@ Brief summary.
                 userInterests = data.interests;
                 await loadSavedArticles();
                 renderArticlesView();
+
+                // Auto-generate if articles are stale or missing
+                const isStale = savedArticles.length === 0 || (() => {
+                    const newest = new Date(savedArticles[0].generated_at);
+                    return (Date.now() - newest.getTime()) > 12 * 60 * 60 * 1000;
+                })();
+
+                if (isStale) {
+                    // Show loading spinner in the content area
+                    const content = document.getElementById('articlesContent');
+                    content.innerHTML = `
+                        <div class="articles-loading">
+                            <div class="articles-spinner"></div>
+                            <span>Generating fresh articles...</span>
+                        </div>
+                    `;
+                    await generateArticles();
+                }
             } else {
                 userInterests = [];
                 renderInterestSelector();
@@ -3869,6 +3993,18 @@ Brief summary.
 
             await loadSavedArticles();
             renderArticlesView();
+
+            // Auto-generate articles after saving interests
+            if (savedArticles.length === 0) {
+                const content = document.getElementById('articlesContent');
+                content.innerHTML = `
+                    <div class="articles-loading">
+                        <div class="articles-spinner"></div>
+                        <span>Generating fresh articles...</span>
+                    </div>
+                `;
+                await generateArticles();
+            }
         }
 
         async function loadSavedArticles() {
@@ -3894,6 +4030,11 @@ Brief summary.
             const generateBtn = document.getElementById('generateBtn');
             generateBtn.style.display = 'inline-flex';
 
+            // Make sure reader is hidden when rendering list
+            const reader = document.getElementById('articleReader');
+            if (reader) reader.style.display = 'none';
+            content.style.display = '';
+
             let html = `
                 <div class="articles-list">
                     <div class="articles-list-header">
@@ -3905,23 +4046,24 @@ Brief summary.
             if (savedArticles.length === 0) {
                 html += `
                     <div class="articles-empty">
-                        No articles yet. Click "Generate Articles" to create personalized content based on your interests.
+                        No articles yet. Articles will generate automatically.
                     </div>
                 `;
             } else {
                 savedArticles.forEach(article => {
+                    const genDate = article.generated_at ? new Date(article.generated_at) : new Date();
+                    const timeStr = getRelativeTime(genDate);
                     html += `
-                        <div class="article-card" id="article-${article.id}" onclick="toggleArticleExpand('${article.id}')">
+                        <div class="article-card" id="article-${article.id}" onclick="openArticle('${article.id}')">
                             <div class="article-card-header">
                                 <div class="article-unread-dot ${article.is_read ? 'read' : ''}"></div>
                                 <div class="article-card-body">
                                     <div class="article-category">${escapeHtml(article.category)}</div>
                                     <div class="article-title">${escapeHtml(article.title)}</div>
                                     <div class="article-summary">${escapeHtml(article.summary)}</div>
+                                    <div class="article-timestamp">${timeStr}</div>
                                 </div>
-                                <div class="article-expand-icon">&#x25BC;</div>
                             </div>
-                            <div class="article-full-content">${formatMessage(article.content)}</div>
                         </div>
                     `;
                 });
@@ -3931,16 +4073,49 @@ Brief summary.
             content.innerHTML = html;
         }
 
-        function toggleArticleExpand(articleId) {
-            const card = document.getElementById('article-' + articleId);
-            if (!card) return;
+        function openArticle(articleId) {
+            const article = savedArticles.find(a => a.id === articleId);
+            if (!article) return;
 
-            const wasExpanded = card.classList.contains('expanded');
-            card.classList.toggle('expanded');
+            markArticleRead(articleId);
 
-            if (!wasExpanded) {
-                markArticleRead(articleId);
-            }
+            const reader = document.getElementById('articleReader');
+            const category = document.getElementById('readerCategory');
+            const body = document.getElementById('readerBody');
+            const content = document.getElementById('articlesContent');
+
+            category.textContent = article.category;
+
+            const genDate = article.generated_at ? new Date(article.generated_at) : new Date();
+            const timeStr = getRelativeTime(genDate);
+
+            body.innerHTML = `
+                <div class="reader-title">${escapeHtml(article.title)}</div>
+                <div class="reader-meta">${escapeHtml(article.category)} &middot; ${timeStr}</div>
+                <div class="reader-content">${formatMessage(article.content)}</div>
+            `;
+
+            content.style.display = 'none';
+            reader.style.display = 'flex';
+        }
+
+        function closeArticleReader() {
+            const reader = document.getElementById('articleReader');
+            const content = document.getElementById('articlesContent');
+            reader.style.display = 'none';
+            content.style.display = '';
+        }
+
+        function getRelativeTime(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return diffMins + ' min ago';
+            const diffHrs = Math.floor(diffMins / 60);
+            if (diffHrs < 24) return diffHrs + (diffHrs === 1 ? ' hour ago' : ' hours ago');
+            const diffDays = Math.floor(diffHrs / 24);
+            return diffDays + (diffDays === 1 ? ' day ago' : ' days ago');
         }
 
         async function markArticleRead(articleId) {
@@ -3963,18 +4138,25 @@ Brief summary.
         async function generateArticles() {
             const generateBtn = document.getElementById('generateBtn');
             generateBtn.disabled = true;
-            generateBtn.textContent = 'Generating...';
+            generateBtn.innerHTML = '&#x21bb; Generating...';
 
             if (!MISTRAL_API_KEY) {
                 generateBtn.disabled = false;
-                generateBtn.textContent = 'Generate Articles';
+                generateBtn.innerHTML = '&#x21bb; Refresh';
                 return;
             }
 
-            const prompt = `Generate 3 short, practical articles personalized to these interests: ${userInterests.join(', ')}.
-Each article: 200-400 words, educational, actionable.
+            const prompt = `You are a news journalist. Write 3 breaking news / current events articles about recent developments related to these topics: ${userInterests.join(', ')}.
+
+Each article should:
+- Be written as a NEWS article, NOT an introduction or tutorial
+- Cover a specific recent development, trend, or event
+- Be 300-500 words with a journalistic tone
+- Include specific details, names, numbers, and context
+- Feel like something from a news website
+
 Respond with ONLY a JSON array:
-[{"title": "...", "summary": "...", "content": "...", "category": "..."}]`;
+[{"title": "...", "summary": "one-sentence hook", "content": "full article with multiple paragraphs", "category": "..."}]`;
 
             try {
                 const response = await fetch(API_URL, {
@@ -4035,7 +4217,7 @@ Respond with ONLY a JSON array:
             }
 
             generateBtn.disabled = false;
-            generateBtn.textContent = 'Generate Articles';
+            generateBtn.innerHTML = '&#x21bb; Refresh';
         }
 
     </script>
