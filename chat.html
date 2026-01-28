@@ -2419,9 +2419,12 @@
             transform: translateY(-2px);
         }
 
-        .article-card.expanded {
-            border-color: rgba(59, 130, 246, 0.2);
-            box-shadow: 0 6px 30px rgba(59, 130, 246, 0.12);
+        .article-card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .article-card-header {
@@ -2538,6 +2541,15 @@
             margin: 0 auto;
             width: 100%;
             box-sizing: border-box;
+        }
+
+        .reader-hero-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 28px;
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .article-reader-body .reader-title {
@@ -3892,17 +3904,12 @@ Brief summary.
             if (data && data.interests && data.interests.length > 0) {
                 userInterests = data.interests;
                 await loadSavedArticles();
-                renderArticlesView();
 
-                // Auto-generate if articles are stale or missing
-                const isStale = savedArticles.length === 0 || (() => {
-                    const newest = new Date(savedArticles[0].generated_at);
-                    return (Date.now() - newest.getTime()) > 12 * 60 * 60 * 1000;
-                })();
-
-                if (isStale) {
-                    // Show loading spinner in the content area
+                if (savedArticles.length === 0) {
+                    // No cached articles — show spinner and wait for generation
                     const content = document.getElementById('articlesContent');
+                    const generateBtn = document.getElementById('generateBtn');
+                    generateBtn.style.display = 'inline-flex';
                     content.innerHTML = `
                         <div class="articles-loading">
                             <div class="articles-spinner"></div>
@@ -3910,6 +3917,10 @@ Brief summary.
                         </div>
                     `;
                     await generateArticles();
+                } else {
+                    // Show cached articles immediately, then generate fresh ones in background
+                    renderArticlesView();
+                    generateArticles();
                 }
             } else {
                 userInterests = [];
@@ -3992,19 +4003,18 @@ Brief summary.
             }
 
             await loadSavedArticles();
-            renderArticlesView();
 
-            // Auto-generate articles after saving interests
-            if (savedArticles.length === 0) {
-                const content = document.getElementById('articlesContent');
-                content.innerHTML = `
-                    <div class="articles-loading">
-                        <div class="articles-spinner"></div>
-                        <span>Generating fresh articles...</span>
-                    </div>
-                `;
-                await generateArticles();
-            }
+            // Show spinner and auto-generate articles
+            const content = document.getElementById('articlesContent');
+            const generateBtn = document.getElementById('generateBtn');
+            generateBtn.style.display = 'inline-flex';
+            content.innerHTML = `
+                <div class="articles-loading">
+                    <div class="articles-spinner"></div>
+                    <span>Generating fresh articles...</span>
+                </div>
+            `;
+            await generateArticles();
         }
 
         async function loadSavedArticles() {
@@ -4053,8 +4063,10 @@ Brief summary.
                 savedArticles.forEach(article => {
                     const genDate = article.generated_at ? new Date(article.generated_at) : new Date();
                     const timeStr = getRelativeTime(genDate);
+                    const imgUrl = getArticleImageUrl(article, 640, 360);
                     html += `
                         <div class="article-card" id="article-${article.id}" onclick="openArticle('${article.id}')">
+                            <img class="article-card-image" src="${imgUrl}" alt="" loading="lazy" onerror="this.style.display='none'">
                             <div class="article-card-header">
                                 <div class="article-unread-dot ${article.is_read ? 'read' : ''}"></div>
                                 <div class="article-card-body">
@@ -4089,7 +4101,9 @@ Brief summary.
             const genDate = article.generated_at ? new Date(article.generated_at) : new Date();
             const timeStr = getRelativeTime(genDate);
 
+            const heroUrl = getArticleImageUrl(article, 800, 400);
             body.innerHTML = `
+                <img class="reader-hero-image" src="${heroUrl}" alt="" onerror="this.style.display='none'">
                 <div class="reader-title">${escapeHtml(article.title)}</div>
                 <div class="reader-meta">${escapeHtml(article.category)} &middot; ${timeStr}</div>
                 <div class="reader-content">${formatMessage(article.content)}</div>
@@ -4104,6 +4118,12 @@ Brief summary.
             const content = document.getElementById('articlesContent');
             reader.style.display = 'none';
             content.style.display = '';
+        }
+
+        function getArticleImageUrl(article, width, height) {
+            const keyword = encodeURIComponent(article.category.toLowerCase().replace(/\s+/g, ','));
+            const lock = Math.abs(article.id.split('').reduce((h, c) => ((h << 5) - h) + c.charCodeAt(0), 0));
+            return `https://loremflickr.com/${width}/${height}/${keyword}?lock=${lock}`;
         }
 
         function getRelativeTime(date) {
