@@ -3525,7 +3525,7 @@ Always use **bold**, headers, bullet points, and code blocks to make responses w
                     model: 'pixtral-12b-2409',
                     messages: apiMessages,
                     temperature: 0.7,
-                    max_completion_tokens: 1024
+                    max_tokens: 1024
                 };
             } else {
                 apiMessages = [
@@ -3536,7 +3536,7 @@ Always use **bold**, headers, bullet points, and code blocks to make responses w
                     model: 'mistral-small-latest',
                     messages: apiMessages,
                     temperature: 0.7,
-                    max_completion_tokens: 1024
+                    max_tokens: 1024
                 };
             }
 
@@ -3571,7 +3571,7 @@ Always use **bold**, headers, bullet points, and code blocks to make responses w
                                     ...conversationHistory
                                 ],
                                 temperature: 0.7,
-                                max_completion_tokens: 1024
+                                max_tokens: 1024
                             };
                             retryCount++;
                             continue;
