@@ -1199,36 +1199,29 @@
         }
 
         .message-content {
-            max-width: 800px;
+            max-width: 75%;
             line-height: 1.7;
             font-size: 0.92rem;
-            width: 100%;
+            width: fit-content;
+            padding: 14px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(8px);
         }
 
         .message.assistant .message-content {
             background: linear-gradient(135deg, rgba(147, 51, 234, 0.12), rgba(99, 102, 241, 0.08));
             border: 1px solid rgba(147, 51, 234, 0.18);
-            border-radius: 20px;
             border-bottom-left-radius: 6px;
-            padding: 14px 20px;
             color: rgba(255, 255, 255, 0.9);
             letter-spacing: 0.01em;
-            backdrop-filter: blur(8px);
             box-shadow: 0 2px 20px rgba(147, 51, 234, 0.08);
-            max-width: 75%;
-            width: auto;
             margin-left: 38px;
         }
 
         .message.user .message-content {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(147, 51, 234, 0.12));
             border: 1px solid rgba(99, 102, 241, 0.18);
-            border-radius: 20px;
             border-bottom-right-radius: 6px;
-            padding: 14px 20px;
-            max-width: 75%;
-            width: auto;
-            backdrop-filter: blur(8px);
             box-shadow: 0 2px 20px rgba(99, 102, 241, 0.08);
         }
 
